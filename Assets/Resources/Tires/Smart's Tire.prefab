@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 6993680891567781219}
   m_LocalRotation: {x: -0.5, y: -0.5, z: -0.5, w: 0.5}
   m_LocalPosition: {x: 12, y: 1.16, z: -55}
-  m_LocalScale: {x: 1.2499998, y: 1.2499999, z: 1.2499996}
+  m_LocalScale: {x: 1.8000001, y: 1.8000001, z: 1.8000001}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -147,13 +147,12 @@ MonoBehaviour:
   description:
     English: Right from the trash
     Russian: "\u041F\u0440\u044F\u043C\u0438\u043A\u043E\u043C \u0441\u043E \u0441\u0432\u0430\u043B\u043A\u0438"
-  property1:
-    title:
+  properties:
+  - title:
       English: Mass
       Russian: "\u041C\u0430\u0441\u0441\u0430"
-    value: 4
-  property2:
-    title:
+    value: 2
+  - title:
       English: Bounciness
       Russian: "\u041F\u0440\u044B\u0433\u0443\u0447\u0435\u0441\u0442\u044C"
     value: 4

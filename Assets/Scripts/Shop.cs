@@ -8,42 +8,52 @@ public enum ItemType
     Tire,
 }
 
+public enum ShopOption
+{
+    Buy,
+    NoMoney,
+    Use,
+    InUse
+}
+
 [RequireComponent(typeof(Animator))]
 public class Shop : MonoBehaviour, IDataControllable
 {
     public ItemType itemType;
     public Transform itemPlaceHolder;
-    public ItemInfo itemsToBuy;
+    public List<ItemInfo> catalogue;
 
+    public TextController itemNameHolder;
+    public TextController itemDescriptionHolder;
+
+    public ShopOptionButton optionButtonHolder;
+
+    public TextMeshProUGUI costValueHolder;
+ 
+    public List<Property> propertyHolders;
+
+    private Animator _animator;
+    private ShopOption _shopOption;
     private ItemInfo currentItem;
     private List<ItemInfo> boughtItems;
 
-    public TextController itemName;
-    public TextController itemDescription;
-     
-    public GameObject property1Frame;
-    public GameObject property2Frame;
-
-
-
-    private Animator _animator;
-
     private void OnEnable()
     {
-        UIEvents.OnUIClick += CheckForClick;
+        UIEvents.OnUIClick += UIClickHandler;
     }
 
     private void OnDisable()
     {
-        UIEvents.OnUIClick -= CheckForClick;
+        UIEvents.OnUIClick -= UIClickHandler;
     }
 
     private void Awake()
     {
         _animator = GetComponent<Animator>();
+        SortCatalogueByCost();
     }
 
-    void CheckForClick(GameObject gameObject)
+    void UIClickHandler(GameObject gameObject)
     {
         switch (gameObject.tag)
         {
@@ -55,6 +65,9 @@ public class Shop : MonoBehaviour, IDataControllable
                 break;
             case "DropdownArrow":
                 OpenInfoFrame();
+                break;
+            case "OptionButton":
+                InteractWithItem();
                 break;
         }
     }
@@ -75,6 +88,11 @@ public class Shop : MonoBehaviour, IDataControllable
             _animator.SetBool("IsInfoFrameOpen", false);
         else
             _animator.SetBool("IsInfoFrameOpen", true);
+    }
+
+    void InteractWithItem()
+    {
+        
     }
 
     public void SaveData(ref Database database)
@@ -98,20 +116,55 @@ public class Shop : MonoBehaviour, IDataControllable
                 break;
         }
 
-        SpawnItem(currentItem.gameObject);
+        SpawnItem(currentItem);
     }
 
-    void SpawnItem(GameObject item)
+    public void SpawnItem(ItemInfo item)
     {
         foreach(GameObject obj in itemPlaceHolder)
-            obj.SetActive(false);
+            Destroy(obj);
 
-        item.SetActive(true);
+        ItemInfo spawnedObj = Instantiate(item, itemPlaceHolder, true);
+        spawnedObj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX
+                                                         | RigidbodyConstraints.FreezePositionZ
+                                                         | RigidbodyConstraints.FreezeRotation;
+        RefreshItemInfo(item);
     }
 
-    void RefreshInfo(ItemInfo item)
+    void RefreshItemInfo(ItemInfo item)
     {
-        itemName.text = item.name;
-        itemDescription.text = item.description;
+        if (propertyHolders.Count != item.properties.Count)
+            throw new System.Exception("Количество свойств меню != количеству свойств предмета!");
+
+        itemNameHolder.text = item.name;
+        itemDescriptionHolder.text = item.description;
+        costValueHolder.text = item.cost.ToString();
+        for (int i = 0; i < propertyHolders.Count; i++)
+        {
+            propertyHolders[i].title.text = item.properties[i].title;
+            propertyHolders[i].rating.SetRating(item.properties[i].value);
+        }
+
+        if (isBought(item))
+            if (currentItem == item)
+                _shopOption = ShopOption.InUse;
+            else
+                _shopOption = ShopOption.Use;
+        else
+            _shopOption = ShopOption.Buy;
+
+        optionButtonHolder.ChangeOption(_shopOption);
+    }
+
+    void SortCatalogueByCost()
+    {
+        catalogue.Sort((x, y) => x.cost.CompareTo(y.cost));
+    }
+
+    bool isBought(ItemInfo item)
+    {
+        if (boughtItems.Find((x) => x.name == item.name))
+            return true;
+        return false;
     }
 }

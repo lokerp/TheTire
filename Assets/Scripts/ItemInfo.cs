@@ -15,7 +15,6 @@ public class ItemInfo : MonoBehaviour
 
     public new TranslatableText name;
     public TranslatableText description;
-    public Property property1;
-    public Property property2;
+    public List<Property> properties;
     public int cost;
 }

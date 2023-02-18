@@ -14,7 +14,7 @@ TagManager:
   - LeftArrow
   - RightArrow
   - DropdownArrow
-  - BuyButton
+  - OptionButton
   layers:
   - Default
   - TransparentFX

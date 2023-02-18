@@ -147,14 +147,13 @@ MonoBehaviour:
   description:
     English: Why does he need a spare?
     Russian: "\u0417\u0430\u0447\u0435\u043C \u0435\u043C\u0443 \u0437\u0430\u043F\u0430\u0441\u043A\u0430?"
-  property1:
-    title:
+  properties:
+  - title:
       English: Mass
       Russian: "\u041C\u0430\u0441\u0441\u0430"
-    value: 3
-  property2:
-    title:
+    value: 2
+  - title:
       English: Bounciness
       Russian: "\u041F\u0440\u044B\u0433\u0443\u0447\u0435\u0441\u0442\u044C"
-    value: 5
+    value: 4
   cost: 100
