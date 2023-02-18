@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class LanguageManager : MonoBehaviour, IDataControllable
 {
     public static LanguageManager Instance { get; private set; }
-    public Languages language;
+    private Languages language;
     private Image iconHolder;
     public Slider slider;
     public Sprite englishIcon;

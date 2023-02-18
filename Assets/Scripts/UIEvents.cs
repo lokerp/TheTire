@@ -11,12 +11,15 @@ public class UIEvents : MonoBehaviour
 
     private InputSystemUIInputModule UIInputSystem;
     public string layerName = "UI";
-    public event Action<GameObject> OnUIClick;
+    public static event Action<GameObject> OnUIClick;
 
     void Awake()
     {
         if (Instance == null)
+        {
             Instance = this;
+            DontDestroyOnLoad(this);
+        }
         else
             Destroy(this);
 

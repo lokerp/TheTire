@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8568543832172226352}
   - component: {fileID: 8568543832172226511}
   - component: {fileID: 2429655930508635547}
+  - component: {fileID: 6486283692465894506}
   m_Layer: 0
   m_Name: Daddy's Sedan Tire
   m_TagString: Player
@@ -128,13 +129,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dd6cfa59d6f6514fab74783ef861f5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  info:
-    name:
-      English: DADDY'S SEDAN TIRE
-      Russian: "\u0411\u0410\u0422\u0418\u041D\u041E \u041A\u041E\u041B\u0415\u0421\u041E"
-    description:
-      English: Why does he need a spare?
-      Russian: "\u0417\u0430\u0447\u0435\u043C \u0435\u043C\u0443 \u0437\u0430\u043F\u0430\u0441\u043A\u0430?"
-    mass: 1
-    bounciness: 5
-    cost: 100
+--- !u!114 &6486283692465894506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8568543832172226508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3976b6b7b2762f4ebc8cdce0083e221, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name:
+    English: DADDY'S SEDAN TIRE
+    Russian: "\u0411\u0410\u0422\u0418\u041D\u0410 \u041F\u041E\u041A\u0420\u042B\u0428\u041A\u0410"
+  description:
+    English: Why does he need a spare?
+    Russian: "\u0417\u0430\u0447\u0435\u043C \u0435\u043C\u0443 \u0437\u0430\u043F\u0430\u0441\u043A\u0430?"
+  property1:
+    title:
+      English: Mass
+      Russian: "\u041C\u0430\u0441\u0441\u0430"
+    value: 3
+  property2:
+    title:
+      English: Bounciness
+      Russian: "\u041F\u0440\u044B\u0433\u0443\u0447\u0435\u0441\u0442\u044C"
+    value: 5
+  cost: 100

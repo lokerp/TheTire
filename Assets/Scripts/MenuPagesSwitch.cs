@@ -18,12 +18,17 @@ public class MenuPagesSwitch : MonoBehaviour
 
     private void OnEnable()
     {
-        UIEvents.Instance.OnUIClick += UIClickHandler;
+        UIEvents.OnUIClick += UIClickHandler;
     }
 
     private void OnDisable()
     {
-        UIEvents.Instance.OnUIClick -= UIClickHandler;
+        UIEvents.OnUIClick -= UIClickHandler;
+    }
+
+    private void Start()
+    {
+        OpenPage(currentPage);
     }
 
     void UIClickHandler(GameObject gameObject)

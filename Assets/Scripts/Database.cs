@@ -11,6 +11,6 @@ public class Database
     public int currentLaunches;
     public int currentMoney;
 
-    public Tire currentTire;
-    public List<Tire> availableTires;
+    public ItemInfo currentTire;
+    public List<ItemInfo> availableTires;
 }
