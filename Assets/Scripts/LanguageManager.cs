@@ -9,12 +9,12 @@ using UnityEngine.UI;
 public class LanguageManager : MonoBehaviour, IDataControllable
 {
     public static LanguageManager Instance { get; private set; }
-    private Languages language;
+    public Languages language;
     private Image iconHolder;
+    private TextController[] controllers;
     public Slider slider;
     public Sprite englishIcon;
     public Sprite russianIcon;
-    public event Action<Languages> OnLanguageChange;
 
     public LanguageManager() { }
 
@@ -39,6 +39,7 @@ public class LanguageManager : MonoBehaviour, IDataControllable
             Destroy(this);
 
         iconHolder = slider.handleRect.GetComponent<Image>();
+        controllers = FindObjectsOfType<TextController>(true);
     }
 
     public void SaveData(ref Database database)
@@ -61,7 +62,7 @@ public class LanguageManager : MonoBehaviour, IDataControllable
                 break;
         }
 
-        OnLanguageChange.Invoke(language);
+        ChangeLanguage();
     }
 
     void CheckValueChange(float value)
@@ -77,7 +78,14 @@ public class LanguageManager : MonoBehaviour, IDataControllable
                 iconHolder.overrideSprite = russianIcon;
                 break;
         }
-        OnLanguageChange.Invoke(language);
+
+        ChangeLanguage();
         DataManager.Instance.SaveGame();
+    }
+
+    void ChangeLanguage()
+    {
+        foreach(var contr in controllers)
+            contr.RefreshText();
     }
 }

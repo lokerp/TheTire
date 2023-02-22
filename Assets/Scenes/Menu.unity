@@ -1069,6 +1069,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9afecbc2c06490d438b26d28f234bdff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  language: 0
   slider: {fileID: 1222401156}
   englishIcon: {fileID: 21300000, guid: 91003f4f32f936d4b9811e316ad05cdc, type: 3}
   russianIcon: {fileID: 21300000, guid: 0a5bd075e293c9b4497bfadd384b8b75, type: 3}
@@ -1865,17 +1866,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &849078386 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6719612144069942487, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
-  m_PrefabInstance: {fileID: 6719612144296096933}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1db631f653cba0549841f2e9b535a353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &849078387 stripped
@@ -2733,10 +2723,8 @@ MonoBehaviour:
     currentLanguage: 0
     currentLaunches: 0
     currentMoney: 0
-    currentTire: {fileID: 1895002675544535073, guid: 6a8cc3ee806fd93488a33509f4894611, type: 3}
-    availableTires:
-    - {fileID: 1895002675544535073, guid: 6a8cc3ee806fd93488a33509f4894611, type: 3}
-    - {fileID: 6486283692465894506, guid: f3db6a1eda327b24b87a3bc4da19c62f, type: 3}
+    currentTire: 2
+    availableTires: 02000000
 --- !u!4 &1090147406
 Transform:
   m_ObjectHideFlags: 0
@@ -5045,7 +5033,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2128812747470202821, guid: ffd9b849e1a979e43b450b93632a8110, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 454.29
+      value: 454.33
       objectReference: {fileID: 0}
     - target: {fileID: 2128812747470202821, guid: ffd9b849e1a979e43b450b93632a8110, type: 3}
       propertyPath: m_SizeDelta.y
@@ -6687,7 +6675,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2128812747470202821, guid: ffd9b849e1a979e43b450b93632a8110, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 217.12
+      value: 217.13
       objectReference: {fileID: 0}
     - target: {fileID: 2128812747470202821, guid: ffd9b849e1a979e43b450b93632a8110, type: 3}
       propertyPath: m_SizeDelta.y
@@ -6803,15 +6791,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2299904886629485393, guid: 2daf1ad8caa914848943abe64d25552a, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 150.38
+      value: 150.41
       objectReference: {fileID: 0}
     - target: {fileID: 2299904886629485393, guid: 2daf1ad8caa914848943abe64d25552a, type: 3}
       propertyPath: m_SizeDelta.y
       value: 84.94
       objectReference: {fileID: 0}
+    - target: {fileID: 2299904887224929808, guid: 2daf1ad8caa914848943abe64d25552a, type: 3}
+      propertyPath: text.English
+      value: 'Cost:'
+      objectReference: {fileID: 0}
+    - target: {fileID: 2299904887224929808, guid: 2daf1ad8caa914848943abe64d25552a, type: 3}
+      propertyPath: text.Russian
+      value: "\u0426\u0435\u043D\u0430:"
+      objectReference: {fileID: 0}
     - target: {fileID: 2299904887224929812, guid: 2daf1ad8caa914848943abe64d25552a, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -834.72
+      value: -834.7
       objectReference: {fileID: 0}
     - target: {fileID: 2299904887224929812, guid: 2daf1ad8caa914848943abe64d25552a, type: 3}
       propertyPath: m_SizeDelta.y
@@ -6915,64 +6911,56 @@ PrefabInstance:
     m_TransformParent: {fileID: 1262894124}
     m_Modifications:
     - target: {fileID: -2397581901879925847, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
-      propertyPath: buyColor.g
+      propertyPath: buyColor.a
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -2397581901879925847, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
-      propertyPath: buyColor.r
-      value: 0.07058824
+      propertyPath: useColor.a
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -2397581901879925847, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
-      propertyPath: _textHolder
-      value: 
-      objectReference: {fileID: 849078386}
+      propertyPath: useColor.b
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -2397581901879925847, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
-      propertyPath: _colorHolder
-      value: 
-      objectReference: {fileID: 849078384}
+      propertyPath: useColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2397581901879925847, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
+      propertyPath: useColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2397581901879925847, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
+      propertyPath: inUseColor.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -2397581901879925847, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
       propertyPath: inUseColor.b
-      value: 1
+      value: 0.9056604
       objectReference: {fileID: 0}
     - target: {fileID: -2397581901879925847, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
       propertyPath: inUseColor.g
-      value: 1
+      value: 0.9056604
       objectReference: {fileID: 0}
     - target: {fileID: -2397581901879925847, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
       propertyPath: inUseColor.r
+      value: 0.9056604
+      objectReference: {fileID: 0}
+    - target: {fileID: -2397581901879925847, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
+      propertyPath: noMoneyColor.a
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -2397581901879925847, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
-      propertyPath: buyText.English
-      value: 1
+      propertyPath: noMoneyColor.b
+      value: 0.30277678
       objectReference: {fileID: 0}
     - target: {fileID: -2397581901879925847, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
-      propertyPath: buyText.Russian
-      value: 1
+      propertyPath: noMoneyColor.g
+      value: 0.30277678
       objectReference: {fileID: 0}
     - target: {fileID: -2397581901879925847, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
-      propertyPath: useText.English
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -2397581901879925847, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
-      propertyPath: useText.Russian
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -2397581901879925847, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
-      propertyPath: inUseText.English
-      value: In Use
-      objectReference: {fileID: 0}
-    - target: {fileID: -2397581901879925847, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
-      propertyPath: inUseText.Russian
-      value: "\u0412\u044B\u0431\u0440\u0430\u043D\u043E"
-      objectReference: {fileID: 0}
-    - target: {fileID: -2397581901879925847, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
-      propertyPath: noMoneyText.English
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -2397581901879925847, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
-      propertyPath: noMoneyText.Russian
-      value: 1
+      propertyPath: noMoneyColor.r
+      value: 0.990566
       objectReference: {fileID: 0}
     - target: {fileID: 6719612144069942474, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
       propertyPath: m_Pivot.x
@@ -6988,7 +6976,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6719612144069942474, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6719612144069942474, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
       propertyPath: m_AnchorMax.y
@@ -6996,7 +6984,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6719612144069942474, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6719612144069942474, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
       propertyPath: m_AnchorMin.y
@@ -7004,7 +6992,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6719612144069942474, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 210
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6719612144069942474, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
       propertyPath: m_SizeDelta.y
@@ -7062,13 +7050,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Option
       objectReference: {fileID: 0}
-    - target: {fileID: 6719612144069942487, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
-      propertyPath: text.English
+    - target: {fileID: 6719612144069942475, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 6719612144069942487, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
-      propertyPath: text.Russian
-      value: 1
+    - target: {fileID: 6719612144069942485, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
+      propertyPath: m_text
+      value: BUY
       objectReference: {fileID: 0}
+    - target: {fileID: 6719612144069942487, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}
+      propertyPath: _textHandler
+      value: 
+      objectReference: {fileID: 849078384}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1ed8d4c19d9ea54c81055b46890c856, type: 3}

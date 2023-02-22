@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -22,7 +23,7 @@ public class FileDataHandler
         try
         {
             Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
-            string json = JsonUtility.ToJson(database, true);
+            string json = JsonConvert.SerializeObject(database, Formatting.Indented);
 
             using (FileStream fstream = new FileStream(fullPath, FileMode.Create))
             {
@@ -58,7 +59,7 @@ public class FileDataHandler
                     }
                 }
 
-                database = JsonUtility.FromJson<Database>(data);
+                database = JsonConvert.DeserializeObject<Database>(data);
             }
 
             catch(System.Exception e)

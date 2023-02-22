@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Newtonsoft.Json;
 using UnityEditor;
+using System.Diagnostics;
 
 public class DataManager : MonoBehaviour
 {
@@ -52,5 +54,10 @@ public class DataManager : MonoBehaviour
     List<IDataControllable> FindAllDataControllables()
     {
         return FindObjectsOfType<MonoBehaviour>(true).OfType<IDataControllable>().ToList();
+    }
+
+    public void OpenSavesFolder()
+    {
+        Process.Start(Application.persistentDataPath);
     }
 }

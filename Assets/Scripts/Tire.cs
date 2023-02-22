@@ -5,5 +5,5 @@ using UnityEngine;
 
 public class Tire : MonoBehaviour
 {
-    
+    public ItemInfo info;
 }

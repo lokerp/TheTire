@@ -9,28 +9,28 @@ using static Unity.VisualScripting.Icons;
 public class TextController : MonoBehaviour
 {
     public TranslatableText text;
-    private TextMeshProUGUI textHandler;
-
-
-    private void OnEnable()
-    {
-        if (LanguageManager.Instance != null)
-            LanguageManager.Instance.OnLanguageChange += RefreshText;
-    }
-
-    private void OnDisable()
-    {
-        if (LanguageManager.Instance != null)
-            LanguageManager.Instance.OnLanguageChange -= RefreshText;
-    }
+    private TextMeshProUGUI _textHandler;
 
     private void Awake()
     {
-        textHandler = GetComponent<TextMeshProUGUI>();
+        _textHandler = GetComponent<TextMeshProUGUI>();
     }
 
-    void RefreshText(Languages language)
+    public void RefreshText()
     {
-        textHandler.text = text.GetText(language);
+        Languages language = LanguageManager.Instance.language;
+
+        if (_textHandler == null)
+            _textHandler = GetComponent<TextMeshProUGUI>();
+
+        switch (language)
+        {
+            case Languages.English:
+                _textHandler.text = text.English;
+                break;
+            case Languages.Russian:
+                _textHandler.text = text.Russian;
+                break;
+        }
     }
 }

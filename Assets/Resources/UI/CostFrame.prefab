@@ -316,8 +316,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text:
-    English: Cost
-    Russian: "\u0426\u0435\u043D\u0430"
+    English: 'Cost:'
+    Russian: "\u0426\u0435\u043D\u0430:"
 --- !u!1 &2299904887337403305
 GameObject:
   m_ObjectHideFlags: 0

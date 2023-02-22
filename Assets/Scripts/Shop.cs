@@ -1,12 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
-
-public enum ItemType
-{
-    Tire,
-}
 
 public enum ShopOption
 {
@@ -19,7 +15,7 @@ public enum ShopOption
 [RequireComponent(typeof(Animator))]
 public class Shop : MonoBehaviour, IDataControllable
 {
-    public ItemType itemType;
+    public TypesUtility.Item.Type itemType;
     public Transform itemPlaceHolder;
     public List<ItemInfo> catalogue;
 
@@ -99,9 +95,7 @@ public class Shop : MonoBehaviour, IDataControllable
     {
         switch (itemType)
         {
-            case ItemType.Tire:
-                database.currentTire = currentItem;
-                database.availableTires = boughtItems;
+            case TypesUtility.Item.Type.Tire:
                 break;
         }
     }
@@ -110,12 +104,11 @@ public class Shop : MonoBehaviour, IDataControllable
     {
         switch (itemType)
         {
-            case ItemType.Tire:
-                currentItem = database.currentTire;
-                boughtItems = database.availableTires;
+            case TypesUtility.Item.Type.Tire:
                 break;
         }
 
+        Debug.Log(currentItem);
         SpawnItem(currentItem);
     }
 
@@ -124,7 +117,7 @@ public class Shop : MonoBehaviour, IDataControllable
         foreach(GameObject obj in itemPlaceHolder)
             Destroy(obj);
 
-        ItemInfo spawnedObj = Instantiate(item, itemPlaceHolder, true);
+        GameObject spawnedObj = Instantiate(SaveUtility.PathToPrefab<GameObject>(item.path), itemPlaceHolder, true);
         spawnedObj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX
                                                          | RigidbodyConstraints.FreezePositionZ
                                                          | RigidbodyConstraints.FreezeRotation;
@@ -137,11 +130,17 @@ public class Shop : MonoBehaviour, IDataControllable
             throw new System.Exception("Количество свойств меню != количеству свойств предмета!");
 
         itemNameHolder.text = item.name;
+        itemNameHolder.RefreshText();
+
         itemDescriptionHolder.text = item.description;
+        itemDescriptionHolder.RefreshText();
+
         costValueHolder.text = item.cost.ToString();
+
         for (int i = 0; i < propertyHolders.Count; i++)
         {
             propertyHolders[i].title.text = item.properties[i].title;
+            propertyHolders[i].title.RefreshText();
             propertyHolders[i].rating.SetRating(item.properties[i].value);
         }
 

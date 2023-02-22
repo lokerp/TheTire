@@ -165,18 +165,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a222cf18a3519a4f8698d719a75d26c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buyColor: {r: 0, g: 0, b: 0, a: 0}
+  buyColor: {r: 0.07058824, g: 1, b: 0, a: 0}
+  noMoneyColor: {r: 0, g: 0, b: 0, a: 0}
   useColor: {r: 0, g: 0, b: 0, a: 0}
-  inUseColor: {r: 0, g: 0, b: 0, a: 0}
+  inUseColor: {r: 1, g: 1, b: 1, a: 0}
   buyText:
-    English: 
-    Russian: 
+    English: BUY
+    Russian: "\u041A\u0423\u041F\u0418\u0422\u042C"
+  noMoneyText:
+    English: NO MONEY
+    Russian: "\u041D\u0415\u0422 \u0414\u0415\u041D\u0415\u0413"
   useText:
-    English: 
-    Russian: 
+    English: USE
+    Russian: "\u0412\u042B\u0411\u0420\u0410\u0422\u042C"
   inUseText:
-    English: 
-    Russian: 
+    English: IN USE
+    Russian: "\u0412\u042B\u0411\u0420\u0410\u041D\u041E"
+  _colorHolder: {fileID: 6719612144069942485}
+  _textHolder: {fileID: 6719612144069942487}
 --- !u!1 &6719612145744062200
 GameObject:
   m_ObjectHideFlags: 0

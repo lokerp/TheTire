@@ -39,5 +39,7 @@ public class ShopOptionButton : MonoBehaviour
                 _colorHolder.color = inUseColor;
                 break;
         }
+
+        _textHolder.RefreshText();
     }
 }
