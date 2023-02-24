@@ -1,3 +1,4 @@
+using Cinemachine.Editor;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -8,30 +9,31 @@ public class ItemInfoEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        SerializedProperty baseType = serializedObject.FindProperty("itemType");
-        EditorGUILayout.PropertyField(baseType);
+        SerializedProperty itemTypesField = serializedObject.FindProperty("itemType");
 
-        SerializedProperty additiveType = null;
+        SerializedProperty itemType = itemTypesField.FindPropertyRelative("item");
+        EditorGUILayout.PropertyField(itemType);
 
-        switch (baseType.enumNames[baseType.enumValueIndex])
+        SerializedProperty tireType = itemTypesField.FindPropertyRelative("tire");
+        SerializedProperty weaponType = itemTypesField.FindPropertyRelative("weapon");
+
+        switch (itemType.enumNames[itemType.enumValueIndex])
         {
             case "None":
-                serializedObject.FindProperty("tireType").Reset();
-                serializedObject.FindProperty("weaponType").Reset();
+                tireType.enumValueIndex = 0;
+                weaponType.enumValueIndex = 0;
                 break;
             case "Tire":
-                additiveType = serializedObject.FindProperty("tireType");
-                EditorGUILayout.PropertyField(additiveType);
-                serializedObject.FindProperty("weaponType").enumValueIndex = 0;
+                EditorGUILayout.PropertyField(tireType);
+                weaponType.enumValueIndex = 0;
                 break;
             case "Weapon":
-                additiveType = serializedObject.FindProperty("weaponType");
-                EditorGUILayout.PropertyField(additiveType);
-                serializedObject.FindProperty("tireType").enumValueIndex = 0;
+                EditorGUILayout.PropertyField(weaponType);
+                tireType.enumValueIndex = 0;
                 break;
         }
 
-        if (additiveType != null && additiveType.enumValueIndex != 0)
+        if (itemType.enumValueIndex != 0)
             ShowCommonInfo();
 
         serializedObject.ApplyModifiedProperties();

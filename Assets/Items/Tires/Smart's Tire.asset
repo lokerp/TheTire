@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3976b6b7b2762f4ebc8cdce0083e221, type: 3}
   m_Name: Smart's Tire
   m_EditorClassIdentifier: 
-  itemType: 1
-  tireType: 2
-  weaponType: 0
+  itemType:
+    item: 1
+    tire: 2
+    weapon: 0
   name:
     English: SMART'S TIRE
     Russian: "\u041F\u041E\u041A\u0420\u042B\u0428\u041A\u0410 \u041E\u0422 \u0421\u041C\u0410\u0420\u0422\u0410"
@@ -25,10 +26,10 @@ MonoBehaviour:
   - title:
       English: 'Mass:'
       Russian: "\u041C\u0430\u0441\u0441\u0430:"
-    value: 2
+    value: 0
   - title:
       English: 'Bounciness:'
       Russian: "\u041F\u0440\u044B\u0433\u0443\u0447\u0435\u0441\u0442\u044C:"
-    value: 4
+    value: 0
   cost: 0
   path: Tires/Smart's Tire

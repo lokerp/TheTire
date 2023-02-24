@@ -15,6 +15,7 @@ TagManager:
   - RightArrow
   - DropdownArrow
   - OptionButton
+  - TimePanelButton
   layers:
   - Default
   - TransparentFX

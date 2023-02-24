@@ -36,6 +36,9 @@ public class MenuPagesSwitch : MonoBehaviour
         Debug.Log(gameObject.tag);
         switch (gameObject.tag)
         {
+            case "StartButton":
+                ScenesManager.Instance.SwitchScene("Game");
+                break;
             case "WheelShop":
                 OpenPage(PageTypes.WheelShop);
                 currentPage = PageTypes.WheelShop;

@@ -11,6 +11,6 @@ public class Database
     public int currentLaunches;
     public int currentMoney;
 
-    public TypesUtility.Item.Tire.Type currentTire;
-    public List<TypesUtility.Item.Tire.Type> availableTires;
+    public ItemTypes selectedTire;
+    public List<ItemTypes> availableTires;
 }

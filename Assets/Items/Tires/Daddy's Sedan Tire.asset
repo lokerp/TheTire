@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3976b6b7b2762f4ebc8cdce0083e221, type: 3}
   m_Name: Daddy's Sedan Tire
   m_EditorClassIdentifier: 
-  itemType: 1
-  tireType: 1
-  weaponType: 0
+  itemType:
+    item: 1
+    tire: 1
+    weapon: 0
   name:
     English: DADDY'S SEDAN TIRE
     Russian: "\u0411\u0410\u0422\u0418\u041D\u0410 \u041F\u041E\u041A\u0420\u042B\u0428\u041A\u0410"
@@ -25,10 +26,10 @@ MonoBehaviour:
   - title:
       English: 'Mass:'
       Russian: "\u041C\u0430\u0441\u0441\u0430:"
-    value: 2
+    value: 1
   - title:
       English: 'Bounciness:'
       Russian: "\u041F\u0440\u044B\u0433\u0443\u0447\u0435\u0441\u0442\u044C:"
-    value: 4
+    value: 2
   cost: 100
   path: Tires/Daddy's Sedan Tire

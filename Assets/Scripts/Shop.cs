@@ -2,35 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public enum ShopOption
-{
-    Buy,
-    NoMoney,
-    Use,
-    InUse
-}
 
 [RequireComponent(typeof(Animator))]
 public class Shop : MonoBehaviour, IDataControllable
 {
-    public TypesUtility.Item.Type itemType;
+    public ItemTypes.Type itemType;
     public Transform itemPlaceHolder;
+
     public List<ItemInfo> catalogue;
 
+    public GameObject leftArrowHolder;
+    public GameObject rightArrowHolder;
     public TextController itemNameHolder;
     public TextController itemDescriptionHolder;
-
     public ShopOptionButton optionButtonHolder;
-
     public TextMeshProUGUI costValueHolder;
- 
+
     public List<Property> propertyHolders;
 
     private Animator _animator;
-    private ShopOption _shopOption;
+    private ShopOptionButton.ShopOption _shopOption;
+    private ItemInfo selectedItem;
     private ItemInfo currentItem;
+    private int currentItemIndex;
     private List<ItemInfo> boughtItems;
 
     private void OnEnable()
@@ -70,12 +67,20 @@ public class Shop : MonoBehaviour, IDataControllable
 
     void ShowNext()
     {
-
+        if (currentItemIndex < catalogue.Count - 1)
+        {
+            currentItem = catalogue[++currentItemIndex];
+            SwitchItem();
+        }
     }
 
     void ShowPrev()
     {
-
+        if (currentItemIndex > 0)
+        {
+            currentItem = catalogue[--currentItemIndex];
+            SwitchItem();
+        }
     }
 
     void OpenInfoFrame()
@@ -88,14 +93,44 @@ public class Shop : MonoBehaviour, IDataControllable
 
     void InteractWithItem()
     {
-        
+        switch (_shopOption)
+        {
+            case ShopOptionButton.ShopOption.Use:
+                selectedItem = currentItem;
+                break;
+            case ShopOptionButton.ShopOption.Buy:
+                BuyItem();
+                break;
+        }
+        RefreshItemInfo();
+        DataManager.Instance.SaveGame();
+    }
+
+
+    void BuyItem()
+    {
+        if (boughtItems.Contains(currentItem)) 
+        {
+            Debug.LogError("Ошибка! Попытка купить уже купленный предмет");
+            return;
+        }
+        int exCode = MoneyManager.Instance.ChangeMoneyAmount(MoneyManager.Instance.MoneyAmount - currentItem.cost);
+
+        if (exCode == 0)
+            _shopOption = ShopOptionButton.ShopOption.NoMoney;
+        else if (exCode == 1)
+            boughtItems.Add(currentItem);
     }
 
     public void SaveData(ref Database database)
     {
         switch (itemType)
         {
-            case TypesUtility.Item.Type.Tire:
+            case ItemTypes.Type.Tire:
+                database.selectedTire = selectedItem.itemType;
+                database.availableTires = boughtItems.Select(t => t.itemType).ToList();
+                break;
+            case ItemTypes.Type.Weapon:
                 break;
         }
     }
@@ -104,55 +139,79 @@ public class Shop : MonoBehaviour, IDataControllable
     {
         switch (itemType)
         {
-            case TypesUtility.Item.Type.Tire:
+            case ItemTypes.Type.Tire:
+                selectedItem = ItemsManager.Instance.GetItemByType(database.selectedTire);
+                boughtItems = database.availableTires.Select(t => ItemsManager.Instance.GetItemByType(t)).ToList();
+                break;
+            case ItemTypes.Type.Weapon:
                 break;
         }
 
-        Debug.Log(currentItem);
-        SpawnItem(currentItem);
+        currentItem = selectedItem;
+        GetCurrentItemIndex();
+        SwitchItem();
     }
 
-    public void SpawnItem(ItemInfo item)
+    void SwitchItem()
     {
-        foreach(GameObject obj in itemPlaceHolder)
-            Destroy(obj);
+        SpawnItem();
+        RefreshItemInfo();
+    }
 
-        GameObject spawnedObj = Instantiate(SaveUtility.PathToPrefab<GameObject>(item.path), itemPlaceHolder, true);
+    void SpawnItem()
+    {
+        foreach(Transform obj in itemPlaceHolder)
+            Destroy(obj.gameObject);
+
+        GameObject spawnedObj = Instantiate(SaveUtility.PathToPrefab<GameObject>(currentItem.path), itemPlaceHolder, false);
         spawnedObj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX
                                                          | RigidbodyConstraints.FreezePositionZ
                                                          | RigidbodyConstraints.FreezeRotation;
-        RefreshItemInfo(item);
     }
 
-    void RefreshItemInfo(ItemInfo item)
+    void RefreshItemInfo()
     {
-        if (propertyHolders.Count != item.properties.Count)
+        if (propertyHolders.Count != currentItem.properties.Count)
             throw new System.Exception("Количество свойств меню != количеству свойств предмета!");
 
-        itemNameHolder.text = item.name;
+        itemNameHolder.text = currentItem.name;
         itemNameHolder.RefreshText();
 
-        itemDescriptionHolder.text = item.description;
+        itemDescriptionHolder.text = currentItem.description;
         itemDescriptionHolder.RefreshText();
 
-        costValueHolder.text = item.cost.ToString();
+        costValueHolder.text = currentItem.cost.ToString();
 
         for (int i = 0; i < propertyHolders.Count; i++)
         {
-            propertyHolders[i].title.text = item.properties[i].title;
+            propertyHolders[i].title.text = currentItem.properties[i].title;
             propertyHolders[i].title.RefreshText();
-            propertyHolders[i].rating.SetRating(item.properties[i].value);
+            propertyHolders[i].rating.SetRating(currentItem.properties[i].value);
         }
 
-        if (isBought(item))
-            if (currentItem == item)
-                _shopOption = ShopOption.InUse;
+        if (isBought(currentItem))
+            if (selectedItem == currentItem)
+                _shopOption = ShopOptionButton.ShopOption.InUse;
             else
-                _shopOption = ShopOption.Use;
-        else
-            _shopOption = ShopOption.Buy;
-
+                _shopOption = ShopOptionButton.ShopOption.Use;
+        else if (_shopOption != ShopOptionButton.ShopOption.NoMoney)
+            _shopOption = ShopOptionButton.ShopOption.Buy;
         optionButtonHolder.ChangeOption(_shopOption);
+
+        if (currentItemIndex >= catalogue.Count - 1)
+            rightArrowHolder.SetActive(false);
+        else if (!rightArrowHolder.activeInHierarchy)
+            rightArrowHolder.SetActive(true);
+
+        if (currentItemIndex <= 0)
+            leftArrowHolder.SetActive(false);
+        else if (!leftArrowHolder.activeInHierarchy)
+            leftArrowHolder.SetActive(true);
+    }
+
+    void GetCurrentItemIndex()
+    {
+        currentItemIndex = catalogue.IndexOf(currentItem);
     }
 
     void SortCatalogueByCost()

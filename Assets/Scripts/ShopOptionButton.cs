@@ -5,6 +5,14 @@ using UnityEngine;
 
 public class ShopOptionButton : MonoBehaviour
 {
+    public enum ShopOption
+    {
+        Buy,
+        NoMoney,
+        Use,
+        InUse
+    }
+
     public Color buyColor;
     public Color noMoneyColor;
     public Color useColor;

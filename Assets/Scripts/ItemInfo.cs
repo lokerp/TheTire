@@ -8,15 +8,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Info", menuName = "ScriptableObjects/ItemInfo", order = 1)]
 public class ItemInfo : ScriptableObject
 {
-    public TypesUtility.Item.Type itemType;
-    public TypesUtility.Item.Tire.Type tireType;
-    public TypesUtility.Item.Weapon.Type weaponType;
+    public ItemTypes itemType;
 
     [Serializable]
     public struct Property
     {
         public TranslatableText title;
-        [Range(1, 10)] public int value;
+        [Range(0, 10)] public int value;
     }
 
     public new TranslatableText name;

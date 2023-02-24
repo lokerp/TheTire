@@ -18,11 +18,6 @@ public class LanguageManager : MonoBehaviour, IDataControllable
 
     public LanguageManager() { }
 
-    void OnEnable()
-    {
-        slider.onValueChanged.AddListener(CheckValueChange);
-    }
-
     void OnDisable()
     {
         slider.onValueChanged.RemoveListener(CheckValueChange);
@@ -57,12 +52,13 @@ public class LanguageManager : MonoBehaviour, IDataControllable
                 slider.value = 0;
                 break;
             case Languages.Russian:
-                iconHolder.overrideSprite = englishIcon;
+                iconHolder.overrideSprite = russianIcon;
                 slider.value = 1;
                 break;
         }
 
         ChangeLanguage();
+        slider.onValueChanged.AddListener(CheckValueChange);
     }
 
     void CheckValueChange(float value)
