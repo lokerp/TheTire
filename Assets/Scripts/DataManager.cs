@@ -19,7 +19,6 @@ public class DataManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(this);
         }
         else
             Destroy(this);
@@ -48,7 +47,9 @@ public class DataManager : MonoBehaviour
             _database = loadedDatabase;
 
         foreach (var obj in dataControllableObjects)
+        {
             obj.LoadData(_database);
+        }
     }
 
     List<IDataControllable> FindAllDataControllables()

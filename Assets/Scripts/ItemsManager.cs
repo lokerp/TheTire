@@ -14,7 +14,6 @@ public class ItemsManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(this);
         }
         else
             Destroy(this);
@@ -23,5 +22,10 @@ public class ItemsManager : MonoBehaviour
     public ItemInfo GetItemByType(ItemTypes type)
     {
         return _items.Find((x) => x.itemType.Equals(type));
+    }
+
+    public static T PathToPrefab<T>(string path) where T : UnityEngine.Object
+    {
+        return Resources.Load<T>(path);
     }
 }

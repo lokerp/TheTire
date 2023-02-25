@@ -163,7 +163,7 @@ public class Shop : MonoBehaviour, IDataControllable
         foreach(Transform obj in itemPlaceHolder)
             Destroy(obj.gameObject);
 
-        GameObject spawnedObj = Instantiate(SaveUtility.PathToPrefab<GameObject>(currentItem.path), itemPlaceHolder, false);
+        GameObject spawnedObj = Instantiate(ItemsManager.PathToPrefab<GameObject>(currentItem.path), itemPlaceHolder, false);
         spawnedObj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX
                                                          | RigidbodyConstraints.FreezePositionZ
                                                          | RigidbodyConstraints.FreezeRotation;

@@ -44,7 +44,8 @@ public class UIEvents : MonoBehaviour
 
         foreach (var result in resultsData)
         {
-            if (result.gameObject.layer == LayerMask.NameToLayer("UI"))
+            if (result.gameObject != null && result.gameObject.activeInHierarchy
+                && result.gameObject.layer == LayerMask.NameToLayer("UI"))
             {
                 OnUIClick.Invoke(result.gameObject);
             }

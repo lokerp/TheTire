@@ -12,7 +12,7 @@ public class LanguageManager : MonoBehaviour, IDataControllable
     public Languages language;
     private Image iconHolder;
     private TextController[] controllers;
-    public Slider slider;
+    public Slider? slider;
     public Sprite englishIcon;
     public Sprite russianIcon;
 
@@ -20,7 +20,8 @@ public class LanguageManager : MonoBehaviour, IDataControllable
 
     void OnDisable()
     {
-        slider.onValueChanged.RemoveListener(CheckValueChange);
+        if (slider != null)
+            slider.onValueChanged.RemoveListener(CheckValueChange);
     }
 
     private void Awake()
@@ -28,12 +29,13 @@ public class LanguageManager : MonoBehaviour, IDataControllable
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(this);
         }
         else
             Destroy(this);
 
-        iconHolder = slider.handleRect.GetComponent<Image>();
+        if (slider != null)
+            iconHolder = slider.handleRect.GetComponent<Image>();
+
         controllers = FindObjectsOfType<TextController>(true);
     }
 
@@ -45,20 +47,22 @@ public class LanguageManager : MonoBehaviour, IDataControllable
     public void LoadData(Database database)
     {
         language = database.currentLanguage;
-        switch (language)
-        {
-            case Languages.English:
-                iconHolder.overrideSprite = englishIcon;
-                slider.value = 0;
-                break;
-            case Languages.Russian:
-                iconHolder.overrideSprite = russianIcon;
-                slider.value = 1;
-                break;
-        }
+        if (slider != null)
+            switch (language)
+            {
+                case Languages.English:
+                    iconHolder.overrideSprite = englishIcon;
+                    slider.value = 0;
+                    break;
+                case Languages.Russian:
+                    iconHolder.overrideSprite = russianIcon;
+                    slider.value = 1;
+                    break;
+            }
 
         ChangeLanguage();
-        slider.onValueChanged.AddListener(CheckValueChange);
+        if (slider != null)
+            slider.onValueChanged.AddListener(CheckValueChange);
     }
 
     void CheckValueChange(float value)
