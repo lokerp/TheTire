@@ -52,9 +52,7 @@ public class CamsManager : MonoBehaviour
     {
         if (LaunchController.Instance.IsLaunched && (_t / _noiseDuration) < 1)
         {
-            Debug.Log("test");
             _t += Time.deltaTime;
-
             _noiseController.m_FrequencyGain = Mathf.Lerp(_noiseStrength, _noiseDefaultStrength, _t / _noiseDuration);
         }
     }

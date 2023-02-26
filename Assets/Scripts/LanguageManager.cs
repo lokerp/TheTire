@@ -12,7 +12,7 @@ public class LanguageManager : MonoBehaviour, IDataControllable
     public Languages language;
     private Image iconHolder;
     private TextController[] controllers;
-    public Slider? slider;
+    public Slider slider;
     public Sprite englishIcon;
     public Sprite russianIcon;
 

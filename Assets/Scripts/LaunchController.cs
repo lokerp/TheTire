@@ -56,7 +56,7 @@ public class LaunchController : MonoBehaviour
         }
         else
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
 
         _input = new();
