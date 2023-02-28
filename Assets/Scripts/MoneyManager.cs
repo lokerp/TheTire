@@ -15,7 +15,6 @@ public class MoneyManager : MonoBehaviour, IDataControllable
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(this);
         }
         else
             Destroy(this);
@@ -46,6 +45,7 @@ public class MoneyManager : MonoBehaviour, IDataControllable
 
     void RefreshMoneyText()
     {
-        moneyText.text = MoneyAmount.ToString();
+        if (moneyText != null)
+            moneyText.text = MoneyAmount.ToString();
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine;
 public class LaunchesManager : MonoBehaviour, IDataControllable
 {
     public static LaunchesManager Instance { get; private set; }
+    public int LaunchesAmount { get; private set; }
     public int maxLaunches = 10;
     public int timeToRecoverInMin = 5;
     public TextMeshProUGUI launchesText;
@@ -13,7 +14,6 @@ public class LaunchesManager : MonoBehaviour, IDataControllable
     public TextMeshProUGUI timeText;
     private bool _isTimerRunning;
 
-    private int _launchesAmount;
     private int timeToRecoverInSec;
     private int _timePassed = 0;
 
@@ -41,7 +41,7 @@ public class LaunchesManager : MonoBehaviour, IDataControllable
 
     void Update()
     {
-        if (!_isTimerRunning && _launchesAmount < maxLaunches)
+        if (!_isTimerRunning && LaunchesAmount < maxLaunches)
         {
             _timePassed = 0;
             _isTimerRunning = true;
@@ -51,14 +51,14 @@ public class LaunchesManager : MonoBehaviour, IDataControllable
 
     public void LoadData(Database database)
     {
-        _launchesAmount = database.currentLaunches;
+        LaunchesAmount = database.currentLaunches;
         RefreshLaunchesText();
         SetTimeText();
     }
 
     public void SaveData(ref Database database)
     {
-        database.currentLaunches = _launchesAmount;
+        database.currentLaunches = LaunchesAmount;
     }
 
     private IEnumerator StartTimer()
@@ -73,7 +73,7 @@ public class LaunchesManager : MonoBehaviour, IDataControllable
         if (_timePassed >= timeToRecoverInSec)
         {
             _isTimerRunning = false;
-            _launchesAmount++;
+            LaunchesAmount++;
             SetTimeText();
             RefreshLaunchesText();
             DataManager.Instance.SaveGame();
@@ -82,7 +82,10 @@ public class LaunchesManager : MonoBehaviour, IDataControllable
 
     void SetTimeText()
     {
-        if (_launchesAmount == maxLaunches)
+        if (timeText == null)
+            return;
+
+        if (LaunchesAmount == maxLaunches)
         {
             timeText.text = $"0:00";
             return;
@@ -117,6 +120,19 @@ public class LaunchesManager : MonoBehaviour, IDataControllable
 
     void RefreshLaunchesText()
     {
-        launchesText.text = $"{_launchesAmount}/{maxLaunches}";
+        if (launchesText != null)
+            launchesText.text = $"{LaunchesAmount}/{maxLaunches}";
+    }
+
+    public bool CanPlay()
+    {
+        if (LaunchesAmount > 0)
+            return true;
+        return false;
+    }
+
+    public void ReduceLaunchesAmount()
+    {
+        LaunchesAmount--;
     }
 }

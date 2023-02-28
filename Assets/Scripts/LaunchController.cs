@@ -21,13 +21,16 @@ public class LaunchController : MonoBehaviour
     public RectTransform redZone;
     public RectTransform orangeZone;
 
+    public ParticleSystem launchEffect;
     public float smoothTime = 2;
     public float maxVelocity = 5f;
     public float maxAngle = 90;
     public float minAngle = 0;
-    public static event Action<float, float> OnLaunch;
+    public static event Action<float> OnLaunch;
     public bool IsLaunched { get; private set; }
 
+    private Rigidbody _player;
+    private float _forceModifier = 100;
     private PlayerInput _input;
     private float _amplitude;
     private Vector3 _velocity = Vector3.zero;
@@ -69,14 +72,29 @@ public class LaunchController : MonoBehaviour
         arrow.localPosition = _bottomPosition;
     }
 
+    private void Start()
+    {
+        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
+
+    }
+
     private void Launch(InputAction.CallbackContext obj)
     {
         if (!IsLaunched)
         {
             float angle = GetChoiceYPosition() / GetScaleHeight() * (maxAngle - minAngle);
             float bonusCoef = GetScaleBonus();
+            _forceModifier *= bonusCoef;
 
-            OnLaunch.Invoke(angle, bonusCoef);
+            _player.constraints = RigidbodyConstraints.None;
+            float cos = Mathf.Cos(Mathf.Deg2Rad * angle);
+            float sin = Mathf.Sin(Mathf.Deg2Rad * angle);
+            Vector3 force = new Vector3(0, sin, cos) * _forceModifier;
+            _player.AddForce(force, ForceMode.Impulse);
+
+            launchEffect.Play();
+
+            OnLaunch.Invoke(_forceModifier);
             IsLaunched = true;
         }
     }

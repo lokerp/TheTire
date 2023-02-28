@@ -17,13 +17,11 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         _input.Enable();
-        LaunchController.OnLaunch += Launch;
     }
 
     private void OnDisable()
     {
         _input.Disable();
-        LaunchController.OnLaunch -= Launch;
     }
 
     private void Awake()
@@ -31,15 +29,6 @@ public class PlayerController : MonoBehaviour
         _input = new();
         _rigidbody = GetComponent<Rigidbody>();
         turnSpeed = 1 - Mathf.Clamp01((Mathf.Clamp(_rigidbody.mass, 5, 30) - 5) * 0.04f);
-    }
-
-    private void Launch(float angle, float bonusCoef)
-    {
-        _rigidbody.constraints = RigidbodyConstraints.None;
-        float cos = Mathf.Cos(Mathf.Deg2Rad * angle);
-        float sin = Mathf.Sin(Mathf.Deg2Rad * angle);
-        _force = new Vector3(0, sin, cos) * forceModifier * bonusCoef;
-        _rigidbody.AddForce(_force, ForceMode.Impulse);
     }
 
     private void Turn(float turnDirection)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,7 +38,7 @@ public class MenuPagesSwitch : MonoBehaviour
         switch (gameObject.tag)
         {
             case "StartButton":
-                ScenesManager.Instance.SwitchScene("Game");
+                StartGame();
                 break;
             case "WheelShop":
                 OpenPage(PageTypes.WheelShop);
@@ -53,6 +54,15 @@ public class MenuPagesSwitch : MonoBehaviour
                 break;
 
         }
+    }
+
+    private void StartGame()
+    {
+        if (LaunchesManager.Instance.CanPlay())
+        {
+            ScenesManager.Instance.SwitchScene("Game");
+        }
+        else { }
     }
 
     void OpenPage(PageTypes clickedType)

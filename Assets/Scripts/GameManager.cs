@@ -14,21 +14,26 @@ public class GameManager : MonoBehaviour, IDataControllable
     public Animator UIAnimator;
     public TextMeshProUGUI timerText;
     public float timeForEndInS;
+    [Header("Result's info")]
+    public TextMeshProUGUI distanceResult;
+    public TextMeshProUGUI moneyEarnedResult;
 
     private bool _isPlaying = true;
     private GameObject _player;
     private GameObject _playerPrefab;
     private float _passedDistance = 0;
-    private float _earnedMoney = 0;
+    private int _earnedMoney = 0;
 
     private void OnEnable()
     {
         LaunchController.OnLaunch += OnLaunch;
+        UIEvents.OnUIClick += UIClickHandler;
     }
 
     private void OnDisable()
     {
         LaunchController.OnLaunch -= OnLaunch;
+        UIEvents.OnUIClick -= UIClickHandler;
     }
 
     private void Awake()
@@ -37,6 +42,13 @@ public class GameManager : MonoBehaviour, IDataControllable
             Instance = this;
         else
             Destroy(gameObject);
+    }
+
+    private void UIClickHandler(GameObject obj)
+    {
+        Debug.Log(obj.tag);
+        if (obj.CompareTag("BackButton"))
+            ScenesManager.Instance.SwitchScene("Menu");
     }
 
     public void LoadData(Database database)
@@ -61,7 +73,7 @@ public class GameManager : MonoBehaviour, IDataControllable
         _player = spawnedObj;
     }
 
-    private void OnLaunch(float arg1, float arg2)
+    private void OnLaunch(float arg1)
     {
         passedDistanceText.gameObject.SetActive(true);
         StartCoroutine(RefreshPassedDistance());
@@ -70,8 +82,15 @@ public class GameManager : MonoBehaviour, IDataControllable
 
     private void EndGame()
     {
-        _earnedMoney = (int) _passedDistance / 10;
+        UIAnimator.SetBool("IsResultsOpen", true);
 
+        _earnedMoney = (int) (_passedDistance / 10);
+        distanceResult.text = Mathf.CeilToInt(_passedDistance).ToString();
+        moneyEarnedResult.text = _earnedMoney.ToString();
+
+        MoneyManager.Instance.ChangeMoneyAmount(MoneyManager.Instance.MoneyAmount + _earnedMoney);
+        LaunchesManager.Instance.ReduceLaunchesAmount();
+        DataManager.Instance.SaveGame();
     }
 
     IEnumerator RefreshPassedDistance()
@@ -99,8 +118,8 @@ public class GameManager : MonoBehaviour, IDataControllable
         {
             currentTime = Time.time;
             Vector3 playerVelocity = playerRigidbody.velocity;
-            Debug.Log($"Distance: {Vector3.Distance(playerVelocity, velocityToEnd)}");
-            Debug.Log($"Magnitude: {velocityToEnd.magnitude}");
+            //Debug.Log($"Distance: {Vector3.Distance(playerVelocity, velocityToEnd)}");
+            //Debug.Log($"Magnitude: {velocityToEnd.magnitude}");
 
             if (Vector3.Distance(playerVelocity, velocityToEnd) <= velocityToEnd.magnitude)
             {

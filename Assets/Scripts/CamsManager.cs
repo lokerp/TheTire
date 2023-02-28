@@ -25,14 +25,12 @@ public class CamsManager : MonoBehaviour
         LaunchController.OnLaunch -= SwitchCamera;
     }
 
-    private void SwitchCamera(float angle, float bonusCoef)
+    private void SwitchCamera(float forceModifier)
     {
         mainCamera.gameObject.SetActive(true);
         sideCamera.gameObject.SetActive(false);
 
-        float force = player.GetComponent<PlayerController>().forceModifier;
-
-        _noiseStrength = force * bonusCoef;
+        _noiseStrength = forceModifier;
         _noiseController.m_FrequencyGain = _noiseStrength;
     }
 
