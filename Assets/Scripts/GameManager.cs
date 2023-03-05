@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour, IDataControllable
     public GameManager Instance { get; private set; }
 
     public Transform tireHolder;
+    public Transform weaponHolder;
     public TextMeshProUGUI passedDistanceText;
     public Animator UIAnimator;
     public TextMeshProUGUI timerText;
@@ -17,11 +18,15 @@ public class GameManager : MonoBehaviour, IDataControllable
     [Header("Result's info")]
     public TextMeshProUGUI distanceResult;
     public TextMeshProUGUI moneyEarnedResult;
+    public GameObject recordHolder;
 
     private bool _isPlaying = true;
     private GameObject _player;
     private GameObject _playerPrefab;
+    private GameObject _weapon;
+    private GameObject _weaponPrefab;
     private float _passedDistance = 0;
+    private float _recordDistance = 0;
     private int _earnedMoney = 0;
 
     private void OnEnable()
@@ -54,12 +59,16 @@ public class GameManager : MonoBehaviour, IDataControllable
     public void LoadData(Database database)
     {
         _playerPrefab = ItemsManager.PathToPrefab<GameObject>(ItemsManager.Instance.GetItemByType(database.selectedTire).path);
+        _weaponPrefab = ItemsManager.PathToPrefab<GameObject>(ItemsManager.Instance.GetItemByType(database.selectedWeapon).path);
+        _recordDistance = database.recordDistance;
         SpawnTire();
+        SpawnWeapon();
     }
 
     public void SaveData(ref Database database)
     {
-
+        if (_passedDistance > _recordDistance)
+            database.recordDistance = _passedDistance;
     }
 
     void SpawnTire()
@@ -73,6 +82,18 @@ public class GameManager : MonoBehaviour, IDataControllable
         _player = spawnedObj;
     }
 
+    private void SpawnWeapon()
+    {
+        GameObject spawnedObj = Instantiate(_weaponPrefab, weaponHolder, false);
+        Rigidbody spawnedObjRb = spawnedObj.GetComponent<Rigidbody>();
+
+        spawnedObjRb.constraints = RigidbodyConstraints.None;
+        spawnedObjRb.isKinematic = true;
+
+        _weapon = spawnedObj;
+        _weapon.GetComponent<Animator>().SetTrigger("HitPrepare");
+    }
+
     private void OnLaunch(float arg1)
     {
         passedDistanceText.gameObject.SetActive(true);
@@ -83,6 +104,11 @@ public class GameManager : MonoBehaviour, IDataControllable
     private void EndGame()
     {
         UIAnimator.SetBool("IsResultsOpen", true);
+
+        if (_passedDistance > _recordDistance)
+            recordHolder.SetActive(true);
+        else
+            recordHolder.SetActive(false);
 
         _earnedMoney = (int) (_passedDistance / 10);
         distanceResult.text = Mathf.CeilToInt(_passedDistance).ToString();

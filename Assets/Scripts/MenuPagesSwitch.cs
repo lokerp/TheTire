@@ -29,7 +29,7 @@ public class MenuPagesSwitch : MonoBehaviour
 
     private void Start()
     {
-        OpenPage(currentPage);
+        OpenPage(currentPage, false);
     }
 
     void UIClickHandler(GameObject gameObject)
@@ -41,14 +41,15 @@ public class MenuPagesSwitch : MonoBehaviour
                 StartGame();
                 break;
             case "WheelShop":
-                OpenPage(PageTypes.WheelShop);
-                currentPage = PageTypes.WheelShop;
-                pageHistory.AddLast(currentPage);
+                OpenPage(PageTypes.WheelShop, true);
+                break;
+            case "WeaponShop":
+                OpenPage(PageTypes.WeaponShop, true);
                 break;
             case "BackButton":
                 if (pageHistory.Count > 1)
                 {
-                    OpenPage(pageHistory.Last.Previous.Value);
+                    OpenPage(pageHistory.Last.Previous.Value, false);
                     pageHistory.RemoveLast();
                 }
                 break;
@@ -65,7 +66,7 @@ public class MenuPagesSwitch : MonoBehaviour
         else { }
     }
 
-    void OpenPage(PageTypes clickedType)
+    void OpenPage(PageTypes clickedType, bool addInHistory)
     {
         bool hasOpened = false;
 
@@ -75,6 +76,11 @@ public class MenuPagesSwitch : MonoBehaviour
             {
                 page.Open();
                 hasOpened = true;
+                if (addInHistory)
+                {
+                    currentPage = page.pageType;
+                    pageHistory.AddLast(page.pageType);
+                }
             }
             else
                 page.Close();

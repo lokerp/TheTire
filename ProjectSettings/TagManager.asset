@@ -16,6 +16,8 @@ TagManager:
   - DropdownArrow
   - OptionButton
   - TimePanelButton
+  - WeaponShop
+  - Weapon
   layers:
   - Default
   - TransparentFX

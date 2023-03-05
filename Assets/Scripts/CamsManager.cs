@@ -7,9 +7,9 @@ public class CamsManager : MonoBehaviour
 {
     public CinemachineVirtualCamera mainCamera;
     public CinemachineVirtualCamera sideCamera;
-    public GameObject player;
     public float _noiseDuration;
 
+    private GameObject _player;
     private CinemachineBasicMultiChannelPerlin _noiseController;
     private float _noiseStrength;
     private float _noiseDefaultStrength = 1;
@@ -17,12 +17,30 @@ public class CamsManager : MonoBehaviour
 
     private void OnEnable()
     {
-        LaunchController.OnLaunch += SwitchCamera;
+        LaunchController.OnLaunch += OnLaunch;
     }
 
     private void OnDisable()
     {
-        LaunchController.OnLaunch -= SwitchCamera;
+        LaunchController.OnLaunch -= OnLaunch;
+    }
+
+    void Start()
+    {
+        _player = GameObject.FindGameObjectWithTag("Player");
+        _noiseController = mainCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+
+        mainCamera.gameObject.SetActive(false);
+        sideCamera.gameObject.SetActive(true);
+
+        mainCamera.Follow = _player.transform;
+        mainCamera.LookAt = _player.transform;
+    }
+
+    void OnLaunch(float forceModifier)
+    {
+        SwitchCamera(forceModifier);
+        StartCoroutine(DoCameraNoise());
     }
 
     private void SwitchCamera(float forceModifier)
@@ -34,24 +52,13 @@ public class CamsManager : MonoBehaviour
         _noiseController.m_FrequencyGain = _noiseStrength;
     }
 
-    void Start()
+    IEnumerator DoCameraNoise()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        _noiseController = mainCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-
-        mainCamera.gameObject.SetActive(false);
-        sideCamera.gameObject.SetActive(true);
-
-        mainCamera.Follow = player.transform;
-        mainCamera.LookAt = player.transform;
-    }
-
-    private void Update()
-    {
-        if (LaunchController.Instance.IsLaunched && (_t / _noiseDuration) < 1)
+        while ((_t / _noiseDuration) < 1)
         {
             _t += Time.deltaTime;
             _noiseController.m_FrequencyGain = Mathf.Lerp(_noiseStrength, _noiseDefaultStrength, _t / _noiseDuration);
+            yield return null;
         }
     }
 

@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 8795098820107703478}
   - component: {fileID: 4767965830213647930}
   - component: {fileID: 3469287838675757888}
-  - component: {fileID: 3469287838675757887}
   m_Layer: 0
   m_Name: Smart's Tire
   m_TagString: Player
@@ -116,16 +115,3 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &3469287838675757887
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6993680891567781219}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6dd6cfa59d6f6514fab74783ef861f5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  info: {fileID: 11400000, guid: 005f0786626d4014ea5e6d18a6c76cd0, type: 2}

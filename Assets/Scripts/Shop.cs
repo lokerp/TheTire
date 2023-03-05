@@ -144,6 +144,8 @@ public class Shop : MonoBehaviour, IDataControllable
                 boughtItems = database.availableTires.Select(t => ItemsManager.Instance.GetItemByType(t)).ToList();
                 break;
             case ItemTypes.Type.Weapon:
+                selectedItem = ItemsManager.Instance.GetItemByType(database.selectedWeapon);
+                boughtItems = database.availableWeapons.Select(t => ItemsManager.Instance.GetItemByType(t)).ToList();
                 break;
         }
 
@@ -162,6 +164,7 @@ public class Shop : MonoBehaviour, IDataControllable
     {
         foreach(Transform obj in itemPlaceHolder)
             Destroy(obj.gameObject);
+        Debug.Log(currentItem);
 
         GameObject spawnedObj = Instantiate(ItemsManager.PathToPrefab<GameObject>(currentItem.path), itemPlaceHolder, false);
         spawnedObj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX
@@ -189,7 +192,7 @@ public class Shop : MonoBehaviour, IDataControllable
             propertyHolders[i].rating.SetRating(currentItem.properties[i].value);
         }
 
-        if (isBought(currentItem))
+        if (IsBought(currentItem))
             if (selectedItem == currentItem)
                 _shopOption = ShopOptionButton.ShopOption.InUse;
             else
@@ -219,7 +222,7 @@ public class Shop : MonoBehaviour, IDataControllable
         catalogue.Sort((x, y) => x.cost.CompareTo(y.cost));
     }
 
-    bool isBought(ItemInfo item)
+    bool IsBought(ItemInfo item)
     {
         if (boughtItems.Find((x) => x.name == item.name))
             return true;

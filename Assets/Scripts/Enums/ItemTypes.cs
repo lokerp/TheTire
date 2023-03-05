@@ -28,7 +28,7 @@ public struct ItemTypes : IEquatable<ItemTypes>
         public enum Type
         {
             None,
-            zalupa,
+            WoodenStick,
         }
     }
 

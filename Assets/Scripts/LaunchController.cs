@@ -22,15 +22,16 @@ public class LaunchController : MonoBehaviour
     public RectTransform orangeZone;
 
     public ParticleSystem launchEffect;
-    public float smoothTime = 2;
-    public float maxVelocity = 5f;
+    public float smoothScaleArrowTime = 0.1f;
+    public float maxScaleArrowVelocity = 3000f;
     public float maxAngle = 90;
     public float minAngle = 0;
     public static event Action<float> OnLaunch;
     public bool IsLaunched { get; private set; }
 
     private Rigidbody _player;
-    private float _forceModifier = 100;
+    private Weapon _weapon;
+    private float _forceModifier;
     private PlayerInput _input;
     private float _amplitude;
     private Vector3 _velocity = Vector3.zero;
@@ -63,7 +64,7 @@ public class LaunchController : MonoBehaviour
         }
 
         _input = new();
-        _input.Player.Launch.performed += Launch;
+        _input.Player.Launch.performed += (obj) => StartCoroutine(Launch());
 
         _amplitude = scale.sizeDelta.y / 2 - 20;
         _bottomPosition = new Vector3(arrow.localPosition.x, arrow.localPosition.y - _amplitude, arrow.localPosition.z);
@@ -75,27 +76,38 @@ public class LaunchController : MonoBehaviour
     private void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
+        _weapon = GameObject.FindGameObjectWithTag("Weapon").GetComponent<Weapon>();
 
+        if (_player == null) Debug.LogError("Couldn't find object with tag 'player'");
+        if (_weapon == null) Debug.LogError("Couldn't find object with tag 'weapon'");
     }
 
-    private void Launch(InputAction.CallbackContext obj)
+    private IEnumerator Launch()
     {
         if (!IsLaunched)
         {
+            IsLaunched = true;
+
+            Animator weaponAnimator = _weapon.GetComponent<Animator>();
+            AnimationEndHandler weaponHitEndHandler = _weapon.GetComponent<AnimationEndHandler>();
+
             float angle = GetChoiceYPosition() / GetScaleHeight() * (maxAngle - minAngle);
             float bonusCoef = GetScaleBonus();
-            _forceModifier *= bonusCoef;
+
+            _forceModifier = _weapon.GetPower() * bonusCoef;
 
             _player.constraints = RigidbodyConstraints.None;
             float cos = Mathf.Cos(Mathf.Deg2Rad * angle);
             float sin = Mathf.Sin(Mathf.Deg2Rad * angle);
             Vector3 force = new Vector3(0, sin, cos) * _forceModifier;
+
+            weaponAnimator.SetTrigger("Hit");
+            while (weaponHitEndHandler.IsAnimationEnded != true)
+                yield return null;
+
             _player.AddForce(force, ForceMode.Impulse);
-
             launchEffect.Play();
-
             OnLaunch.Invoke(_forceModifier);
-            IsLaunched = true;
         }
     }
 
@@ -106,13 +118,13 @@ public class LaunchController : MonoBehaviour
         {
             if (_moveSide == 1)
             {
-                arrow.localPosition = Vector3.SmoothDamp(arrow.localPosition, _topPosition, ref _velocity, smoothTime, maxVelocity);
+                arrow.localPosition = Vector3.SmoothDamp(arrow.localPosition, _topPosition, ref _velocity, smoothScaleArrowTime, maxScaleArrowVelocity);
                 if (arrow.localPosition.y > _amplitude - 1)
                     _moveSide = 0;
             }
             else if (_moveSide == 0)
             {
-                arrow.localPosition = Vector3.SmoothDamp(arrow.localPosition, _bottomPosition, ref _velocity, smoothTime, maxVelocity);
+                arrow.localPosition = Vector3.SmoothDamp(arrow.localPosition, _bottomPosition, ref _velocity, smoothScaleArrowTime, maxScaleArrowVelocity);
                 if (arrow.localPosition.y < -_amplitude + 1)
                     _moveSide = 1;
             }
@@ -133,15 +145,12 @@ public class LaunchController : MonoBehaviour
 
     float GetScaleBonus()
     {
-        switch (_zone)
+        return _zone switch
         {
-            case ScaleZone.redZone:
-                return 1.5f;
-            case ScaleZone.orangeZone:
-                return 1.2f;
-            default:
-                return 1f;
-        }
+            ScaleZone.redZone => 1.5f,
+            ScaleZone.orangeZone => 1.2f,
+            _ => 1f,
+        };
     }
 
     void CheckZone()

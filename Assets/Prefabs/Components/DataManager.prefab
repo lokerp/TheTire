@@ -24,7 +24,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5050202994527333372}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5.668036, y: 3.312882, z: -59.981327}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -48,7 +48,8 @@ MonoBehaviour:
   _database:
     currentLanguage: 0
     currentLaunches: 5
-    currentMoney: 100
+    currentMoney: 50
+    recordDistance: 0
     selectedTire:
       item: 1
       tire: 1
@@ -57,3 +58,11 @@ MonoBehaviour:
     - item: 1
       tire: 1
       weapon: 0
+    selectedWeapon:
+      item: 2
+      tire: 0
+      weapon: 1
+    availableWeapons:
+    - item: 2
+      tire: 0
+      weapon: 1
