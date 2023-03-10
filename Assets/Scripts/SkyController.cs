@@ -4,20 +4,53 @@ using UnityEngine;
 
 public class SkyController : MonoBehaviour
 {
-    private Transform playerTransform;
-    private Vector3 playerPos;
+    public Material skyMaterial;
 
-    // Start is called before the first frame update
-    void Start()
+    private Vector3 _defaultSkyScale;
+    private Vector3 _startPlayerPos;
+    private Transform _playerPos;
+    private Rigidbody _playerRb;
+    private MeshRenderer _skyMesh;
+    private float _nonScaleMeshSize;
+
+    private void Awake()
     {
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        playerPos = playerTransform.position;
+        _skyMesh = GetComponent<MeshRenderer>();
+        _defaultSkyScale = transform.localScale;
     }
 
-    // Update is called once per frame
+    void Start()
+    {
+        _playerPos = GameObject.FindGameObjectWithTag("Player").transform;
+        _startPlayerPos = _playerPos.position;
+        _playerRb = _playerPos.GetComponent<Rigidbody>();
+        _nonScaleMeshSize = _skyMesh.bounds.size.y / _defaultSkyScale.y;
+    }
+
+
     void LateUpdate()
     {
-        playerPos = playerTransform.position;
-        transform.position = new Vector3(transform.position.x, transform.position.y, playerPos.z);
+        UpscaleSky();
+
+    }
+
+    void UpscaleSky()
+    {
+        transform.position = new Vector3(transform.position.x, transform.position.y, _playerPos.position.z);
+
+        float newYCoordinates = transform.localScale.y + (_playerRb.velocity.y / _nonScaleMeshSize);
+
+        Vector3 sizeAdjVector = new(transform.localScale.x,
+                                    newYCoordinates,
+                                    transform.localScale.z);
+
+        if (_playerRb.velocity.y > 0 && _playerPos.position.y / _skyMesh.bounds.size.y > 0.8f
+            || transform.localScale.y > _defaultSkyScale.y)
+        {
+            transform.localScale = Vector3.Lerp(transform.localScale, sizeAdjVector, Time.deltaTime);
+        }
+
+        else if (!Mathf.Approximately(transform.localScale.y, _defaultSkyScale.y))
+            transform.localScale = Vector3.Lerp(transform.localScale, _defaultSkyScale, 5);
     }
 }

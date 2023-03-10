@@ -13,7 +13,11 @@ public class CloudsController : MonoBehaviour
     public int minHeight = 80;
     public int maxHeight = 130;
     public int spreadRadius = 120;
-    public int sphereRadius = 900;
+    public int sphereDiameter = 900;
+    public Material material;
+    [Range(0, 10)]public float scaleMinAmount = 1f;
+    [Range(0, 10)]public float scaleMaxAmount = 5f;
+
     private Transform playerTransform;
     private Vector3 playerPos;
 
@@ -30,13 +34,7 @@ public class CloudsController : MonoBehaviour
         SpawnSkiesAtStart(playerPos);
         spawnedSkies = FindSpawnedSkies();
 
-        StartCoroutine("SpawnSkies");
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        StartCoroutine(SpawnSkies());
     }
 
     GameObject ShouldSpawn() 
@@ -56,12 +54,14 @@ public class CloudsController : MonoBehaviour
 
         while (true)
         {
-            sky = poolManager.SpawnYoungest(out spawnIndex);
+            sky = poolManager.SpawnYoungest();
             if (sky)
             {
                 sky.transform.position = new Vector3(Random.Range(-spreadRadius, spreadRadius),
                                                      Random.Range(minHeight, maxHeight),
-                                                     Random.Range(playerPos.z + 100, playerPos.z + sphereRadius / 2));
+                                                     Random.Range(playerPos.z + 100, playerPos.z + sphereDiameter / 2));
+
+                SetRandomTransform(sky.transform);
                 spawnedSkies.Add(sky);
             }
             else
@@ -71,15 +71,18 @@ public class CloudsController : MonoBehaviour
 
     IEnumerator SpawnSkies()
     {
+        int heightsAmplitude = maxHeight - minHeight;
         while (true)
         {
             GameObject sky;
             if (sky = ShouldSpawn())
             {
-                Debug.Log(sky);
                 sky.transform.position = new Vector3(Random.Range(-spreadRadius, spreadRadius),
-                                                     Random.Range(minHeight, maxHeight),
-                                                     Random.Range(playerPos.z + sphereRadius / 2 + 50, playerPos.z + sphereRadius / 2 + 400));
+                                                     Random.Range(Mathf.Clamp(playerPos.y - heightsAmplitude, minHeight, int.MaxValue),
+                                                                  Mathf.Clamp(playerPos.y + heightsAmplitude, minHeight, int.MaxValue)),
+                                                     Random.Range(playerPos.z + sphereDiameter / 2 + 50, playerPos.z + sphereDiameter / 2 + 400));
+
+                SetRandomTransform(sky.transform);
             }
 
             yield return new WaitForSeconds(timeToCheckInSeconds);
@@ -96,5 +99,16 @@ public class CloudsController : MonoBehaviour
                 skies.Add(sky);
 
         return skies;
+    }
+
+    void SetRandomTransform(Transform sky)
+    {
+        sky.localScale = new Vector3(Random.Range(scaleMinAmount, scaleMaxAmount),
+                                     sky.localScale.x,
+                                     Random.Range(scaleMinAmount, scaleMaxAmount));
+
+        sky.transform.rotation = Quaternion.Euler(sky.transform.rotation.z,
+                                                  Random.Range(0, 180),
+                                                  sky.transform.rotation.z);
     }
 }

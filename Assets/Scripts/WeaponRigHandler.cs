@@ -5,16 +5,24 @@ using UnityEngine.Animations.Rigging;
 
 public class WeaponRigHandler : MonoBehaviour
 {
-    public TwoBoneIKConstraint RHRig;
-    public TwoBoneIKConstraint LHRig;
+    public Transform RHRigTarget;
+    public Transform LHRigTarget;
 
     private Weapon _weapon;
+    private Transform RHRigInnerTarget;
+    private Transform LHRigInnerTarget;
 
     void Start()
     {
         _weapon = GameObject.FindGameObjectWithTag("Weapon").GetComponent<Weapon>();
 
-        RHRig.data.target = _weapon.RHTargetInner;
-        LHRig.data.target = _weapon.LHTargetInner;
+        RHRigInnerTarget = _weapon.RHTargetInner;
+        LHRigInnerTarget = _weapon.LHTargetInner;
+    }
+
+    private void Update()
+    {
+        RHRigTarget.SetPositionAndRotation(RHRigInnerTarget.position, RHRigInnerTarget.rotation);
+        LHRigTarget.SetPositionAndRotation(LHRigInnerTarget.position, LHRigInnerTarget.rotation);
     }
 }

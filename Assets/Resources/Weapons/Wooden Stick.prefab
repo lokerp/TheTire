@@ -211,6 +211,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff3d219c6aba938409042d571d92ce94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _power: 100
+  _power: 1000
   RHTargetInner: {fileID: 6905543430729876496}
   LHTargetInner: {fileID: 6905543429706566337}

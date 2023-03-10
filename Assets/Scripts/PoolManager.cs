@@ -4,20 +4,18 @@ using UnityEngine;
 
 public class PoolManager
 {
-    List<GameObject> pools = new List<GameObject>();
+    List<GameObject> pools = new();
 
-    public GameObject SpawnUnused(int inIndex, out int outIndex, bool startOverIfEnd)
+    public GameObject SpawnByIndex(int inIndex, out int outIndex, bool startOverIfEnd)
     {
         outIndex = -1;
 
-        if (inIndex + 1 >= pools.Count && startOverIfEnd)
+        if ((inIndex >= pools.Count || inIndex < 0) && startOverIfEnd)
         {
-            pools.Add(pools[0]);
-            pools.RemoveAt(0);
-            inIndex--;
+            inIndex %= pools.Count;
         }
 
-        for (int i = inIndex + 1; i < pools.Count; i++)
+        for (int i = inIndex; i < pools.Count; i++)
         {
             if (!pools[i].activeInHierarchy)
             {
@@ -29,33 +27,50 @@ public class PoolManager
 
         return null;
     }
-    public GameObject SpawnYoungest(out int outIndex)
+    public GameObject SpawnYoungest()
     {
-        outIndex = -1;
         for (int i = 0; i < pools.Count; i++)
         {
             if (!pools[i].activeInHierarchy)
             {
                 pools[i].SetActive(true);
-                outIndex = i;
                 return pools[i];
             }
         }
         return null;
     }
 
-    public bool DespawnOldest(out int outIndex)
+    public bool DespawnOldest()
     {
-        outIndex = -1;
         for (int i = 0; i < pools.Count; i++)
         {
             if (pools[i].activeInHierarchy)
             {
                 pools[i].SetActive(false);
-                outIndex = i;
                 return true;
             }
         }
+        return false;
+    }
+
+    public bool DespawnByIndex(int inIndex, out int outIndex, bool startOverIfEnd)
+    {
+        outIndex = -1;
+
+
+        if ((inIndex >= pools.Count || inIndex < 0) && startOverIfEnd)
+        {
+            inIndex %= pools.Count;
+        }
+
+        if (!pools[inIndex].activeInHierarchy)
+        {
+            pools[inIndex].SetActive(true);
+            outIndex = inIndex;
+            return true;
+        }
+
+        Debug.LogError("!!! Ёлемент не был деспавнен!");
         return false;
     }
 
