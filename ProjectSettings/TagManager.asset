@@ -18,6 +18,8 @@ TagManager:
   - TimePanelButton
   - WeaponShop
   - Weapon
+  - Water
+  - Cloud
   layers:
   - Default
   - TransparentFX

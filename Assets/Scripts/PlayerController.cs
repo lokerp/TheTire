@@ -7,12 +7,16 @@ using UnityEngine.InputSystem.Controls;
 
 public class PlayerController : MonoBehaviour
 {
-    public float forceModifier = 10;
+    public float waterDrag = 10;
+    public float waterAngularDrag = 10;
+    public float cloudDrag = 5;
+    public float cloudAngularDrag = 5;
 
-    private float turnSpeed = 1;
+    private float _drag;
+    private float _angularDrag;
+    private float _turnSpeed = 1;
     PlayerInput _input;
     Rigidbody _rigidbody;
-    Vector3 _force;
 
     private void OnEnable()
     {
@@ -28,12 +32,15 @@ public class PlayerController : MonoBehaviour
     {
         _input = new();
         _rigidbody = GetComponent<Rigidbody>();
-        turnSpeed = 1 - Mathf.Clamp01((Mathf.Clamp(_rigidbody.mass, 5, 30) - 5) * 0.04f);
+        _turnSpeed = 1 - Mathf.Clamp01((Mathf.Clamp(_rigidbody.mass, 5, 30) - 5) * 0.04f);
+
+        _drag = _rigidbody.drag;
+        _angularDrag = _rigidbody.angularDrag;
     }
 
     private void Turn(float turnDirection)
     {
-        _rigidbody.AddTorque(new Vector3(0, 0, turnDirection * turnSpeed * -1));
+        _rigidbody.AddTorque(new Vector3(0, 0, turnDirection * _turnSpeed * -1));
     }
 
     void Update()
@@ -43,5 +50,26 @@ public class PlayerController : MonoBehaviour
             float turnDirection = _input.Player.Turn.ReadValue<float>();
             Turn(turnDirection);
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Water"))
+        {
+            _rigidbody.drag = waterDrag;
+            _rigidbody.angularDrag = waterAngularDrag;
+        }
+
+        else if (other.gameObject.CompareTag("Cloud"))
+        {
+            _rigidbody.drag = cloudDrag;
+            _rigidbody.angularDrag = cloudAngularDrag;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        _rigidbody.drag = _drag;
+        _rigidbody.angularDrag = _angularDrag;
     }
 }
