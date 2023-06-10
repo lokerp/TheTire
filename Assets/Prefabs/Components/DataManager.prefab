@@ -46,10 +46,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _fileName: Save.txt
   _database:
-    currentLanguage: 0
-    currentLaunches: 5
-    currentMoney: 50
-    recordDistance: 0
+    settings:
+      currentLanguage: 0
+      currentMusicVolume: 5
+      currentSoundsVolume: 5
+    currentLaunches: 99
+    currentMoney: 100
     selectedTire:
       item: 1
       tire: 1

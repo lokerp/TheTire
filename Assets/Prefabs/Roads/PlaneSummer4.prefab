@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 538017114417273212}
   - component: {fileID: 538017114417273214}
   - component: {fileID: 538017114417273213}
+  - component: {fileID: 1840340635}
   m_Layer: 0
-  m_Name: Water
-  m_TagString: Untagged
+  m_Name: WaterCollider
+  m_TagString: Water
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -83,6 +84,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1840340635
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 538017114417273187}
+  m_Material: {fileID: 13400000, guid: eb4b4757aefeda845b2b48bce5a8e346, type: 2}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0000007, y: 1.0000036, z: 1.0000006}
+  m_Center: {x: -0.000000014901161, y: 0.00000023841858, z: 0}
 --- !u!1 &538017114567746406
 GameObject:
   m_ObjectHideFlags: 0
@@ -160,7 +174,7 @@ GameObject:
   - component: {fileID: 538017115286543142}
   m_Layer: 0
   m_Name: PlaneSummer4
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -172,7 +186,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 843864620974286458}
-  m_LocalRotation: {x: -0.50000006, y: -0.5, z: -0.5, w: 0.50000006}
+  m_LocalRotation: {x: -0.5, y: -0.5, z: -0.5, w: 0.5}
   m_LocalPosition: {x: -0.000022888184, y: 2.3200045, z: 639.1801}
   m_LocalScale: {x: 100.000046, y: 100.000046, z: 100.000046}
   m_ConstrainProportionsScale: 0

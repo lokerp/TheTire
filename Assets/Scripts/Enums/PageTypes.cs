@@ -6,5 +6,7 @@ public enum PageTypes
 {
     MainMenu,
     WheelShop,
-    WeaponShop
+    WeaponShop,
+    Achievements,
+    Settings
 }

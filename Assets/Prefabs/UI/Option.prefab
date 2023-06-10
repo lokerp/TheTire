@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6719612144069942485}
   - component: {fileID: 6719612144069942487}
   - component: {fileID: -2397581901879925847}
+  - component: {fileID: 660623375}
   m_Layer: 5
   m_Name: Option
   m_TagString: OptionButton
@@ -165,10 +166,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a222cf18a3519a4f8698d719a75d26c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buyColor: {r: 0.07058824, g: 1, b: 0, a: 0}
-  noMoneyColor: {r: 0, g: 0, b: 0, a: 0}
-  useColor: {r: 0, g: 0, b: 0, a: 0}
-  inUseColor: {r: 1, g: 1, b: 1, a: 0}
+  buyColor: {r: 0.07058824, g: 1, b: 0, a: 1}
+  noMoneyColor: {r: 0.990566, g: 0.30277678, b: 0.30277678, a: 1}
+  useColor: {r: 1, g: 1, b: 1, a: 1}
+  inUseColor: {r: 1, g: 1, b: 1, a: 0.627451}
   buyText:
     English: BUY
     Russian: "\u041A\u0423\u041F\u0418\u0422\u042C"
@@ -183,6 +184,23 @@ MonoBehaviour:
     Russian: "\u0412\u042B\u0411\u0420\u0410\u041D\u041E"
   _colorHolder: {fileID: 6719612144069942485}
   _textHolder: {fileID: 6719612144069942487}
+  <AudioSources>k__BackingField:
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!114 &660623375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6719612144069942475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 507139883b960df4ab33c7d7cf396b50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 6719612145744062200}
+  <AudioSources>k__BackingField: []
 --- !u!1 &6719612145744062200
 GameObject:
   m_ObjectHideFlags: 0
@@ -243,7 +261,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
