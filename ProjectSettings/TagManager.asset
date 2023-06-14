@@ -23,6 +23,7 @@ TagManager:
   - Achievements
   - Ground
   - Settings
+  - Cliffs
   layers:
   - Default
   - TransparentFX

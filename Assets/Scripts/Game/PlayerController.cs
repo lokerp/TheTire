@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour, IAchievementsControllable
 {
     public static PlayerController Instance { get; private set; }
 
+    public Rigidbody Rigidbody { get; private set; }
+
     public float waterDrag = 10;
     public float waterAngularDrag = 10;
     public float cloudDrag = 3;
@@ -19,8 +21,8 @@ public class PlayerController : MonoBehaviour, IAchievementsControllable
     private float _angularDrag;
     private float _turnSpeed = 1;
     PlayerInput _input;
-    Rigidbody _rigidbody;
 
+    public Action<Collision> OnCollision { get; set; }
     public Action<AchievementProgress, byte> OnAchievementProgressChanged { get; set; }
 
     private void OnEnable()
@@ -36,6 +38,7 @@ public class PlayerController : MonoBehaviour, IAchievementsControllable
     private void OnDestroy()
     {
         OnAchievementProgressChanged = null;
+        OnCollision = null;
     }
 
     private void Awake()
@@ -46,15 +49,15 @@ public class PlayerController : MonoBehaviour, IAchievementsControllable
             Destroy(gameObject);
 
         _input = new();
-        _rigidbody = GetComponent<Rigidbody>();
-        _turnSpeed = 1 - Mathf.Clamp01((Mathf.Clamp(_rigidbody.mass, 5, 30) - 5) * 0.04f);
-        _drag = _rigidbody.drag;
-        _angularDrag = _rigidbody.angularDrag;
+        Rigidbody = GetComponent<Rigidbody>();
+        _turnSpeed = 1 - Mathf.Clamp01((Mathf.Clamp(Rigidbody.mass, 5, 30) - 5) * 0.04f);
+        _drag = Rigidbody.drag;
+        _angularDrag = Rigidbody.angularDrag;
     }
 
     private void Turn(float turnDirection)
     {
-        _rigidbody.AddTorque(new Vector3(0, 0, turnDirection * _turnSpeed * -1));
+        Rigidbody.AddTorque(new Vector3(0, 0, turnDirection * _turnSpeed * -1));
     }
 
     void Update()
@@ -66,27 +69,32 @@ public class PlayerController : MonoBehaviour, IAchievementsControllable
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void OnCollisionEnter(Collision collision)
+    {
+        OnCollision?.Invoke(collision);
+    }
+
+    public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Water"))
         {
-            _rigidbody.drag = waterDrag;
-            _rigidbody.angularDrag = waterAngularDrag;
+            Rigidbody.drag = waterDrag;
+            Rigidbody.angularDrag = waterAngularDrag;
             GetDiverAchievement();
         }
 
         else if (other.gameObject.CompareTag("Cloud"))
         {
-            _rigidbody.drag = cloudDrag;
-            _rigidbody.angularDrag = cloudAngularDrag;
+            Rigidbody.drag = cloudDrag;
+            Rigidbody.angularDrag = cloudAngularDrag;
             GetTodayIsCloudyAchievement();
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        _rigidbody.drag = _drag;
-        _rigidbody.angularDrag = _angularDrag;
+        Rigidbody.drag = _drag;
+        Rigidbody.angularDrag = _angularDrag;
     }
 
     private void GetDiverAchievement()

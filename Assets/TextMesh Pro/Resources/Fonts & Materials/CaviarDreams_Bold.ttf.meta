@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 6f60fcf0566158842a5794c9d27aa1b6
+guid: 0c1ff9f697f763747aa18d6ede90b077
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -10,7 +10,8 @@ TrueTypeFontImporter:
   includeFontData: 1
   fontNames:
   - Caviar Dreams
-  fallbackFontReferences: []
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 6f60fcf0566158842a5794c9d27aa1b6, type: 3}
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1

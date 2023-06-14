@@ -42,6 +42,7 @@ public class MenuPagesSwitch : MonoBehaviour, IAudioPlayable
         switch (gameObject.tag)
         {
             case "StartButton":
+                PlaySound(AudioSources[2]);
                 StartGame();
                 break;
             case "WheelShop":
@@ -58,6 +59,7 @@ public class MenuPagesSwitch : MonoBehaviour, IAudioPlayable
                 break;
             case "Settings":
                 OpenPage(PageTypes.Settings, true);
+                PlaySound(AudioSources[3]);
                 break;
             case "BackButton":
                 if (pageHistory.Count > 1)
@@ -74,9 +76,14 @@ public class MenuPagesSwitch : MonoBehaviour, IAudioPlayable
     {
         if (LaunchesManager.Instance.CanPlay())
         {
+            LaunchesManager.Instance.ReduceLaunchesAmount();
             ScenesManager.Instance.SwitchScene("Game");
         }
-        else { }
+        else
+        {
+            PlaySound(AudioSources[4]);
+            StartCoroutine(LaunchesManager.Instance.ShowError());
+        }
     }
 
     void OpenPage(PageTypes clickedType, bool addInHistory)
@@ -109,8 +116,6 @@ public class MenuPagesSwitch : MonoBehaviour, IAudioPlayable
 
     public void PlaySound(AudioSource source)
     {
-        foreach (var s in AudioSources)
-            s.Stop();
         source.Play();
     }
 }

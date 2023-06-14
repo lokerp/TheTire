@@ -1,29 +1,9 @@
 fileFormatVersion: 2
-guid: 0502b34ad06955544a671ad3642e32d8
+guid: 49da1833b141cc24c83260b0155409d3
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Cliffs.003
-    second: {fileID: 2100000, guid: f27d9eb53123ef447a5032de4b57e63f, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material.003
-    second: {fileID: 2100000, guid: 5bcf05afee55cfd48932926732aefacd, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Road.003
-    second: {fileID: 2100000, guid: 0c31082dd5b96a54894b7af9d92aac17, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: RoadEdge.002
-    second: {fileID: 2100000, guid: 36750c1bfc9f5fc4987d87bfddac93bf, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0

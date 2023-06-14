@@ -45,7 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxLaunches: 10
-  timeToRecoverInMin: 1
+  timeToRecoverInS: 30
   launchesText: {fileID: 0}
+  launchesErrorColor: {r: 1, g: 0, b: 0, a: 1}
   timePanel: {fileID: 0}
   timeText: {fileID: 0}

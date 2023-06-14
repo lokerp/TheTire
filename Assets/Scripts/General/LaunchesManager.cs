@@ -2,20 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LaunchesManager : MonoBehaviour, IDataControllable
 {
     public static LaunchesManager Instance { get; private set; }
     public int LaunchesAmount { get; private set; }
     public int maxLaunches = 10;
-    public int timeToRecoverInMin = 5;
+    public float timeToRecoverInS = 5;
     public TextMeshProUGUI launchesText;
+    public Color launchesErrorColor;
     public Animator timePanel;
     public TextMeshProUGUI timeText;
-    private bool _isTimerRunning;
 
-    private int timeToRecoverInSec;
-    private int _timePassed = 0;
+    private int _timePassedInS = 0;
+    private Color _launchesDefaultColor;
 
     private void OnEnable()
     {
@@ -36,17 +37,14 @@ public class LaunchesManager : MonoBehaviour, IDataControllable
         else
             Destroy(this);
 
-        timeToRecoverInSec = 60 * timeToRecoverInMin;
+        if (launchesText != null)
+            _launchesDefaultColor = launchesText.color;
     }
 
-    void Update()
+    void Start()
     {
-        if (!_isTimerRunning && LaunchesAmount < maxLaunches)
-        {
-            _timePassed = 0;
-            _isTimerRunning = true;
-            StartCoroutine(StartTimer());
-        }
+        if (SceneManager.GetActiveScene().name == "Menu")
+            StartCoroutine(Timer());
     }
 
     public void LoadData(Database database)
@@ -61,21 +59,31 @@ public class LaunchesManager : MonoBehaviour, IDataControllable
         database.currentLaunches = LaunchesAmount;
     }
 
-    private IEnumerator StartTimer()
+    private IEnumerator Timer()
     {
-        while(_timePassed < timeToRecoverInSec)
+        while (true)
         {
-            SetTimeText();
-            _timePassed++;
-            yield return new WaitForSecondsRealtime(1);
-        }
+            if (LaunchesAmount >= maxLaunches)
+            {
+                yield return null;
+                continue;
+            }
 
-        if (_timePassed >= timeToRecoverInSec)
-        {
-            _isTimerRunning = false;
-            LaunchesAmount++;
-            SetTimeText();
-            RefreshLaunchesText();
+            else if (_timePassedInS < timeToRecoverInS)
+            {
+                SetTimeText();
+                _timePassedInS++;
+            }
+
+            else if (_timePassedInS >= timeToRecoverInS)
+            {
+                _timePassedInS = 0;
+                LaunchesAmount++;
+                SetTimeText();
+                RefreshLaunchesText();
+            }
+
+            yield return new WaitForSecondsRealtime(1);
         }
     }
 
@@ -89,8 +97,9 @@ public class LaunchesManager : MonoBehaviour, IDataControllable
             timeText.text = $"0:00";
             return;
         }
-        int minutes = (timeToRecoverInSec - _timePassed) / 60;
-        int seconds = (timeToRecoverInSec - _timePassed) % 60;
+
+        int minutes = (int) ((timeToRecoverInS - _timePassedInS) / 60);
+        int seconds = (int) ((timeToRecoverInS - _timePassedInS) % 60);
 
         timeText.text = string.Format("{0}:{1:d2}", minutes, seconds);
     }
@@ -128,6 +137,21 @@ public class LaunchesManager : MonoBehaviour, IDataControllable
         if (LaunchesAmount > 0)
             return true;
         return false;
+    }
+
+    public IEnumerator ShowError()
+    {
+        StartCoroutine(OpenTimePanel());
+        
+        for (int i = 0; i < 3; i++)
+        {
+            launchesText.color = launchesErrorColor;
+            yield return new WaitForSecondsRealtime(0.2f);
+            launchesText.color = _launchesDefaultColor;
+            yield return new WaitForSecondsRealtime(0.2f);
+        }
+
+        yield break;
     }
 
     public void ReduceLaunchesAmount()

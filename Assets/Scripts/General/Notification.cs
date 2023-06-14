@@ -4,13 +4,16 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Notification : MonoBehaviour
+public class Notification : MonoBehaviour, IAudioPlayable
 {
     public float timeOpenedInS;
     private Animator _animator;
     [SerializeField] private Image _icon;
     [SerializeField] private TextController _notificationTitle;
     [SerializeField] private TextController _info;
+
+    [field: SerializeField]
+    public List<AudioSource> AudioSources { get; private set; }
 
     private void OnEnable()
     {
@@ -37,8 +40,14 @@ public class Notification : MonoBehaviour
 
     private IEnumerator Open(float timeOpenedInS)
     {
+        PlaySound(AudioSources[0]);
         _animator.SetBool("IsNotificationOpen", true);
         yield return new WaitForSecondsRealtime(timeOpenedInS);
         _animator.SetBool("IsNotificationOpen", false);
+    }
+
+    public void PlaySound(AudioSource source)
+    {
+        source.Play();
     }
 }

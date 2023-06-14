@@ -626,6 +626,10 @@ PrefabInstance:
       propertyPath: timeOpenedInS
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 3009328109310055848, guid: 93853fdb0ef1e8e4d862563827ffcb21, type: 3}
+      propertyPath: <AudioSources>k__BackingField.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3009328109310055850, guid: 93853fdb0ef1e8e4d862563827ffcb21, type: 3}
       propertyPath: m_Name
       value: AchievementNotification

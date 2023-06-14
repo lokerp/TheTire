@@ -12,7 +12,7 @@ enum ScaleZone
     greenZone
 }
 
-public class LaunchController : MonoBehaviour
+public class LaunchController : MonoBehaviour, IAudioPlayable
 {
     public static LaunchController Instance { get; private set; }
 
@@ -28,6 +28,9 @@ public class LaunchController : MonoBehaviour
     public float minAngle = 0;
     public static event Action<Vector3, float> OnLaunch;
     public bool IsLaunched { get; private set; }
+
+    [field: SerializeField]
+    public List<AudioSource> AudioSources { get; set; }
 
     private Rigidbody _player;
     private Weapon _weapon;
@@ -51,7 +54,6 @@ public class LaunchController : MonoBehaviour
         _input.Disable();
     }
 
-    // Start is called before the first frame update
     void Awake()
     {
         if (Instance == null)
@@ -106,12 +108,12 @@ public class LaunchController : MonoBehaviour
                 yield return null;
 
             _player.AddForce(force, ForceMode.Impulse);
+            PlaySound(AudioSources[0]);
             launchEffect.Play();
             OnLaunch.Invoke(force, _forceModifier);
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (IsLaunched == false)
@@ -174,5 +176,10 @@ public class LaunchController : MonoBehaviour
             _zone = ScaleZone.greenZone;
             arrow.GetComponent<Image>().color = Color.white;
         }
+    }
+
+    public void PlaySound(AudioSource source)
+    {
+        source.Play();
     }
 }

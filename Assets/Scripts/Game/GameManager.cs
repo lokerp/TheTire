@@ -120,7 +120,6 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
         moneyEarnedResult.text = _earnedMoney.ToString();
 
         MoneyManager.Instance.ChangeMoneyAmount(MoneyManager.Instance.MoneyAmount + _earnedMoney);
-        LaunchesManager.Instance.ReduceLaunchesAmount();
         DataManager.Instance.SaveGame();
     }
 
