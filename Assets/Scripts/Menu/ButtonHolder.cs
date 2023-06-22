@@ -1,10 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ButtonHolder : MonoBehaviour, IAudioPlayable
 {
     public GameObject button;
+    public event Action OnClick;
 
     [field: SerializeField]
     public List<AudioSource> AudioSources { get; private set; }
@@ -21,8 +24,12 @@ public class ButtonHolder : MonoBehaviour, IAudioPlayable
 
     void UIClickHandler(GameObject gameObject)
     {
-        if (gameObject == button && AudioSources.Count != 0)
-            PlaySound(AudioSources[0]);
+        if (gameObject == button)
+        {
+            OnClick?.Invoke();
+            if (AudioSources.Count != 0)
+                PlaySound(AudioSources[0]);
+        }
     }
 
     public void PlaySound(AudioSource source)

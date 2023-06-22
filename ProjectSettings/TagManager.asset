@@ -24,6 +24,9 @@ TagManager:
   - Ground
   - Settings
   - Cliffs
+  - Bush
+  - Snow
+  - Ice
   layers:
   - Default
   - TransparentFX

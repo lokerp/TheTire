@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour, IAchievementsControllable
     private float _turnSpeed = 1;
     PlayerInput _input;
 
-    public Action<Collision> OnCollision { get; set; }
+    public Action<GameObject, Vector3, Vector3> OnCollision { get; set; }
     public Action<AchievementProgress, byte> OnAchievementProgressChanged { get; set; }
 
     private void OnEnable()
@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour, IAchievementsControllable
 
     public void OnCollisionEnter(Collision collision)
     {
-        OnCollision?.Invoke(collision);
+        OnCollision?.Invoke(collision.gameObject, collision.GetContact(0).point, collision.relativeVelocity);
     }
 
     public void OnTriggerEnter(Collider other)
@@ -89,6 +89,8 @@ public class PlayerController : MonoBehaviour, IAchievementsControllable
             Rigidbody.angularDrag = cloudAngularDrag;
             GetTodayIsCloudyAchievement();
         }
+
+        OnCollision?.Invoke(other.gameObject, other.ClosestPoint(transform.position), Rigidbody.velocity);
     }
 
     private void OnTriggerExit(Collider other)

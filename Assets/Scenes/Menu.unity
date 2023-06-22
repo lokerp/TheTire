@@ -497,6 +497,66 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8357482947581960543, guid: 6c9fc1c14a91a194fb44f91b10267143, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357482947644303086, guid: 6c9fc1c14a91a194fb44f91b10267143, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357482947933915614, guid: 6c9fc1c14a91a194fb44f91b10267143, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357482948293847848, guid: 6c9fc1c14a91a194fb44f91b10267143, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357482948355439219, guid: 6c9fc1c14a91a194fb44f91b10267143, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357482948496139600, guid: 6c9fc1c14a91a194fb44f91b10267143, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357482948701279623, guid: 6c9fc1c14a91a194fb44f91b10267143, type: 3}
+      propertyPath: m_TagString
+      value: Cliffs
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357482948868658502, guid: 6c9fc1c14a91a194fb44f91b10267143, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357482948877939761, guid: 6c9fc1c14a91a194fb44f91b10267143, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357482949123427846, guid: 6c9fc1c14a91a194fb44f91b10267143, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357482949329698028, guid: 6c9fc1c14a91a194fb44f91b10267143, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357482949433451825, guid: 6c9fc1c14a91a194fb44f91b10267143, type: 3}
+      propertyPath: m_TagString
+      value: Cliffs
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357482949574552449, guid: 6c9fc1c14a91a194fb44f91b10267143, type: 3}
+      propertyPath: m_TagString
+      value: Cliffs
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357482949587773135, guid: 6c9fc1c14a91a194fb44f91b10267143, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357482949612741677, guid: 6c9fc1c14a91a194fb44f91b10267143, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     - target: {fileID: 8390495324898330904, guid: 6c9fc1c14a91a194fb44f91b10267143, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -14363,7 +14423,15 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1655134778}
     - target: {fileID: -1677552661212267479, guid: cbaa5b3ccf960d449afc02c4a938cb79, type: 3}
+      propertyPath: _musicVolumeSlider
+      value: 
+      objectReference: {fileID: 1655134778}
+    - target: {fileID: -1677552661212267479, guid: cbaa5b3ccf960d449afc02c4a938cb79, type: 3}
       propertyPath: soundsVolumeSlider
+      value: 
+      objectReference: {fileID: 1424790965}
+    - target: {fileID: -1677552661212267479, guid: cbaa5b3ccf960d449afc02c4a938cb79, type: 3}
+      propertyPath: _soundsVolumeSlider
       value: 
       objectReference: {fileID: 1424790965}
     - target: {fileID: 2733656668924284468, guid: cbaa5b3ccf960d449afc02c4a938cb79, type: 3}
@@ -14428,6 +14496,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9028333142496013041, guid: cbaa5b3ccf960d449afc02c4a938cb79, type: 3}
       propertyPath: spreadCustomCurve.m_Curve.Array.data[0].value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9028333142496013042, guid: cbaa5b3ccf960d449afc02c4a938cb79, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:

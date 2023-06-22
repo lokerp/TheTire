@@ -48,8 +48,8 @@ MonoBehaviour:
   _database:
     settings:
       currentLanguage: 0
-      currentMusicVolume: 5
-      currentSoundsVolume: 5
+      currentMusicVolume: 0.5
+      currentSoundsVolume: 0.5
     currentLaunches: 99
     currentMoney: 100
     selectedTire:

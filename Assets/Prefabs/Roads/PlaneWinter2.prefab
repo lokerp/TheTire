@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: 3849858792756463710}
   m_Layer: 0
   m_Name: PlaneWinter2.SnowCliffs
-  m_TagString: Untagged
+  m_TagString: Cliffs
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -422,7 +422,7 @@ GameObject:
   - component: {fileID: 2188717896228048829}
   m_Layer: 0
   m_Name: PlaneWinter2.Snow
-  m_TagString: Untagged
+  m_TagString: Snow
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

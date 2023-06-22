@@ -10,16 +10,35 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
     public GameManager Instance { get; private set; }
     public Action<AchievementProgress, byte> OnAchievementProgressChanged { get; set; }
 
+    [Header("Spawn Holders")]
     public Transform tireHolder;
     public Transform weaponHolder;
+
+
+    [Header("Pages And UI'S")]
+    [SerializeField] private Page _pausePage;
+    [SerializeField] private AcceptPage _pauseAcceptPage;
+    [SerializeField] private Page _scalePage;
+    [SerializeField] private Page _timerPage;
+    [SerializeField] private Page _passedDistancePage;
+    [SerializeField] private Page _resultsPage;
+    [SerializeField] private Page _pauseButtonPage;
+
+    [SerializeField] private ButtonHolder _returnButton;
     public TextMeshProUGUI passedDistanceText;
-    public Animator UIAnimator;
+
+    [Header("Timer")]
     public TextMeshProUGUI timerText;
     public float timeForEndInS;
+    public AudioSource timerCountdown;
+
     [Header("Result's info")]
     public TextMeshProUGUI distanceResult;
     public TextMeshProUGUI moneyEarnedResult;
     public GameObject recordHolder;
+
+    [Header("Other")]
+    public float timeInSToCloseScale;
 
     private bool _isPlaying = true;
     private GameObject _player;
@@ -33,13 +52,20 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
     private void OnEnable()
     {
         LaunchController.OnLaunch += OnLaunch;
-        UIEvents.OnUIClick += UIClickHandler;
+        _pausePage.OnOpen += Pause;
+        _pausePage.OnClose += Unpause;
+        _pauseAcceptPage.OnAccept += ExitToMenu;
+        _returnButton.OnClick += ExitToMenu;
     }
+
 
     private void OnDisable()
     {
         LaunchController.OnLaunch -= OnLaunch;
-        UIEvents.OnUIClick -= UIClickHandler;
+        _pausePage.OnOpen -= Pause;
+        _pausePage.OnClose -= Unpause;
+        _pauseAcceptPage.OnAccept -= ExitToMenu;
+        _returnButton.OnClick -= ExitToMenu;
     }
 
     private void OnDestroy()
@@ -53,12 +79,7 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
             Instance = this;
         else
             Destroy(gameObject);
-    }
-
-    private void UIClickHandler(GameObject obj)
-    {
-        if (obj.CompareTag("BackButton"))
-            ScenesManager.Instance.SwitchScene("Menu");
+        _pauseButtonPage.Close();
     }
 
     public void LoadData(Database database)
@@ -101,14 +122,25 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
 
     private void OnLaunch(Vector3 force, float forceModifier)
     {
-        passedDistanceText.gameObject.SetActive(true);
+        _pauseButtonPage.Open();
+        _passedDistancePage.Open();
         StartCoroutine(RefreshPassedDistance());
         StartCoroutine(CheckForStop());
+        StartCoroutine(CloseScale());
     }
 
-    private void EndGame()
+    IEnumerator CloseScale()
     {
-        UIAnimator.SetBool("IsResultsOpen", true);
+        yield return new WaitForSeconds(timeInSToCloseScale);
+        _scalePage.Close();
+        yield break;
+    }
+
+    private void ShowResults()
+    {
+        _resultsPage.Open();
+        _timerPage.Close();
+        _pauseButtonPage.Close();
 
         if (_passedDistance > _recordDistance)
             recordHolder.SetActive(true);
@@ -121,6 +153,28 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
 
         MoneyManager.Instance.ChangeMoneyAmount(MoneyManager.Instance.MoneyAmount + _earnedMoney);
         DataManager.Instance.SaveGame();
+    }
+
+    private void Pause()
+    {
+        Time.timeScale = 0;
+        _pauseButtonPage.Close();
+        AudioManager.Instance.ChangeVolume(AudioManager.VolumeType.GameSounds, 0);
+        timerCountdown.Pause();
+    }
+
+    private void Unpause()
+    {
+        Time.timeScale = 1;
+        _pauseButtonPage.Open();
+        AudioManager.Instance.ChangeVolume(AudioManager.VolumeType.GameSounds, 1);
+        timerCountdown.UnPause();
+    }
+
+    private void ExitToMenu()
+    {
+        Unpause();
+        ScenesManager.Instance.SwitchScene("Menu");
     }
 
     IEnumerator RefreshPassedDistance()
@@ -172,7 +226,7 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
                 if (currentTime - startTime >= timeToCheckInS + timeForEndInS)
                 {
                     _isPlaying = false;
-                    EndGame();
+                    ShowResults();
                 }
             }
             else
@@ -193,8 +247,12 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
 
     void StartOrRefreshTimer(float time)
     {
-        if (UIAnimator.GetBool("IsTimerOpen") == false)
-            UIAnimator.SetBool("IsTimerOpen", true);
+        if (!_timerPage.IsOpened())
+        {
+            _timerPage.Open();
+            timerCountdown.Play();
+            _passedDistancePage.Close();
+        }
 
         int timeInS = (int)(timeForEndInS - time) >= 0 ? (int)(timeForEndInS - time) : 0;
         timerText.text = timeInS.ToString();
@@ -202,8 +260,9 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
 
     void CloseTimer()
     {
-        if (UIAnimator.GetBool("IsTimerOpen") == true)
-            UIAnimator.SetBool("IsTimerOpen", false);
+        _timerPage.Close();
+        timerCountdown.Stop();
+        _passedDistancePage.Open();
     }
 
     void GetAstronautAchievement(float height, AchievementInfo achievement)

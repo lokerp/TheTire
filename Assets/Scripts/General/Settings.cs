@@ -7,6 +7,6 @@ using UnityEngine;
 public class Settings
 {
     public Languages currentLanguage;
-    [Range(0, 10)] public int currentMusicVolume;
-    [Range(0, 10)] public int currentSoundsVolume;
+    [Range(0, 1)] public float currentMusicVolume;
+    [Range(0, 1)] public float currentSoundsVolume;
 }

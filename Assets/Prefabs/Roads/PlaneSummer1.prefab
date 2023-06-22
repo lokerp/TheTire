@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: 6506251301627913841}
   m_Layer: 0
   m_Name: PlaneSummer1.Grass
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -210,7 +210,7 @@ GameObject:
   - component: {fileID: 878140451174134847}
   m_Layer: 0
   m_Name: PlaneSummer1.Grass1
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -404,7 +404,7 @@ GameObject:
   - component: {fileID: 8357482947581960541}
   m_Layer: 0
   m_Name: FoliageCollider
-  m_TagString: Untagged
+  m_TagString: Bush
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -449,7 +449,7 @@ GameObject:
   - component: {fileID: 8357482947644303084}
   m_Layer: 0
   m_Name: FoliageCollider4
-  m_TagString: Untagged
+  m_TagString: Bush
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -494,7 +494,7 @@ GameObject:
   - component: {fileID: 8357482947933915612}
   m_Layer: 0
   m_Name: FoliageCollider4
-  m_TagString: Untagged
+  m_TagString: Bush
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -539,7 +539,7 @@ GameObject:
   - component: {fileID: 8357482948293847854}
   m_Layer: 0
   m_Name: FoliageCollider3
-  m_TagString: Untagged
+  m_TagString: Bush
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -615,7 +615,7 @@ GameObject:
   - component: {fileID: 8357482948355439217}
   m_Layer: 0
   m_Name: FoliageCollider
-  m_TagString: Untagged
+  m_TagString: Bush
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -660,7 +660,7 @@ GameObject:
   - component: {fileID: 8357482948496139606}
   m_Layer: 0
   m_Name: FoliageCollider
-  m_TagString: Untagged
+  m_TagString: Bush
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -736,7 +736,7 @@ GameObject:
   - component: {fileID: 8357482948701279621}
   m_Layer: 0
   m_Name: TrunkCollider
-  m_TagString: Untagged
+  m_TagString: Cliffs
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -781,7 +781,7 @@ GameObject:
   - component: {fileID: 8357482948868658500}
   m_Layer: 0
   m_Name: FoliageCollider2
-  m_TagString: Untagged
+  m_TagString: Bush
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -826,7 +826,7 @@ GameObject:
   - component: {fileID: 8357482948877939767}
   m_Layer: 0
   m_Name: FoliageCollider3
-  m_TagString: Untagged
+  m_TagString: Bush
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -871,7 +871,7 @@ GameObject:
   - component: {fileID: 8357482949123427844}
   m_Layer: 0
   m_Name: FoliageCollider2
-  m_TagString: Untagged
+  m_TagString: Bush
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -916,7 +916,7 @@ GameObject:
   - component: {fileID: 8357482949329698018}
   m_Layer: 0
   m_Name: FoliageCollider3
-  m_TagString: Untagged
+  m_TagString: Bush
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -961,7 +961,7 @@ GameObject:
   - component: {fileID: 8357482949433451831}
   m_Layer: 0
   m_Name: TrunkCollider
-  m_TagString: Untagged
+  m_TagString: Cliffs
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1006,7 +1006,7 @@ GameObject:
   - component: {fileID: 8357482949574552455}
   m_Layer: 0
   m_Name: TrunkCollider
-  m_TagString: Untagged
+  m_TagString: Cliffs
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1051,7 +1051,7 @@ GameObject:
   - component: {fileID: 8357482949587773133}
   m_Layer: 0
   m_Name: FoliageCollider4
-  m_TagString: Untagged
+  m_TagString: Bush
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1096,7 +1096,7 @@ GameObject:
   - component: {fileID: 8357482949612741667}
   m_Layer: 0
   m_Name: FoliageCollider2
-  m_TagString: Untagged
+  m_TagString: Bush
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1180,6 +1180,7 @@ Transform:
   - {fileID: 8390495325964885301}
   - {fileID: 8357482948309968848}
   - {fileID: 8357482948682430669}
+  - {fileID: 7193011948748871675}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
@@ -1197,6 +1198,68 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Begin: {fileID: 8357482948309968848}
   End: {fileID: 8357482948682430669}
+--- !u!1001 &638509214728869301
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 8390495324898330904}
+    m_Modifications:
+    - target: {fileID: 2464943006770952549, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_Name
+      value: BirdsAudio
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_RootOrder
+      value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+--- !u!4 &7193011948748871675 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+  m_PrefabInstance: {fileID: 638509214728869301}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8357482947589682383
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1263,6 +1326,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: d6dcdbc01707fcc4a84f1291e9269a10, type: 3}
       propertyPath: m_Name
       value: Tree_temp_climate_001
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d6dcdbc01707fcc4a84f1291e9269a10, type: 3}
+      propertyPath: m_TagString
+      value: Bush
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3451118302482216456, guid: d6dcdbc01707fcc4a84f1291e9269a10, type: 3}
@@ -1338,6 +1405,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 72f9bef5d922b904d907a89eb1b19e5d, type: 3}
       propertyPath: m_Name
       value: Rock
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 72f9bef5d922b904d907a89eb1b19e5d, type: 3}
+      propertyPath: m_TagString
+      value: Cliffs
       objectReference: {fileID: 0}
     - target: {fileID: 3451118302482216456, guid: 72f9bef5d922b904d907a89eb1b19e5d, type: 3}
       propertyPath: m_Convex
@@ -1417,6 +1488,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tree_temp_climate_001 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d6dcdbc01707fcc4a84f1291e9269a10, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d6dcdbc01707fcc4a84f1291e9269a10, type: 3}
 --- !u!4 &8390495326541196945 stripped
@@ -1494,6 +1569,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 71b5492192f2421449b609e53b8455a9, type: 3}
       propertyPath: m_Name
       value: Tree_temp_climate_010
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 71b5492192f2421449b609e53b8455a9, type: 3}
+      propertyPath: m_TagString
+      value: Bush
       objectReference: {fileID: 0}
     - target: {fileID: 3451118302482216456, guid: 71b5492192f2421449b609e53b8455a9, type: 3}
       propertyPath: m_Convex
@@ -1573,6 +1652,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rock (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 72f9bef5d922b904d907a89eb1b19e5d, type: 3}
+      propertyPath: m_TagString
+      value: Cliffs
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72f9bef5d922b904d907a89eb1b19e5d, type: 3}
 --- !u!4 &8390495326064061614 stripped
@@ -1650,6 +1733,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: ba1bfe86b67816d43910a9e02ea80847, type: 3}
       propertyPath: m_Name
       value: Tree_temp_climate_004 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ba1bfe86b67816d43910a9e02ea80847, type: 3}
+      propertyPath: m_TagString
+      value: Bush
       objectReference: {fileID: 0}
     - target: {fileID: 3451118302482216456, guid: ba1bfe86b67816d43910a9e02ea80847, type: 3}
       propertyPath: m_Convex
@@ -1733,6 +1820,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tree_temp_climate_004 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ba1bfe86b67816d43910a9e02ea80847, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     - target: {fileID: 3451118302482216456, guid: ba1bfe86b67816d43910a9e02ea80847, type: 3}
       propertyPath: m_Convex
       value: 0
@@ -1810,6 +1901,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 72f9bef5d922b904d907a89eb1b19e5d, type: 3}
       propertyPath: m_Name
       value: Rock (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 72f9bef5d922b904d907a89eb1b19e5d, type: 3}
+      propertyPath: m_TagString
+      value: Cliffs
       objectReference: {fileID: 0}
     - target: {fileID: 3451118302482216456, guid: 72f9bef5d922b904d907a89eb1b19e5d, type: 3}
       propertyPath: m_Convex
@@ -1893,6 +1988,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tree_temp_climate_004 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ba1bfe86b67816d43910a9e02ea80847, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     - target: {fileID: 3451118302482216456, guid: ba1bfe86b67816d43910a9e02ea80847, type: 3}
       propertyPath: m_Convex
       value: 0
@@ -1974,6 +2073,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 71b5492192f2421449b609e53b8455a9, type: 3}
       propertyPath: m_Name
       value: Tree_temp_climate_010 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 71b5492192f2421449b609e53b8455a9, type: 3}
+      propertyPath: m_TagString
+      value: Bush
       objectReference: {fileID: 0}
     - target: {fileID: 3451118302482216456, guid: 71b5492192f2421449b609e53b8455a9, type: 3}
       propertyPath: m_Convex
@@ -2057,6 +2160,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tree_temp_climate_010 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 71b5492192f2421449b609e53b8455a9, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     - target: {fileID: 3451118302482216456, guid: 71b5492192f2421449b609e53b8455a9, type: 3}
       propertyPath: m_Convex
       value: 0
@@ -2135,6 +2242,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tree_temp_climate_001 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d6dcdbc01707fcc4a84f1291e9269a10, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d6dcdbc01707fcc4a84f1291e9269a10, type: 3}
 --- !u!4 &8390495325462127092 stripped
@@ -2212,6 +2323,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: ba1bfe86b67816d43910a9e02ea80847, type: 3}
       propertyPath: m_Name
       value: Tree_temp_climate_004
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ba1bfe86b67816d43910a9e02ea80847, type: 3}
+      propertyPath: m_TagString
+      value: Bush
       objectReference: {fileID: 0}
     - target: {fileID: 3451118302482216456, guid: ba1bfe86b67816d43910a9e02ea80847, type: 3}
       propertyPath: m_Convex
@@ -2295,6 +2410,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tree_temp_climate_010 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 71b5492192f2421449b609e53b8455a9, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     - target: {fileID: 3451118302482216456, guid: 71b5492192f2421449b609e53b8455a9, type: 3}
       propertyPath: m_Convex
       value: 0
@@ -2377,6 +2496,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tree_temp_climate_004 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ba1bfe86b67816d43910a9e02ea80847, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     - target: {fileID: 3451118302482216456, guid: ba1bfe86b67816d43910a9e02ea80847, type: 3}
       propertyPath: m_Convex
       value: 0
@@ -2458,6 +2581,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: dca45198f33c8384695d298e324dc7c5, type: 3}
       propertyPath: m_Name
       value: Tree_temp_climate_018
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: dca45198f33c8384695d298e324dc7c5, type: 3}
+      propertyPath: m_TagString
+      value: Bush
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dca45198f33c8384695d298e324dc7c5, type: 3}

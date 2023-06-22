@@ -42,6 +42,7 @@ Transform:
   - {fileID: 2138432518102793170}
   - {fileID: 1884620614196213594}
   - {fileID: 1884620614880056894}
+  - {fileID: 8303759650223835687}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
@@ -134,7 +135,7 @@ GameObject:
   - component: {fileID: 1884620614929869860}
   - component: {fileID: 2112451840516336578}
   m_Layer: 0
-  m_Name: WaterCollider
+  m_Name: Water
   m_TagString: Water
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -428,7 +429,7 @@ GameObject:
   - component: {fileID: 5223264412191189448}
   m_Layer: 0
   m_Name: PlaneSummer4.Grass
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -526,7 +527,7 @@ GameObject:
   - component: {fileID: 7902151271973008661}
   m_Layer: 0
   m_Name: PlaneSummer4.Grass1
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -610,6 +611,68 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 8497191126878004902, guid: 941f4e792211d364e83721ecb741b033, type: 3}
+--- !u!1001 &1743499534102366313
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1934954359006422188}
+    m_Modifications:
+    - target: {fileID: 2464943006770952549, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_Name
+      value: BirdsAudio
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_RootOrder
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+--- !u!4 &8303759650223835687 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+  m_PrefabInstance: {fileID: 1743499534102366313}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1884620614039314718
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -680,6 +743,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 2690b4e2833eddf45af18e96748b775a, type: 3}
       propertyPath: m_Name
       value: Bush_temp_climate_003
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2690b4e2833eddf45af18e96748b775a, type: 3}
+      propertyPath: m_TagString
+      value: Bush
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2690b4e2833eddf45af18e96748b775a, type: 3}
@@ -759,6 +826,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tree_temp_climate_015
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c0b4b27792d47714ab480833e1f0b991, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c0b4b27792d47714ab480833e1f0b991, type: 3}
 --- !u!4 &2138432518594373137 stripped
@@ -836,6 +907,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: d6dcdbc01707fcc4a84f1291e9269a10, type: 3}
       propertyPath: m_Name
       value: Tree_temp_climate_001
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d6dcdbc01707fcc4a84f1291e9269a10, type: 3}
+      propertyPath: m_TagString
+      value: Bush
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d6dcdbc01707fcc4a84f1291e9269a10, type: 3}
@@ -915,6 +990,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tree_temp_climate_019
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1aaa47774f2600547b011aa2dbfc3139, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1aaa47774f2600547b011aa2dbfc3139, type: 3}
 --- !u!4 &2138432518365703492 stripped
@@ -993,6 +1072,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rock
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 72f9bef5d922b904d907a89eb1b19e5d, type: 3}
+      propertyPath: m_TagString
+      value: Cliffs
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72f9bef5d922b904d907a89eb1b19e5d, type: 3}
 --- !u!4 &2138432518102793170 stripped
@@ -1070,6 +1153,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: daec3f1b3e84b294eb61d50ffa7c5475, type: 3}
       propertyPath: m_Name
       value: Bush_temp_climate_001
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: daec3f1b3e84b294eb61d50ffa7c5475, type: 3}
+      propertyPath: m_TagString
+      value: Bush
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: daec3f1b3e84b294eb61d50ffa7c5475, type: 3}

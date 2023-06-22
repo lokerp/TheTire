@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
-using static Unity.VisualScripting.Member;
 
 public class MenuPagesSwitch : MonoBehaviour, IAudioPlayable
 {

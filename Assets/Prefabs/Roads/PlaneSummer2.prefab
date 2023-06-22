@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1483843631992566241}
   m_Layer: 0
   m_Name: PlaneSummer2.Grass1
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -210,7 +210,7 @@ GameObject:
   - component: {fileID: 8278723984350155914}
   m_Layer: 0
   m_Name: PlaneSummer2.Grass
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -544,6 +544,7 @@ Transform:
   - {fileID: 6102249870141734184}
   - {fileID: 6102249871864445216}
   - {fileID: 5991250474091813450}
+  - {fileID: 1301586581899382939}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
@@ -636,6 +637,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grass_007 (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
 --- !u!4 &5991250475475171249 stripped
@@ -717,6 +722,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3970c1c7b277b5f40b4fbf75dd448e97, type: 3}
       propertyPath: m_Name
       value: Tree_temp_climate_021
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3970c1c7b277b5f40b4fbf75dd448e97, type: 3}
+      propertyPath: m_TagString
+      value: Bush
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3970c1c7b277b5f40b4fbf75dd448e97, type: 3}
@@ -800,6 +809,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grass_007 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
 --- !u!4 &5991250475238967273 stripped
@@ -881,6 +894,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
       propertyPath: m_Name
       value: Grass_007 (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
+      propertyPath: m_TagString
+      value: Bush
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
@@ -964,6 +981,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grass_007
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
 --- !u!4 &5991250475123719198 stripped
@@ -1046,6 +1067,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grass_007 (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
 --- !u!4 &5991250475050404390 stripped
@@ -1123,6 +1148,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: d6dcdbc01707fcc4a84f1291e9269a10, type: 3}
       propertyPath: m_Name
       value: Tree_temp_climate_001
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d6dcdbc01707fcc4a84f1291e9269a10, type: 3}
+      propertyPath: m_TagString
+      value: Bush
       objectReference: {fileID: 0}
     - target: {fileID: 3451118302482216456, guid: d6dcdbc01707fcc4a84f1291e9269a10, type: 3}
       propertyPath: m_Convex
@@ -1210,6 +1239,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grass_007 (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
 --- !u!4 &5991250474677715839 stripped
@@ -1292,6 +1325,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grass_007 (13)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
 --- !u!4 &5991250474551268436 stripped
@@ -1369,6 +1406,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 5c72ac683598d754191ef124243103ec, type: 3}
       propertyPath: m_Name
       value: Bush_temp_climate_005
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5c72ac683598d754191ef124243103ec, type: 3}
+      propertyPath: m_TagString
+      value: Bush
       objectReference: {fileID: 0}
     - target: {fileID: 3451118302482216456, guid: 5c72ac683598d754191ef124243103ec, type: 3}
       propertyPath: m_Convex
@@ -1452,6 +1493,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rock
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 72f9bef5d922b904d907a89eb1b19e5d, type: 3}
+      propertyPath: m_TagString
+      value: Cliffs
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72f9bef5d922b904d907a89eb1b19e5d, type: 3}
 --- !u!4 &5991250474261388533 stripped
@@ -1533,6 +1578,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
       propertyPath: m_Name
       value: Grass_007 (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
+      propertyPath: m_TagString
+      value: Bush
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
@@ -1616,6 +1665,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tree_temp_climate_017
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: fe8df66563a28f94fbf72a46ac8e43b4, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fe8df66563a28f94fbf72a46ac8e43b4, type: 3}
 --- !u!4 &5991250474209180679 stripped
@@ -1697,6 +1750,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: fcd26284bae45204486bedd546896768, type: 3}
       propertyPath: m_Name
       value: Bush_temp_climate_002
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: fcd26284bae45204486bedd546896768, type: 3}
+      propertyPath: m_TagString
+      value: Bush
       objectReference: {fileID: 0}
     - target: {fileID: 3451118302482216456, guid: fcd26284bae45204486bedd546896768, type: 3}
       propertyPath: m_Convex
@@ -1780,6 +1837,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bush_temp_climate_007
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54ac4df8ef21a72409525d7976bd875c, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 54ac4df8ef21a72409525d7976bd875c, type: 3}
 --- !u!4 &5991250474091813450 stripped
@@ -1861,6 +1922,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
       propertyPath: m_Name
       value: Grass_007 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
+      propertyPath: m_TagString
+      value: Bush
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
@@ -1944,6 +2009,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grass_007 (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
 --- !u!4 &5991250473912178506 stripped
@@ -2025,6 +2094,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
       propertyPath: m_Name
       value: Grass_007 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
+      propertyPath: m_TagString
+      value: Bush
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
@@ -2108,6 +2181,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grass_007 (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
 --- !u!4 &5991250473538043982 stripped
@@ -2190,6 +2267,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grass_007 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
 --- !u!4 &5991250473453963840 stripped
@@ -2271,6 +2352,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: b97299a0ad435f44e9b1d8473d64675d, type: 3}
       propertyPath: m_Name
       value: Bush_temp_climate_009
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b97299a0ad435f44e9b1d8473d64675d, type: 3}
+      propertyPath: m_TagString
+      value: Bush
       objectReference: {fileID: 0}
     - target: {fileID: 3451118302482216456, guid: b97299a0ad435f44e9b1d8473d64675d, type: 3}
       propertyPath: m_Convex
@@ -2358,6 +2443,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grass_007 (14)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
 --- !u!4 &5991250473434816007 stripped
@@ -2440,10 +2529,76 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grass_007 (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
+      propertyPath: m_TagString
+      value: Bush
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
 --- !u!4 &5991250473393088186 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: da692af3e2cd29a48a7cccad4e3418c4, type: 3}
   m_PrefabInstance: {fileID: 6102249872218456401}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8727673604863185621
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7626093506796799411}
+    m_Modifications:
+    - target: {fileID: 2464943006770952549, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_Name
+      value: BirdsAudio
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_RootOrder
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+--- !u!4 &1301586581899382939 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+  m_PrefabInstance: {fileID: 8727673604863185621}
   m_PrefabAsset: {fileID: 0}
