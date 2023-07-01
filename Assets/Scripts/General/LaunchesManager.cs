@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,11 +10,12 @@ public class LaunchesManager : MonoBehaviour, IDataControllable
     public static LaunchesManager Instance { get; private set; }
     public int LaunchesAmount { get; private set; }
     public int maxLaunches = 10;
-    public float timeToRecoverInS = 5;
+    public float timeToRecoverInS = 30;
     public TextMeshProUGUI launchesText;
     public Color launchesErrorColor;
     public Animator timePanel;
     public TextMeshProUGUI timeText;
+    public AcceptPage adAcceptPage;
 
     private int _timePassedInS = 0;
     private Color _launchesDefaultColor;
@@ -21,11 +23,15 @@ public class LaunchesManager : MonoBehaviour, IDataControllable
     private void OnEnable()
     {
         UIEvents.OnUIClick += UIClickHandler;
+        adAcceptPage.OnAccept += OnAcceptHandler;
+        APIBridge.OnAdvertisementClose += OnAdvertisementCloseHandler;
     }
 
     private void OnDisable()
     {
         UIEvents.OnUIClick -= UIClickHandler;
+        adAcceptPage.OnAccept -= OnAcceptHandler;
+        APIBridge.OnAdvertisementClose -= OnAdvertisementCloseHandler;
     }
 
     private void Awake()
@@ -43,13 +49,32 @@ public class LaunchesManager : MonoBehaviour, IDataControllable
 
     void Start()
     {
-        if (SceneManager.GetActiveScene().name == "Menu")
-            StartCoroutine(Timer());
+        StartCoroutine(Timer());
+    }
+
+    public void OnAcceptHandler()
+    {
+        #if !UNITY_EDITOR
+        APIBridge.Instance.ShowRewardedAdv();
+        #endif
+    }
+
+    public void OnAdvertisementCloseHandler(bool hasGotReward)
+    {
+        if (hasGotReward)
+            LaunchesAmount = 10;
     }
 
     public void LoadData(Database database)
     {
-        LaunchesAmount = database.currentLaunches;
+        var launchesEarnedFromLastSession = 0;
+        if (database.isFirstVisitPerSession)
+        {
+            var timePassed = (System.DateTime.UtcNow - database.lastSession).TotalSeconds;
+            launchesEarnedFromLastSession = Mathf.Clamp((int)(timePassed / timeToRecoverInS), 0, maxLaunches);
+        }
+
+        LaunchesAmount = Mathf.Clamp(database.currentLaunches + launchesEarnedFromLastSession, 0, maxLaunches);
         RefreshLaunchesText();
         SetTimeText();
     }
@@ -57,6 +82,7 @@ public class LaunchesManager : MonoBehaviour, IDataControllable
     public void SaveData(ref Database database)
     {
         database.currentLaunches = LaunchesAmount;
+        database.isFirstVisitPerSession = false;
     }
 
     private IEnumerator Timer()
@@ -110,8 +136,6 @@ public class LaunchesManager : MonoBehaviour, IDataControllable
         {
             case "TimePanelButton":
                 StartCoroutine(OpenTimePanel());
-                break;
-            case "AdButton":
                 break;
         }
     }

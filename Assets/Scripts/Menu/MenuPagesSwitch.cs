@@ -8,7 +8,7 @@ using UnityEngine.InputSystem.UI;
 public class MenuPagesSwitch : MonoBehaviour, IAudioPlayable
 {
     public GameObject backButton;
-    public List<MenuPageHandler> pages;
+    public List<MenuPage> pages;
     public PageTypes startPage = PageTypes.MainMenu;
 
     private LinkedList<PageTypes> pageHistory;

@@ -8,17 +8,17 @@ public class Page : MonoBehaviour
     [field: SerializeField]
     public Canvas Canvas { get; private set; }
 
-    [SerializeField] private Animator _animator;
+    [SerializeField] protected Animator _animator;
 
     [field: SerializeField]
-    public bool HasOpeningAnimation { get; private set; }
+    public bool HasOpeningAnimation { get; protected set; }
     [field: SerializeField]
-    public bool HasClosingAnimation { get; private set; }
+    public bool HasClosingAnimation { get; protected set; }
 
     [field: SerializeField]
-    public ButtonHolder OpenButton { get; private set; }
+    public ButtonHolder OpenButton { get; protected set; }
     [field: SerializeField]
-    public ButtonHolder CloseButton { get; private set; }
+    public ButtonHolder CloseButton { get; protected set; }
 
     public event Action OnOpen;
     public event Action OnClose;

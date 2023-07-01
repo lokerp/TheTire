@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -36,6 +37,7 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
     public TextMeshProUGUI distanceResult;
     public TextMeshProUGUI moneyEarnedResult;
     public GameObject recordHolder;
+    public AudioSource newRecordSound;
 
     [Header("Other")]
     public float timeInSToCloseScale;
@@ -136,23 +138,28 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
         yield break;
     }
 
-    private void ShowResults()
+    private IEnumerator ShowResults()
     {
         _resultsPage.Open();
         _timerPage.Close();
         _pauseButtonPage.Close();
 
-        if (_passedDistance > _recordDistance)
-            recordHolder.SetActive(true);
-        else
-            recordHolder.SetActive(false);
-
-        _earnedMoney = (int) (_passedDistance / 10);
+        _earnedMoney = (int)(_passedDistance / 10);
         distanceResult.text = Mathf.CeilToInt(_passedDistance).ToString();
         moneyEarnedResult.text = _earnedMoney.ToString();
 
+        if (_passedDistance > _recordDistance)
+        {
+            recordHolder.SetActive(true);
+            AnimationEndHandler resultsAnimationEnd = _resultsPage.GetComponent<AnimationEndHandler>();
+            while (resultsAnimationEnd.IsAnimationEnded != true)
+                yield return null;
+            newRecordSound.Play();
+        }
+        else
+            recordHolder.SetActive(false);
+
         MoneyManager.Instance.ChangeMoneyAmount(MoneyManager.Instance.MoneyAmount + _earnedMoney);
-        DataManager.Instance.SaveGame();
     }
 
     private void Pause()
@@ -226,7 +233,7 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
                 if (currentTime - startTime >= timeToCheckInS + timeForEndInS)
                 {
                     _isPlaying = false;
-                    ShowResults();
+                    StartCoroutine(ShowResults());
                 }
             }
             else

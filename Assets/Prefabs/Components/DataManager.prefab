@@ -50,7 +50,7 @@ MonoBehaviour:
       currentLanguage: 0
       currentMusicVolume: 0.5
       currentSoundsVolume: 0.5
-    currentLaunches: 99
+    currentLaunches: 10
     currentMoney: 100
     selectedTire:
       item: 1

@@ -41,13 +41,21 @@ public class UIEvents : MonoBehaviour
         List<RaycastResult> resultsData = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, resultsData);
 
-        foreach (var result in resultsData)
+        if (resultsData.Count > 0)
         {
-            if (result.gameObject != null && result.gameObject.activeInHierarchy
-                && result.gameObject.layer == LayerMask.NameToLayer("UI"))
+            if (resultsData[0].gameObject != null && resultsData[0].gameObject.activeInHierarchy
+             && resultsData[0].gameObject.layer == LayerMask.NameToLayer("UI"))
             {
-                OnUIClick.Invoke(result.gameObject);
+                OnUIClick.Invoke(resultsData[0].gameObject);
             }
         }
+        //foreach (var result in resultsData)
+        //{
+        //    if (result.gameObject != null && result.gameObject.activeInHierarchy
+        //        && result.gameObject.layer == LayerMask.NameToLayer("UI"))
+        //    {
+        //        OnUIClick.Invoke(result.gameObject);
+        //    }
+        //}
     }
 }

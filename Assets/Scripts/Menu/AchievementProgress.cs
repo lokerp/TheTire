@@ -16,7 +16,7 @@ public struct AchievementProgress
     public AchievementProgress(float progress, AchievementInfo achievement)
     {
         this.progress = progress;
-        if (Mathf.Approximately(progress, achievement.totalProgress))
+        if (progress >= achievement.totalProgress)
             isEarned = true;
         else
             isEarned = false;

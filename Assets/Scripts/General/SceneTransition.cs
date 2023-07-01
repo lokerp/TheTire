@@ -5,30 +5,30 @@ using UnityEngine.SceneManagement;
 
 public class SceneTransition : MonoBehaviour
 {
-    private SceneTransition instance;
+    private Animator _animator;
+
+    private void Awake()
+    {
+        _animator = GetComponent<Animator>();
+    }
 
     private void OnEnable()
     {
-        SceneManager.activeSceneChanged += Initialize;
+        ScenesManager.OnSceneChanging += Close;
     }
 
     private void OnDisable()
     {
-        SceneManager.activeSceneChanged -= Initialize;
+        ScenesManager.OnSceneChanging -= Close;
     }
 
-    private void Initialize(Scene current, Scene next)
+    private void Start()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-            Destroy(gameObject);
+        _animator.SetTrigger("IsOpening");
     }
 
-    private void Awake()
+    void Close()
     {
-        DontDestroyOnLoad(this);
+        _animator.SetTrigger("IsClosing");
     }
 }

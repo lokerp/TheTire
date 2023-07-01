@@ -26,10 +26,10 @@ MonoBehaviour:
   - title:
       English: 'Mass:'
       Russian: "\u041C\u0430\u0441\u0441\u0430:"
-    value: 3
+    value: 5
   - title:
       English: 'Bounciness:'
       Russian: "\u041F\u0440\u044B\u0433\u0443\u0447\u0435\u0441\u0442\u044C:"
-    value: 2
+    value: 5
   cost: 100
   path: Tires/Smart's Tire

@@ -20,6 +20,7 @@ public struct ItemTypes : IEquatable<ItemTypes>
             None,
             DaddysSedan,
             Smarts,
+            LowPoly
         }
     }
 

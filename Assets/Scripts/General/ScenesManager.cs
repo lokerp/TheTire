@@ -28,7 +28,6 @@ public class ScenesManager : MonoBehaviour
     {
         asyncLoad = SceneManager.LoadSceneAsync(sceneName);
         asyncLoad.allowSceneActivation = false;
-        sceneTransition.SetTrigger("IsClosing");
         OnSceneChanging?.Invoke();
         if (asyncLoad != null)
         {
@@ -44,6 +43,5 @@ public class ScenesManager : MonoBehaviour
         }
 
         asyncLoad.allowSceneActivation = true;
-        sceneTransition.SetTrigger("IsOpening");
     }
 }

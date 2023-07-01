@@ -12,6 +12,9 @@ public class Database
     public int currentLaunches;
     public int currentMoney;
 
+    public DateTime lastSession = DateTime.UtcNow;
+    [NonSerialized] public bool isFirstVisitPerSession = false;
+
     public ItemTypes selectedTire;
     public List<ItemTypes> availableTires;
 
