@@ -60,10 +60,14 @@ public class MenuPagesSwitch : MonoBehaviour, IAudioPlayable
                 OpenPage(PageTypes.Settings, true);
                 PlaySound(AudioSources[3]);
                 break;
+            case "Upgrades":
+                OpenPage(PageTypes.Upgrades, true);
+                PlaySound(AudioSources[3]);
+                break;
             case "BackButton":
                 if (pageHistory.Count > 1)
                 {
-                    if (pageHistory.Last.Value != PageTypes.Settings)
+                    if (pageHistory.Last.Value != PageTypes.Settings && pageHistory.Last.Value != PageTypes.Upgrades)
                         PlaySound(AudioSources[1]);
                     OpenPage(pageHistory.Last.Previous.Value, false);
                 }

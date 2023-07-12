@@ -51,7 +51,9 @@ MonoBehaviour:
       currentMusicVolume: 0.5
       currentSoundsVolume: 0.5
     currentLaunches: 10
-    currentMoney: 100
+    currentMoney: 10000
+    handlingLevel: 1
+    powerLevel: 1
     selectedTire:
       item: 1
       tire: 1

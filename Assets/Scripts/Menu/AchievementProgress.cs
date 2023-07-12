@@ -15,7 +15,7 @@ public struct AchievementProgress
 
     public AchievementProgress(float progress, AchievementInfo achievement)
     {
-        this.progress = progress;
+        this.progress = Mathf.Clamp(progress, 0, achievement.totalProgress);
         if (progress >= achievement.totalProgress)
             isEarned = true;
         else

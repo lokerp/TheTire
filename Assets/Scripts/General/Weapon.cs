@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.Animations;
 using UnityEngine;
 
-[RequireComponent(typeof(AnimationEndHandler))]
 public class Weapon : MonoBehaviour
 {
-    [SerializeField] int _power;
-    public int GetPower() => _power;
-
+    public AnimatorController animatorController;
     public Transform RHTargetInner;
     public Transform LHTargetInner;
+    public Transform RLTargetInner;
+    public Transform LLTargetInner;
+    public ParticleSystem hitEffect;
+    public List<AudioSource> sounds;
 }

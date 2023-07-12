@@ -20,12 +20,12 @@ MonoBehaviour:
     English: OAK BRANCH
     Russian: "\u0412\u0415\u0422\u041A\u0410 \u0414\u0423\u0411\u0410"
   description:
-    English: Better than nothing
-    Russian: "\u041B\u0443\u0447\u0448\u0435, \u0447\u0435\u043C \u043D\u0438\u0447\u0435\u0433\u043E"
+    English: A spoke in the wheel...
+    Russian: "\u041F\u0430\u043B\u043A\u0438 \u0432 \u043A\u043E\u043B\u0435\u0441\u0430..."
   properties:
   - title:
       English: 'Power:'
       Russian: "\u0421\u0438\u043B\u0430:"
     value: 0
   cost: 0
-  path: Weapons/Wooden Stick
+  path: Weapons/WoodenStick

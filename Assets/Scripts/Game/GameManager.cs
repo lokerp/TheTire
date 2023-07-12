@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour, IDataControllable, IAchievementsControllable
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
     [Header("Spawn Holders")]
     public Transform tireHolder;
     public Transform weaponHolder;
+    public Animator launchAnimator;
 
 
     [Header("Pages And UI'S")]
@@ -119,7 +121,8 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
         spawnedObjRb.isKinematic = true;
 
         _weapon = spawnedObj;
-        _weapon.GetComponent<Animator>().SetTrigger("HitPrepare");
+        launchAnimator.runtimeAnimatorController = _weapon.GetComponent<Weapon>().animatorController;
+        launchAnimator.SetTrigger("HitPrepare");
     }
 
     private void OnLaunch(Vector3 force, float forceModifier)
@@ -187,7 +190,12 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
     IEnumerator RefreshPassedDistance()
     {
         float maxHeight = 0;
+        float maxDistance = 0;
+        float mapSizeFromPlayer = 3200 - _player.transform.position.z;
         AchievementInfo astronautAchievement = AchievementsManager.Instance.GetAchievementInfoById(2);
+        AchievementInfo firstKilometerAchievement = AchievementsManager.Instance.GetAchievementInfoById(3);
+        AchievementInfo timeFliesAchievement = AchievementsManager.Instance.GetAchievementInfoById(4);
+        AchievementInfo championAchievement = AchievementsManager.Instance.GetAchievementInfoById(6);
         while (_isPlaying)
         {
             Vector3 distanceVector = _player.transform.position - tireHolder.transform.position;
@@ -201,6 +209,15 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
                 maxHeight = distanceVector.y;
                 GetAstronautAchievement(maxHeight, astronautAchievement);
             }
+            if (maxDistance < _passedDistance)
+            {
+                maxDistance = _passedDistance;
+                GetFirstKilometerAchievement(maxDistance, firstKilometerAchievement);
+                GetChampionAchievement((int) (maxDistance / 1000), championAchievement);
+            }
+            if (maxDistance >= mapSizeFromPlayer)
+                GetTimeFliesAchievement(1, timeFliesAchievement);
+
             yield return new WaitForSeconds(0.2f);
         }
     }
@@ -276,5 +293,22 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
     {
         var progress = new AchievementProgress(height, achievement);
         OnAchievementProgressChanged.Invoke(progress, 2);
+    }
+
+    void GetFirstKilometerAchievement(float distance, AchievementInfo achievement)
+    {
+        var progress = new AchievementProgress(distance, achievement);
+        OnAchievementProgressChanged.Invoke(progress, 3);
+    }
+
+    void GetTimeFliesAchievement(int progress, AchievementInfo achievement)
+    {
+        OnAchievementProgressChanged.Invoke(new AchievementProgress(progress, true), 4);
+    }
+
+    void GetChampionAchievement(int distanceInKm, AchievementInfo achievement)
+    {
+        var progress = new AchievementProgress(distanceInKm, achievement);
+        OnAchievementProgressChanged.Invoke(progress, 6);
     }
 }

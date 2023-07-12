@@ -12,6 +12,9 @@ public class Database
     public int currentLaunches;
     public int currentMoney;
 
+    public int handlingLevel;
+    public int powerLevel;
+
     public DateTime lastSession = DateTime.UtcNow;
     [NonSerialized] public bool isFirstVisitPerSession = false;
 

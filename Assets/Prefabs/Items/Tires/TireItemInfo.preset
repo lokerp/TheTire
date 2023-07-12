@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!181963792 &2655988077585873504
+Preset:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: TireItemInfo
+  m_TargetType:
+    m_NativeTypeID: 114
+    m_ManagedTypePPtr: {fileID: 11500000, guid: b3976b6b7b2762f4ebc8cdce0083e221, type: 3}
+    m_ManagedTypeFallback: 
+  m_Properties:
+  - target: {fileID: 0}
+    propertyPath: m_Enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorHideFlags
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorClassIdentifier
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: itemType.item
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: itemType.tire
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: itemType.weapon
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: name.English
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: name.Russian
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: description.English
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: description.Russian
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: properties.Array.size
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: properties.Array.data[0].title.English
+    value: 'Mass:'
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: properties.Array.data[0].title.Russian
+    value: "\u041C\u0430\u0441\u0441\u0430:"
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: properties.Array.data[0].value
+    value: 5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: properties.Array.data[1].title.English
+    value: 'Bounciness:'
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: properties.Array.data[1].title.Russian
+    value: "\u041F\u0440\u044B\u0433\u0443\u0447\u0435\u0441\u0442\u044C:"
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: properties.Array.data[1].value
+    value: 5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: cost
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: path
+    value: Tires/
+    objectReference: {fileID: 0}
+  m_ExcludedProperties: []

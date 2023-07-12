@@ -10,16 +10,8 @@ public class ItemInfo : ScriptableObject
 {
     public ItemTypes itemType;
 
-    [Serializable]
-    public struct Property
-    {
-        public TranslatableText title;
-        [Range(0, 10)] public int value;
-    }
-
     public new TranslatableText name;
     public TranslatableText description;
-    public List<Property> properties;
     public int cost;
 
     public string path;

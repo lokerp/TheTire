@@ -8,7 +8,7 @@ public class MoneyManager : MonoBehaviour, IDataControllable
     public static MoneyManager Instance { get; private set; }
     public int MoneyAmount { get; private set; }
 
-    public int maxMoneyAmount = 9999;
+    public int maxMoneyAmount = 99999;
     public TextMeshProUGUI moneyText;
     private void Awake()
     {
@@ -18,6 +18,16 @@ public class MoneyManager : MonoBehaviour, IDataControllable
         }
         else
             Destroy(this);
+    }
+
+    private void OnEnable()
+    {
+        AchievementsManager.OnAchievementEarned += GetMoneyForAchievement;
+    }
+
+    private void OnDisable()
+    {
+        AchievementsManager.OnAchievementEarned -= GetMoneyForAchievement;
     }
 
     public void SaveData(ref Database database)
@@ -41,6 +51,11 @@ public class MoneyManager : MonoBehaviour, IDataControllable
             MoneyAmount = amount;
         RefreshMoneyText();
         return 1;
+    }
+
+    public void GetMoneyForAchievement(AchievementInfo achievement)
+    {
+        ChangeMoneyAmount(MoneyAmount + achievement.moneyPrize);
     }
 
     void RefreshMoneyText()

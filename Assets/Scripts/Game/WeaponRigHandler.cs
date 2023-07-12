@@ -7,10 +7,14 @@ public class WeaponRigHandler : MonoBehaviour
 {
     public Transform RHRigTarget;
     public Transform LHRigTarget;
+    public Transform RLRigTarget;
+    public Transform LLRigTarget;
 
     private Weapon _weapon;
     private Transform RHRigInnerTarget;
     private Transform LHRigInnerTarget;
+    private Transform RLRigInnerTarget;
+    private Transform LLRigInnerTarget;
 
     void Start()
     {
@@ -18,11 +22,19 @@ public class WeaponRigHandler : MonoBehaviour
 
         RHRigInnerTarget = _weapon.RHTargetInner;
         LHRigInnerTarget = _weapon.LHTargetInner;
+        RLRigInnerTarget = _weapon.RLTargetInner;
+        LLRigInnerTarget = _weapon.LLTargetInner;
     }
 
     private void Update()
     {
-        RHRigTarget.SetPositionAndRotation(RHRigInnerTarget.position, RHRigInnerTarget.rotation);
-        LHRigTarget.SetPositionAndRotation(LHRigInnerTarget.position, LHRigInnerTarget.rotation);
+        if (RHRigInnerTarget != null)
+            RHRigTarget.SetPositionAndRotation(RHRigInnerTarget.position, RHRigInnerTarget.rotation);
+        if (LHRigInnerTarget != null)
+            LHRigTarget.SetPositionAndRotation(LHRigInnerTarget.position, LHRigInnerTarget.rotation);
+        if (RLRigInnerTarget != null)
+            RLRigTarget.SetPositionAndRotation(RLRigInnerTarget.position, RLRigInnerTarget.rotation);
+        if (LLRigInnerTarget != null)
+            LLRigTarget.SetPositionAndRotation(LLRigInnerTarget.position, LLRigInnerTarget.rotation);
     }
 }

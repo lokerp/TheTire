@@ -1,0 +1,119 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &4021716080288877066
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2464943006770952549, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_Name
+      value: AutumnSounds
+      objectReference: {fileID: 0}
+    - target: {fileID: 2818530758203919298, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_Name
+      value: Autumn2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5352413922934741346, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_Volume
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5352413922934741346, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: MaxDistance
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5352413922934741346, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 10d471327dd6e744ba37f8f7b86289bd, type: 3}
+    - target: {fileID: 5352413922934741346, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: spreadCustomCurve.m_Curve.Array.data[0].value
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6063445021016075193, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_Volume
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6063445021016075193, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: MaxDistance
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6063445021016075193, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 10d471327dd6e744ba37f8f7b86289bd, type: 3}
+    - target: {fileID: 6063445021016075193, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: spreadCustomCurve.m_Curve.Array.data[0].value
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6616362769770995394, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_Volume
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6616362769770995394, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: MaxDistance
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6616362769770995394, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 10d471327dd6e744ba37f8f7b86289bd, type: 3}
+    - target: {fileID: 6616362769770995394, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: spreadCustomCurve.m_Curve.Array.data[0].value
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7395273463999217946, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_Name
+      value: Autumn1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714322008773444174, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8968626586624669905, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}
+      propertyPath: m_Name
+      value: Autumn3
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 38ae20207e9b59040af7d0686fb62a13, type: 3}

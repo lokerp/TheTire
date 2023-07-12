@@ -30,6 +30,11 @@ public struct ItemTypes : IEquatable<ItemTypes>
         {
             None,
             WoodenStick,
+            Racket,
+            CueStick,
+            DesertEagle,
+            Tank,
+            BarhatnieTyagi
         }
     }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +8,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Animator))]
-public class ShopPage : MenuPage, IDataControllable, IAudioPlayable
+public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievementsControllable
 {
+    public Action<AchievementProgress, byte> OnAchievementProgressChanged { get; set; }
+
     [Space, Space]
     public ItemTypes.Type itemType;
     public Transform itemPlaceHolder;
@@ -19,18 +22,20 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable
     public GameObject rightArrowHolder;
     public GameObject dropdownArrowHolder;
     public TextController itemNameHolder;
-    public TextController itemDescriptionHolder;
+    public TextController itemDescriptionNameHolder;
+    public TextController itemDescriptionText;
     public ShopOptionButton optionButtonHolder;
     public TextMeshProUGUI costValueHolder;
 
-    public List<Property> propertyHolders;
-
+    private TranslatableText _defaultItemDescription;
     private Animator _shopAnimator;
     private ShopOptionButton.ShopOption _shopOption;
     private ItemInfo selectedItem;
     private ItemInfo currentItem;
     private int currentItemIndex;
     private List<ItemInfo> boughtItems;
+
+    private static int boughtItemsCount;
 
     [field: SerializeField]
     public List<AudioSource> AudioSources { get; private set; }
@@ -52,7 +57,6 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable
         if (currentItem != selectedItem)
         {
             currentItem = selectedItem;
-            currentItemIndex = boughtItems.IndexOf(currentItem);
             SwitchItem();
         }
         base.Close();
@@ -61,6 +65,7 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable
     private void Awake()
     {
         _shopAnimator = GetComponent<Animator>();
+        _defaultItemDescription = itemDescriptionText.text;
         SortCatalogueByCost();
     }
 
@@ -114,7 +119,8 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable
                 BuyItem();
                 break;
         }
-        RefreshItemInfo();
+
+        RefreshItemInfo(false);
     }
 
 
@@ -136,6 +142,9 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable
         {
             boughtItems.Add(currentItem);
             selectedItem = currentItem;
+            boughtItemsCount++;
+            if (boughtItemsCount == ItemsManager.Instance.GetItemsCount())
+                GetCollectorAchievement();
             PlaySound(AudioSources[0]);
         }
     }
@@ -157,6 +166,7 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable
 
     public void LoadData(Database database)
     {
+        boughtItemsCount = database.availableTires.Count + database.availableWeapons.Count;
         switch (itemType)
         {
             case ItemTypes.Type.Tire:
@@ -170,14 +180,14 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable
         }
 
         currentItem = selectedItem;
-        GetCurrentItemIndex();
         SwitchItem();
     }
 
     void SwitchItem()
     {
+        GetCurrentItemIndex();
         SpawnItem();
-        RefreshItemInfo();
+        RefreshItemInfo(true);
 
         if (currentItemIndex >= catalogue.Count - 1) rightArrowHolder.SetActive(false);
         else rightArrowHolder.SetActive(true);
@@ -189,39 +199,31 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable
     {
         foreach(Transform obj in itemPlaceHolder)
             Destroy(obj.gameObject);
-
         GameObject spawnedObj = Instantiate(ItemsManager.PathToPrefab<GameObject>(currentItem.path), itemPlaceHolder, false);
         spawnedObj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX
                                                          | RigidbodyConstraints.FreezePositionZ
                                                          | RigidbodyConstraints.FreezeRotation;
     }
 
-    void RefreshItemInfo()
+    void RefreshItemInfo(bool isSwitching)
     {
-        if (propertyHolders.Count != currentItem.properties.Count)
-            throw new System.Exception("Количество свойств меню != количеству свойств предмета!");
-
         itemNameHolder.text = currentItem.name;
         itemNameHolder.RefreshText();
 
-        itemDescriptionHolder.text = currentItem.description;
-        itemDescriptionHolder.RefreshText();
+        itemDescriptionNameHolder.text = currentItem.name;
+        itemDescriptionNameHolder.RefreshText();
+
+        itemDescriptionText.text = _defaultItemDescription + currentItem.description;
+        itemDescriptionText.RefreshText();
 
         costValueHolder.text = currentItem.cost.ToString();
-
-        for (int i = 0; i < propertyHolders.Count; i++)
-        {
-            propertyHolders[i].title.text = currentItem.properties[i].title;
-            propertyHolders[i].title.RefreshText();
-            propertyHolders[i].rating.SetRating(currentItem.properties[i].value);
-        }
 
         if (IsBought(currentItem))
             if (selectedItem == currentItem)
                 _shopOption = ShopOptionButton.ShopOption.InUse;
             else
                 _shopOption = ShopOptionButton.ShopOption.Use;
-        else if (_shopOption != ShopOptionButton.ShopOption.NoMoney)
+        else if (isSwitching)
             _shopOption = ShopOptionButton.ShopOption.Buy;
         optionButtonHolder.ChangeOption(_shopOption);
     }
@@ -246,5 +248,11 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable
     public void PlaySound(AudioSource source)
     {
         source.Play();
+    }
+
+    private void GetCollectorAchievement()
+    {
+        var progress = new AchievementProgress(1, true);
+        OnAchievementProgressChanged.Invoke(progress, 5);
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Data;
 
 enum ScaleZone
 {
@@ -12,7 +13,7 @@ enum ScaleZone
     greenZone
 }
 
-public class LaunchController : MonoBehaviour, IAudioPlayable
+public class LaunchController : MonoBehaviour, IAudioPlayable, IDataControllable
 {
     public static LaunchController Instance { get; private set; }
 
@@ -29,11 +30,14 @@ public class LaunchController : MonoBehaviour, IAudioPlayable
     public static event Action<Vector3, float> OnLaunch;
     public bool IsLaunched { get; private set; }
 
+    public GameObject launchAnimation;
+
     [field: SerializeField]
     public List<AudioSource> AudioSources { get; set; }
 
     private Rigidbody _player;
-    private Weapon _weapon;
+    private int _handlingLevel;
+    private int _powerLevel;
     private float _forceModifier;
     private PlayerInput _input;
     private float _amplitude;
@@ -78,10 +82,8 @@ public class LaunchController : MonoBehaviour, IAudioPlayable
     private void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
-        _weapon = GameObject.FindGameObjectWithTag("Weapon").GetComponent<Weapon>();
 
         if (_player == null) Debug.LogError("Couldn't find object with tag 'player'");
-        if (_weapon == null) Debug.LogError("Couldn't find object with tag 'weapon'");
     }
 
     private IEnumerator Launch()
@@ -90,21 +92,21 @@ public class LaunchController : MonoBehaviour, IAudioPlayable
         {
             IsLaunched = true;
 
-            Animator weaponAnimator = _weapon.GetComponent<Animator>();
-            AnimationEndHandler weaponHitEndHandler = _weapon.GetComponent<AnimationEndHandler>();
+            Animator launchAnimator = launchAnimation.GetComponent<Animator>();
+            AnimationEndHandler launchAnimationEndHandler = launchAnimation.GetComponent<AnimationEndHandler>();
 
             float angle = GetChoiceYPosition() / GetScaleHeight() * (maxAngle - minAngle);
             float bonusCoef = GetScaleBonus();
 
-            _forceModifier = _weapon.GetPower() * bonusCoef;
+            _forceModifier = 500 * _powerLevel * bonusCoef;
 
             _player.constraints = RigidbodyConstraints.None;
             float cos = Mathf.Cos(Mathf.Deg2Rad * angle);
             float sin = Mathf.Sin(Mathf.Deg2Rad * angle);
             Vector3 force = new Vector3(0, sin, cos) * _forceModifier;
 
-            weaponAnimator.SetTrigger("Hit");
-            while (weaponHitEndHandler.IsAnimationEnded != true)
+            launchAnimator.SetTrigger("Hit");
+            while (launchAnimationEndHandler.IsAnimationEnded != true)
                 yield return null;
 
             _player.AddForce(force, ForceMode.Impulse);
@@ -181,5 +183,16 @@ public class LaunchController : MonoBehaviour, IAudioPlayable
     public void PlaySound(AudioSource source)
     {
         source.Play();
+    }
+
+    public void SaveData(ref Database database)
+    {
+
+    }
+
+    public void LoadData(Database database)
+    {
+        _handlingLevel = database.handlingLevel;
+        _powerLevel = database.powerLevel;
     }
 }

@@ -8,5 +8,6 @@ public enum PageTypes
     WheelShop,
     WeaponShop,
     Achievements,
-    Settings
+    Settings,
+    Upgrades
 }
