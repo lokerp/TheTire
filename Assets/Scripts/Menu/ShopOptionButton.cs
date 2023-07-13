@@ -8,19 +8,17 @@ public class ShopOptionButton : MonoBehaviour
 {
     public enum ShopOption
     {
-        Buy,
-        NoMoney,
+        NotAvailable,
         Use,
         InUse
     }
 
     public Color buyColor;
-    public Color noMoneyColor;
+    public Color notAvailableColor;
     public Color useColor;
     public Color inUseColor;
 
-    public TranslatableText buyText;
-    public TranslatableText noMoneyText;
+    public TranslatableText notAvailableText;
     public TranslatableText useText;
     public TranslatableText inUseText;
 
@@ -31,13 +29,9 @@ public class ShopOptionButton : MonoBehaviour
     {
         switch (option)
         {
-            case ShopOption.Buy:
-                _textHolder.text = buyText;
-                _colorHolder.color = buyColor;
-                break;
-            case ShopOption.NoMoney:
-                _textHolder.text = noMoneyText;
-                _colorHolder.color = noMoneyColor;
+            case ShopOption.NotAvailable:
+                _textHolder.text = notAvailableText;
+                _colorHolder.color = notAvailableColor;
                 break;
             case ShopOption.Use:
                 _textHolder.text = useText;

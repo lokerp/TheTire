@@ -43,6 +43,8 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
 
     [Header("Other")]
     public float timeInSToCloseScale;
+    public PhysicMaterial tirePhysicMaterial;
+    [Range(0, 1)] public float bouncinessMaxLvl;
 
     private bool _isPlaying = true;
     private GameObject _player;
@@ -91,6 +93,7 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
         _playerPrefab = ItemsManager.PathToPrefab<GameObject>(ItemsManager.Instance.GetItemByType(database.selectedTire).path);
         _weaponPrefab = ItemsManager.PathToPrefab<GameObject>(ItemsManager.Instance.GetItemByType(database.selectedWeapon).path);
         _recordDistance = database.records.RecordDistance;
+        SetTireBounciness(database.bouncinessLevel, 25);
         SpawnTire();
         SpawnWeapon();
     }
@@ -99,6 +102,12 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
     {
         if (_passedDistance > _recordDistance)
             database.records.RecordDistance = _passedDistance;
+    }
+
+    void SetTireBounciness(int curLvl, int maxLvl)
+    {
+        tirePhysicMaterial.bounciness = (float) curLvl / maxLvl * bouncinessMaxLvl;
+        tirePhysicMaterial.dynamicFriction = (1 - (float)curLvl / maxLvl) * 1000;
     }
 
     void SpawnTire()
@@ -147,7 +156,7 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
         _timerPage.Close();
         _pauseButtonPage.Close();
 
-        _earnedMoney = (int)(_passedDistance / 10);
+        _earnedMoney = (int)(_passedDistance / 10) * 2;
         distanceResult.text = Mathf.CeilToInt(_passedDistance).ToString();
         moneyEarnedResult.text = _earnedMoney.ToString();
 

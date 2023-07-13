@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Data;
+using Unity.Mathematics;
 
 enum ScaleZone
 {
@@ -27,8 +28,10 @@ public class LaunchController : MonoBehaviour, IAudioPlayable, IDataControllable
     public float maxScaleArrowVelocity = 3000f;
     public float maxAngle = 90;
     public float minAngle = 0;
+    public int minForceModifier;
     public static event Action<Vector3, float> OnLaunch;
     public bool IsLaunched { get; private set; }
+    public float randomXOffset;
 
     public GameObject launchAnimation;
 
@@ -36,7 +39,6 @@ public class LaunchController : MonoBehaviour, IAudioPlayable, IDataControllable
     public List<AudioSource> AudioSources { get; set; }
 
     private Rigidbody _player;
-    private int _handlingLevel;
     private int _powerLevel;
     private float _forceModifier;
     private PlayerInput _input;
@@ -98,12 +100,14 @@ public class LaunchController : MonoBehaviour, IAudioPlayable, IDataControllable
             float angle = GetChoiceYPosition() / GetScaleHeight() * (maxAngle - minAngle);
             float bonusCoef = GetScaleBonus();
 
-            _forceModifier = 500 * _powerLevel * bonusCoef;
+            _powerLevel += 10;
+            _forceModifier = (float)_powerLevel * (_powerLevel + 1) / 2 * 10;
 
             _player.constraints = RigidbodyConstraints.None;
             float cos = Mathf.Cos(Mathf.Deg2Rad * angle);
             float sin = Mathf.Sin(Mathf.Deg2Rad * angle);
-            Vector3 force = new Vector3(0, sin, cos) * _forceModifier;
+            Vector3 force = (_forceModifier * bonusCoef * new Vector3(0, sin, cos)) 
+                            + new Vector3(UnityEngine.Random.Range(0, randomXOffset), 0, 0);
 
             launchAnimator.SetTrigger("Hit");
             while (launchAnimationEndHandler.IsAnimationEnded != true)
@@ -192,7 +196,6 @@ public class LaunchController : MonoBehaviour, IAudioPlayable, IDataControllable
 
     public void LoadData(Database database)
     {
-        _handlingLevel = database.handlingLevel;
         _powerLevel = database.powerLevel;
     }
 }

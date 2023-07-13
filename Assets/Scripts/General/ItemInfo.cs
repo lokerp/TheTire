@@ -8,11 +8,23 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Item", menuName = "ScriptableObjects/ItemInfo", order = 1)]
 public class ItemInfo : ScriptableObject
 {
+    [Serializable]
+    public struct Requirements : IComparable<Requirements>
+    {
+        public int bouncinessLevel;
+        public int powerLevel;
+
+        public int CompareTo(Requirements other)
+        {
+            return (bouncinessLevel + powerLevel).CompareTo(other.bouncinessLevel + powerLevel);
+        }
+    }
+
     public ItemTypes itemType;
 
     public new TranslatableText name;
     public TranslatableText description;
-    public int cost;
+    public Requirements requirements;
 
     public string path;
 }

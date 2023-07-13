@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.TextCore.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
@@ -11,6 +12,7 @@ public class MenuPagesSwitch : MonoBehaviour, IAudioPlayable
     public List<MenuPage> pages;
     public PageTypes startPage = PageTypes.MainMenu;
 
+    bool isGameLaunching = false;
     private LinkedList<PageTypes> pageHistory;
 
     [field: SerializeField]
@@ -42,7 +44,8 @@ public class MenuPagesSwitch : MonoBehaviour, IAudioPlayable
         {
             case "StartButton":
                 PlaySound(AudioSources[2]);
-                StartGame();
+                if (!isGameLaunching)
+                    StartGame();
                 break;
             case "WheelShop":
                 OpenPage(PageTypes.WheelShop, true);
@@ -80,6 +83,7 @@ public class MenuPagesSwitch : MonoBehaviour, IAudioPlayable
         if (LaunchesManager.Instance.CanPlay())
         {
             LaunchesManager.Instance.ReduceLaunchesAmount();
+            isGameLaunching = true;
             ScenesManager.Instance.SwitchScene("Game");
         }
         else

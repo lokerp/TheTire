@@ -22,10 +22,7 @@ MonoBehaviour:
   description:
     English: Tireminton?
     Russian: "\u0428\u0438\u043D\u043C\u0438\u043D\u0442\u043E\u043D?"
-  properties:
-  - title:
-      English: 'Power:'
-      Russian: "\u0421\u0438\u043B\u0430:"
-    value: 3
-  cost: 300
+  requirements:
+    bouncinessLevel: 0
+    powerLevel: 3
   path: Weapons/BadmintonRacket

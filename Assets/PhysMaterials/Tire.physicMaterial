@@ -6,9 +6,9 @@ PhysicMaterial:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: LowPoly Tire
-  dynamicFriction: 0.6
+  m_Name: Tire
+  dynamicFriction: 680
   staticFriction: 0.6
-  bounciness: 0.3
-  frictionCombine: 0
+  bounciness: 0.256
+  frictionCombine: 3
   bounceCombine: 2

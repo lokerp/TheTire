@@ -22,14 +22,7 @@ MonoBehaviour:
   description:
     English: Why does he need a spare?
     Russian: "\u0417\u0430\u0447\u0435\u043C \u0435\u043C\u0443 \u0437\u0430\u043F\u0430\u0441\u043A\u0430?"
-  properties:
-  - title:
-      English: 'Mass:'
-      Russian: "\u041C\u0430\u0441\u0441\u0430:"
-    value: 0
-  - title:
-      English: 'Bounciness:'
-      Russian: "\u041F\u0440\u044B\u0433\u0443\u0447\u0435\u0441\u0442\u044C:"
-    value: 0
-  cost: 0
+  requirements:
+    bouncinessLevel: 1
+    powerLevel: 0
   path: Tires/Daddy's Sedan Tire

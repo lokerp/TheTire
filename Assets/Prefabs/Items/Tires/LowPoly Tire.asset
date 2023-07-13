@@ -22,14 +22,7 @@ MonoBehaviour:
   description:
     English: For weak computers
     Russian: "\u0414\u043B\u044F \u0441\u043B\u0430\u0431\u044B\u0445 \u043A\u043E\u043C\u043F\u044C\u044E\u0442\u0435\u0440\u043E\u0432"
-  properties:
-  - title:
-      English: 'Mass:'
-      Russian: "\u041C\u0430\u0441\u0441\u0430:"
-    value: 3
-  - title:
-      English: 'Bounciness:'
-      Russian: "\u041F\u0440\u044B\u0433\u0443\u0447\u0435\u0441\u0442\u044C:"
-    value: 2
-  cost: 500
+  requirements:
+    bouncinessLevel: 5
+    powerLevel: 0
   path: Tires/LowPoly Tire

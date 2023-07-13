@@ -43,8 +43,7 @@ public class ItemInfoEditor : Editor
     {
         EditorGUILayout.PropertyField(serializedObject.FindProperty("name"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("description"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("properties"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("cost"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("requirements"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("path"));
     }
 }

@@ -22,10 +22,7 @@ MonoBehaviour:
   description:
     English: Better than yours
     Russian: "\u041B\u0443\u0447\u0448\u0435 \u0447\u0435\u043C \u0442\u0432\u043E\u0438"
-  properties:
-  - title:
-      English: 'Power:'
-      Russian: "\u0421\u0438\u043B\u0430:"
-    value: 10
-  cost: 5000
+  requirements:
+    bouncinessLevel: 0
+    powerLevel: 15
   path: Weapons/BarhatnieTyagi

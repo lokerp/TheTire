@@ -26,7 +26,7 @@ public static class MathfExtension
         Smoothstep
     }
 
-    private static float FuncSpeedApply(float value, FuncSpeed speed)
+    public static float FuncSpeedApply(float value, FuncSpeed speed)
     {
         value = Mathf.Clamp01(value);
         switch (speed)

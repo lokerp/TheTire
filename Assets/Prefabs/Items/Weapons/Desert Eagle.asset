@@ -22,10 +22,7 @@ MonoBehaviour:
   description:
     English: Interesting application
     Russian: "\u0418\u043D\u0442\u0435\u0440\u0435\u0441\u043D\u043E\u0435 \u043F\u0440\u0438\u043C\u0435\u043D\u0435\u043D\u0438\u0435"
-  properties:
-  - title:
-      English: 'Power:'
-      Russian: "\u0421\u0438\u043B\u0430:"
-    value: 5
-  cost: 1000
+  requirements:
+    bouncinessLevel: 0
+    powerLevel: 10
   path: Weapons/DesertEagle

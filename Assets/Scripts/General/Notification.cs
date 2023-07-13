@@ -11,6 +11,7 @@ public class Notification : MonoBehaviour, IAudioPlayable
     [SerializeField] private Image _icon;
     [SerializeField] private TextController _notificationTitle;
     [SerializeField] private TextController _info;
+    [SerializeField] private TextMeshProUGUI _rewardText;
 
     [field: SerializeField]
     public List<AudioSource> AudioSources { get; private set; }
@@ -35,6 +36,7 @@ public class Notification : MonoBehaviour, IAudioPlayable
         _icon.sprite = Resources.Load<Sprite>(achievement.imagePath);
         _info.text = achievement.title;
         _info.RefreshText();
+        _rewardText.text = "+ " + achievement.moneyPrize.ToString();
         StartCoroutine(Open(timeOpenedInS));
     }
 

@@ -12,7 +12,7 @@ public class Database
     public int currentLaunches;
     public int currentMoney;
 
-    public int handlingLevel;
+    public int bouncinessLevel;
     public int powerLevel;
 
     public DateTime lastSession = DateTime.UtcNow;

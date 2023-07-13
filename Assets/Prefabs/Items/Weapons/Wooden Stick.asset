@@ -22,10 +22,7 @@ MonoBehaviour:
   description:
     English: A spoke in the wheel...
     Russian: "\u041F\u0430\u043B\u043A\u0438 \u0432 \u043A\u043E\u043B\u0435\u0441\u0430..."
-  properties:
-  - title:
-      English: 'Power:'
-      Russian: "\u0421\u0438\u043B\u0430:"
-    value: 0
-  cost: 0
+  requirements:
+    bouncinessLevel: 0
+    powerLevel: 1
   path: Weapons/WoodenStick

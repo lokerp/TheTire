@@ -167,15 +167,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buyColor: {r: 0.07058824, g: 1, b: 0, a: 1}
-  noMoneyColor: {r: 0.990566, g: 0.30277678, b: 0.30277678, a: 1}
+  notAvailableColor: {r: 0.735849, g: 0.735849, b: 0.735849, a: 0.5882353}
   useColor: {r: 1, g: 1, b: 1, a: 1}
   inUseColor: {r: 1, g: 1, b: 1, a: 0.627451}
-  buyText:
-    English: BUY
-    Russian: "\u041A\u0423\u041F\u0418\u0422\u042C"
-  noMoneyText:
-    English: NO MONEY
-    Russian: "\u041D\u0415\u0422 \u0414\u0415\u041D\u0415\u0413"
+  notAvailableText:
+    English: UNAVAILABLE
+    Russian: "\u041D\u0415\u0414\u041E\u0421\u0422\u0423\u041F\u041D\u041E"
   useText:
     English: USE
     Russian: "\u0412\u042B\u0411\u0420\u0410\u0422\u042C"
@@ -184,9 +181,6 @@ MonoBehaviour:
     Russian: "\u0412\u042B\u0411\u0420\u0410\u041D\u041E"
   _colorHolder: {fileID: 6719612144069942485}
   _textHolder: {fileID: 6719612144069942487}
-  <AudioSources>k__BackingField:
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!114 &660623375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,7 +261,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 91003f4f32f936d4b9811e316ad05cdc, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

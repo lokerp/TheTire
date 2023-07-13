@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3415550629053678206}
   m_Layer: 0
   m_Name: Tree_temp_climate_021
-  m_TagString: Bush
+  m_TagString: Cliffs
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

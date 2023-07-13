@@ -25,7 +25,13 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
     public TextController itemDescriptionNameHolder;
     public TextController itemDescriptionText;
     public ShopOptionButton optionButtonHolder;
-    public TextMeshProUGUI costValueHolder;
+    public GameObject bouncinessReqHolder;
+    public GameObject powerReqHolder;
+    public TextMeshProUGUI bouncinessReqText;
+    public TextMeshProUGUI powerReqText;
+
+    public Color notEarnedReqColor;
+    public Color earnedReqColor;
 
     private TranslatableText _defaultItemDescription;
     private Animator _shopAnimator;
@@ -33,9 +39,13 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
     private ItemInfo selectedItem;
     private ItemInfo currentItem;
     private int currentItemIndex;
-    private List<ItemInfo> boughtItems;
+    private List<ItemInfo> availableItems;
+    private int currBouncinessLvl;
+    private int currPowerLvl;
 
-    private static int boughtItemsCount;
+    private Action<int, int> OnLevelUpHandler;
+
+    private static int availableItemsCount;
 
     [field: SerializeField]
     public List<AudioSource> AudioSources { get; private set; }
@@ -43,13 +53,21 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
     protected override void OnEnable()
     {
         base.OnEnable();
+        OnLevelUpHandler = (bouncinessLvl, weaponLvl) =>
+        {
+            currBouncinessLvl = bouncinessLvl;
+            currPowerLvl = weaponLvl;
+            RefreshAvailableItems();
+        };
         UIEvents.OnUIClick += UIClickHandler;
+        UpgradesManager.OnLevelUp += OnLevelUpHandler;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
         UIEvents.OnUIClick -= UIClickHandler;
+        UpgradesManager.OnLevelUp -= OnLevelUpHandler;
     }
 
     public override void Close()
@@ -66,7 +84,11 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
     {
         _shopAnimator = GetComponent<Animator>();
         _defaultItemDescription = itemDescriptionText.text;
-        SortCatalogueByCost();
+    }
+
+    private void Start()
+    {
+        SortCatalogue();
     }
 
     void UIClickHandler(GameObject gameObject)
@@ -115,38 +137,12 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
                 selectedItem = currentItem;
                 PlaySound(AudioSources[0]);
                 break;
-            case ShopOptionButton.ShopOption.Buy:
-                BuyItem();
+            case ShopOptionButton.ShopOption.NotAvailable:
+                PlaySound(AudioSources[1]);
                 break;
         }
 
-        RefreshItemInfo(false);
-    }
-
-
-    void BuyItem()
-    {
-        if (boughtItems.Contains(currentItem)) 
-        {
-            Debug.LogError($"Error! You are trying to buy an item you already have {currentItem}");
-            return;
-        }
-        int exCode = MoneyManager.Instance.ChangeMoneyAmount(MoneyManager.Instance.MoneyAmount - currentItem.cost);
-
-        if (exCode == 0)
-        {
-            _shopOption = ShopOptionButton.ShopOption.NoMoney;
-            PlaySound(AudioSources[1]);
-        }
-        else if (exCode == 1)
-        {
-            boughtItems.Add(currentItem);
-            selectedItem = currentItem;
-            boughtItemsCount++;
-            if (boughtItemsCount == ItemsManager.Instance.GetItemsCount())
-                GetCollectorAchievement();
-            PlaySound(AudioSources[0]);
-        }
+        RefreshItemInfo();
     }
 
     public void SaveData(ref Database database)
@@ -155,31 +151,34 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
         {
             case ItemTypes.Type.Tire:
                 database.selectedTire = selectedItem.itemType;
-                database.availableTires = boughtItems.Select(t => t.itemType).ToList();
+                database.availableTires = availableItems.Select(t => t.itemType).ToList();
                 break;
             case ItemTypes.Type.Weapon:
                 database.selectedWeapon = selectedItem.itemType;
-                database.availableWeapons = boughtItems.Select(t => t.itemType).ToList();
+                database.availableWeapons = availableItems.Select(t => t.itemType).ToList();
                 break;
         }
     }
 
     public void LoadData(Database database)
     {
-        boughtItemsCount = database.availableTires.Count + database.availableWeapons.Count;
+        availableItemsCount = database.availableTires.Count + database.availableWeapons.Count;
+        currBouncinessLvl = database.bouncinessLevel;
+        currPowerLvl = database.powerLevel;
         switch (itemType)
         {
             case ItemTypes.Type.Tire:
                 selectedItem = ItemsManager.Instance.GetItemByType(database.selectedTire);
-                boughtItems = database.availableTires.Select(t => ItemsManager.Instance.GetItemByType(t)).ToList();
+                availableItems = database.availableTires.Select(t => ItemsManager.Instance.GetItemByType(t)).ToList();
                 break;
             case ItemTypes.Type.Weapon:
                 selectedItem = ItemsManager.Instance.GetItemByType(database.selectedWeapon);
-                boughtItems = database.availableWeapons.Select(t => ItemsManager.Instance.GetItemByType(t)).ToList();
+                availableItems = database.availableWeapons.Select(t => ItemsManager.Instance.GetItemByType(t)).ToList();
                 break;
         }
-
         currentItem = selectedItem;
+
+        RefreshAvailableItems();
         SwitchItem();
     }
 
@@ -187,7 +186,7 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
     {
         GetCurrentItemIndex();
         SpawnItem();
-        RefreshItemInfo(true);
+        RefreshItemInfo();
 
         if (currentItemIndex >= catalogue.Count - 1) rightArrowHolder.SetActive(false);
         else rightArrowHolder.SetActive(true);
@@ -205,7 +204,23 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
                                                          | RigidbodyConstraints.FreezeRotation;
     }
 
-    void RefreshItemInfo(bool isSwitching)
+    void RefreshAvailableItems()
+    {
+        int newItemsCount = 0;
+        foreach (var item in catalogue)
+        {
+            if (!availableItems.Contains(item) 
+                && currBouncinessLvl >= item.requirements.bouncinessLevel 
+                && currPowerLvl >= item.requirements.powerLevel)
+                availableItems.Add(item);
+        }
+        availableItemsCount += newItemsCount;
+
+        if (availableItemsCount == ItemsManager.Instance.GetItemsCount())
+            GetCollectorAchievement();
+    }
+
+    void RefreshItemInfo()
     {
         itemNameHolder.text = currentItem.name;
         itemNameHolder.RefreshText();
@@ -216,15 +231,27 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
         itemDescriptionText.text = _defaultItemDescription + currentItem.description;
         itemDescriptionText.RefreshText();
 
-        costValueHolder.text = currentItem.cost.ToString();
+        if (currentItem.requirements.bouncinessLevel > 0)
+            bouncinessReqText.text = currentItem.requirements.bouncinessLevel.ToString();
+        else bouncinessReqHolder.SetActive(false);
+        if (currentItem.requirements.powerLevel > 0)
+            powerReqText.text = currentItem.requirements.powerLevel.ToString();
+        else powerReqHolder.SetActive(false);
 
-        if (IsBought(currentItem))
+        if (currentItem.requirements.bouncinessLevel > currBouncinessLvl)
+            bouncinessReqText.color = notEarnedReqColor;
+        else bouncinessReqText.color = earnedReqColor;
+        if (currentItem.requirements.powerLevel > currPowerLvl)
+            powerReqText.color = notEarnedReqColor;
+        else powerReqText.color = earnedReqColor;
+
+        if (IsAvailable(currentItem))
             if (selectedItem == currentItem)
                 _shopOption = ShopOptionButton.ShopOption.InUse;
             else
                 _shopOption = ShopOptionButton.ShopOption.Use;
-        else if (isSwitching)
-            _shopOption = ShopOptionButton.ShopOption.Buy;
+        else
+            _shopOption = ShopOptionButton.ShopOption.NotAvailable;
         optionButtonHolder.ChangeOption(_shopOption);
     }
 
@@ -233,14 +260,14 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
         currentItemIndex = catalogue.IndexOf(currentItem);
     }
 
-    void SortCatalogueByCost()
+    void SortCatalogue()
     {
-        catalogue.Sort((x, y) => x.cost.CompareTo(y.cost));
+        catalogue = catalogue.OrderByDescending(x => IsAvailable(x)).ThenBy(x => x.requirements).ToList();
     }
 
-    bool IsBought(ItemInfo item)
+    bool IsAvailable(ItemInfo item)
     {
-        if (boughtItems.Find((x) => x.name == item.name))
+        if (availableItems.Find((x) => x.name == item.name))
             return true;
         return false;
     }
@@ -253,6 +280,6 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
     private void GetCollectorAchievement()
     {
         var progress = new AchievementProgress(1, true);
-        OnAchievementProgressChanged.Invoke(progress, 5);
+        OnAchievementProgressChanged?.Invoke(progress, 5);
     }
 }

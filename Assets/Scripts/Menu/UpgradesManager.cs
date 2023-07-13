@@ -7,14 +7,13 @@ using UnityEngine.UI;
 
 public class UpgradesManager : MonoBehaviour, IAudioPlayable, IDataControllable
 {
+    public static UpgradesManager Instance { get; private set; }
+
     private enum LevelType
     {
         Bounciness,
         Power
     }
-
-    public int maxHandlingLevel;
-    public int maxPowerLevel;
 
     public TextMeshProUGUI bouncinessLevelText;
     public TextMeshProUGUI powerLevelText;
@@ -35,11 +34,20 @@ public class UpgradesManager : MonoBehaviour, IAudioPlayable, IDataControllable
     private Action OnBouncinessUpgradeButtonClick;
     private Action OnPowerUpgradeButtonClick;
 
+    public static event Action<int, int> OnLevelUp;
+
     [field: SerializeField]
     public List<AudioSource> AudioSources { get; private set; }
 
     public void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+            Destroy(this);
+
         OnBouncinessUpgradeButtonClick = () => UpgradeLevel(LevelType.Bounciness);
         OnPowerUpgradeButtonClick = () => UpgradeLevel(LevelType.Power);
     }
@@ -58,16 +66,16 @@ public class UpgradesManager : MonoBehaviour, IAudioPlayable, IDataControllable
 
     public void LoadData(Database database)
     {
-        _bouncinessLevel = database.handlingLevel;
+        _bouncinessLevel = database.bouncinessLevel;
         _powerLevel = database.powerLevel;
 
         RefreshUpgradeCosts();
-        RefreshLevelsInfo();
+        RefreshLevelsInfo(database.currentMoney);
     }
 
     public void SaveData(ref Database database)
     {
-        database.handlingLevel = _bouncinessLevel;
+        database.bouncinessLevel = _bouncinessLevel;
         database.powerLevel = _powerLevel;
     }
 
@@ -77,41 +85,40 @@ public class UpgradesManager : MonoBehaviour, IAudioPlayable, IDataControllable
         switch (levelType)
         {
             case LevelType.Bounciness:
-                if (_bouncinessLevel >= maxHandlingLevel)
-                    throw new System.Exception("Trying to upgrade level while its' max has been reached!");
                 opCode = MoneyManager.Instance.ChangeMoneyAmount(MoneyManager.Instance.MoneyAmount - _bouncinessUpgradeCost);
                 if (opCode == 1)
                     _bouncinessLevel++;
                 break;
             case LevelType.Power:
-                if (_powerLevel >= maxPowerLevel)
-                    throw new System.Exception("Trying to upgrade level while its' max has been reached!");
                 opCode = MoneyManager.Instance.ChangeMoneyAmount(MoneyManager.Instance.MoneyAmount - _powerUpgradeCost);
                 if (opCode == 1)
                     _powerLevel++;
                 break;
         }
         if (opCode == 1)
+        {
             AudioSources[0].Play();
+            OnLevelUp?.Invoke(_bouncinessLevel, _powerLevel);
+        }
 
         RefreshUpgradeCosts();
-        RefreshLevelsInfo();
+        RefreshLevelsInfo(MoneyManager.Instance.MoneyAmount);
     }
 
-    private void RefreshLevelsInfo()
+    private void RefreshLevelsInfo(int currentMoney)
     {
-        bouncinessLevelText.text = _bouncinessLevel.ToString() + " / " + maxHandlingLevel.ToString();
-        powerLevelText.text = _powerLevel.ToString() + " / " + maxPowerLevel.ToString();
+        bouncinessLevelText.text = _bouncinessLevel.ToString();
+        powerLevelText.text = _powerLevel.ToString();
 
         bouncinessUpgradeCostText.text = _bouncinessUpgradeCost.ToString();
         powerUpgradeCostText.text = _powerUpgradeCost.ToString();
 
-        if (_bouncinessUpgradeCost > MoneyManager.Instance.MoneyAmount || _bouncinessLevel >= maxHandlingLevel)
+        if (_bouncinessUpgradeCost > currentMoney)
         {
             bouncinessUpgradeButton.GetComponent<Image>().color = noMoneyColor;
             bouncinessUpgradeButton.enabled = false;
         }
-        if (_powerUpgradeCost > MoneyManager.Instance.MoneyAmount || _powerLevel >= maxPowerLevel)
+        if (_powerUpgradeCost > currentMoney)
         {
             powerUpgradeButton.GetComponent<Image>().color = noMoneyColor;
             powerUpgradeButton.enabled = false;
@@ -120,15 +127,7 @@ public class UpgradesManager : MonoBehaviour, IAudioPlayable, IDataControllable
 
     private void RefreshUpgradeCosts()
     {
-        if (_bouncinessLevel >= maxHandlingLevel)
-            _bouncinessUpgradeCost = 0;
-        if (_powerLevel >= maxPowerLevel)
-        {
-            _powerLevel = 0;
-            return;
-        }
-
-        _bouncinessUpgradeCost =  200 * _bouncinessLevel * (_bouncinessLevel + 1);
-        _powerUpgradeCost = 200 * _powerLevel * (_powerLevel + 1);
+        _bouncinessUpgradeCost =  100 * (_bouncinessLevel * (_bouncinessLevel + 1) / 2);
+        _powerUpgradeCost = 100 * (_powerLevel * (_powerLevel + 1) / 2);
     }
 }

@@ -54,9 +54,13 @@ public class LaunchesManager : MonoBehaviour, IDataControllable
 
     public void OnAcceptHandler()
     {
-        #if !UNITY_EDITOR
+    #if !UNITY_EDITOR
         APIBridge.Instance.ShowRewardedAdv();
-        #endif
+    #endif
+    #if UNITY_EDITOR
+        LaunchesAmount = 10;
+        RefreshLaunchesText();
+    #endif
     }
 
     public void OnAdvertisementCloseHandler(bool hasGotReward)

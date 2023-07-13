@@ -5,6 +5,7 @@ using UnityEngine;
 public class WorldBordersController : MonoBehaviour
 {
     public List<Transform> sideBorders;
+    public Transform upBorder;
     public Transform downBorder;
     private Transform _playerPos;
 
@@ -23,5 +24,8 @@ public class WorldBordersController : MonoBehaviour
         downBorder.position = new Vector3(_playerPos.position.x,
                                           downBorder.position.y,
                                           _playerPos.position.z);
+        upBorder.position = new Vector3(_playerPos.position.x,
+                                        upBorder.position.y,
+                                        _playerPos.position.z);
     }
 }
