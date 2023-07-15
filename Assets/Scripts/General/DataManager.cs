@@ -16,7 +16,7 @@ public class DataManager : MonoBehaviour
     [Header("Defaults"), SerializeField] private Database _database;
     private List<IDataControllable> dataControllableObjects;
     private FileDataHandler fileDataHandler;
-    private bool isFirstGameLaunch = false;
+    private bool _isFirstVisitPerSession = false;
 
     private void OnEnable()
     {
@@ -42,9 +42,9 @@ public class DataManager : MonoBehaviour
 
     private void Start()
     {
-        if (isFirstGameLaunch)
+        if (_isFirstVisitPerSession)
         {
-            #if !UNITY_EDITOR
+        #if !UNITY_EDITOR
             Database serverDatabase = null;
             try { serverDatabase = APIBridge.Instance.LoadData(); }
             catch (System.Exception ex) { UnityEngine.Debug.Log(ex); }
@@ -54,7 +54,7 @@ public class DataManager : MonoBehaviour
                 _database = serverDatabase;
                 fileDataHandler.Save(_database);
             }
-            #endif
+        #endif
         }
         dataControllableObjects = FindAllDataControllables();
         LoadGame();
@@ -78,13 +78,22 @@ public class DataManager : MonoBehaviour
         if (loadedDatabase != null)
             _database = loadedDatabase;
 
-        if (isFirstGameLaunch)
+        if (_isFirstVisitPerSession)
+        {
             _database.isFirstVisitPerSession = true;
+            _database.records ??= new();
+            if (Application.systemLanguage == SystemLanguage.Russian
+             || Application.systemLanguage == SystemLanguage.Belarusian
+             || Application.systemLanguage == SystemLanguage.Ukrainian)
+                _database.settings.currentLanguage = Languages.Russian;
+            else
+                _database.settings.currentLanguage = Languages.English;
+        }
 
         foreach (var obj in dataControllableObjects)
             obj.LoadData(_database);
 
-        isFirstGameLaunch = false;
+        _isFirstVisitPerSession = false;
         _database.isFirstVisitPerSession = false;
     }
 
@@ -115,7 +124,7 @@ public class DataManager : MonoBehaviour
     [RuntimeInitializeOnLoadMethod]
     static void OnRuntimeInitialized()
     {
-        Instance.isFirstGameLaunch = true;
+        Instance._isFirstVisitPerSession = true;
     }
 
     private void OnApplicationQuit()

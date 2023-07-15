@@ -20,8 +20,8 @@ MonoBehaviour:
     English: TANK
     Russian: "\u0422\u0410\u041D\u041A"
   description:
-    English: 
-    Russian: 
+    English: Got stuck in the circus
+    Russian: "\u0417\u0430\u0441\u0442\u0440\u044F\u043B \u0432 \u0446\u0438\u0440\u043A\u0435"
   requirements:
     bouncinessLevel: 0
     powerLevel: 13

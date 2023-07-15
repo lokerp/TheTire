@@ -15,6 +15,9 @@ public class Database
     public int bouncinessLevel;
     public int powerLevel;
 
+    public int launchesCount;
+    public int adWatchedCount;
+    public int redZoneThrowsCount;
     public DateTime lastSession = DateTime.UtcNow;
     [NonSerialized] public bool isFirstVisitPerSession = false;
 

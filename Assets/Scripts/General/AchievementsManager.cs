@@ -33,13 +33,8 @@ public class AchievementsManager : MonoBehaviour, IDataControllable
 
     void IDataControllable.LoadData(Database database)
     {
-        if (database.records == null)
-        {
-            Records = new Records();
-            Records.AchievementProgress = InitAchievementProgress();
-        }
-        else
-            Records = database.records;
+        Records = database.records;
+        InitAchievementProgress();
         OnAchievementsLoad?.Invoke(Records.AchievementProgress);
     }
 
@@ -48,17 +43,15 @@ public class AchievementsManager : MonoBehaviour, IDataControllable
         database.records = Records;
     }
 
-    private Dictionary<byte, AchievementProgress> InitAchievementProgress()
+    private void InitAchievementProgress()
     {
-        var achievementProgress = new Dictionary<byte, AchievementProgress>();
+        if (Records.AchievementProgress == null)
+            Records.AchievementProgress = new();
         foreach (var el in achievementsList)
         {
-            if (achievementProgress.ContainsKey(el.id))
-                throw new System.Exception($"Error! Key {el.id} of SO {el.name} already exists!");
-            achievementProgress.Add(el.id, new AchievementProgress());
+            if (!Records.AchievementProgress.ContainsKey(el.id))
+                Records.AchievementProgress.Add(el.id, new AchievementProgress());
         }
-
-        return achievementProgress;
     }
 
     private List<IAchievementsControllable> FindAllAchievementsControllables()

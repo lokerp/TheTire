@@ -16,7 +16,7 @@ public class ItemInfo : ScriptableObject
 
         public int CompareTo(Requirements other)
         {
-            return (bouncinessLevel + powerLevel).CompareTo(other.bouncinessLevel + powerLevel);
+            return (bouncinessLevel + powerLevel).CompareTo(other.bouncinessLevel + other.powerLevel);
         }
     }
 

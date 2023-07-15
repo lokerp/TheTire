@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
     private float _passedDistance = 0;
     private float _recordDistance = 0;
     private int _earnedMoney = 0;
+    private int _launchesCount = 0;
 
     private void OnEnable()
     {
@@ -88,11 +89,17 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
         _pauseButtonPage.Close();
     }
 
+    private void Start()
+    {  
+        GetGamerAchievement(_launchesCount, AchievementsManager.Instance.GetAchievementInfoById(9));
+    }
+
     public void LoadData(Database database)
     {
         _playerPrefab = ItemsManager.PathToPrefab<GameObject>(ItemsManager.Instance.GetItemByType(database.selectedTire).path);
         _weaponPrefab = ItemsManager.PathToPrefab<GameObject>(ItemsManager.Instance.GetItemByType(database.selectedWeapon).path);
         _recordDistance = database.records.RecordDistance;
+        _launchesCount = database.launchesCount;
         SetTireBounciness(database.bouncinessLevel, 25);
         SpawnTire();
         SpawnWeapon();
@@ -201,10 +208,12 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
         float maxHeight = 0;
         float maxDistance = 0;
         float mapSizeFromPlayer = 3200 - _player.transform.position.z;
+        AchievementInfo pilotAchievement = AchievementsManager.Instance.GetAchievementInfoById(7);
         AchievementInfo astronautAchievement = AchievementsManager.Instance.GetAchievementInfoById(2);
         AchievementInfo firstKilometerAchievement = AchievementsManager.Instance.GetAchievementInfoById(3);
         AchievementInfo timeFliesAchievement = AchievementsManager.Instance.GetAchievementInfoById(4);
         AchievementInfo championAchievement = AchievementsManager.Instance.GetAchievementInfoById(6);
+        AchievementInfo halfMarathonAchievement = AchievementsManager.Instance.GetAchievementInfoById(8);
         while (_isPlaying)
         {
             Vector3 distanceVector = _player.transform.position - tireHolder.transform.position;
@@ -217,12 +226,15 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
             {
                 maxHeight = distanceVector.y;
                 GetAstronautAchievement(maxHeight, astronautAchievement);
+                GetPilotAchievement(maxHeight, pilotAchievement);
             }
             if (maxDistance < _passedDistance)
             {
                 maxDistance = _passedDistance;
                 GetFirstKilometerAchievement(maxDistance, firstKilometerAchievement);
                 GetChampionAchievement((int) (maxDistance / 1000), championAchievement);
+                GetHalfMarathonAchievement((int) (maxDistance / 1000), halfMarathonAchievement);
+
             }
             if (maxDistance >= mapSizeFromPlayer)
                 GetTimeFliesAchievement(1, timeFliesAchievement);
@@ -298,6 +310,18 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
         _passedDistancePage.Open();
     }
 
+    void GetGamerAchievement(int launches, AchievementInfo achievement)
+    {
+        var progress = new AchievementProgress(launches, achievement);
+        OnAchievementProgressChanged.Invoke(progress, 9);
+    }
+
+    void GetPilotAchievement(float height, AchievementInfo achievement)
+    {
+        var progress = new AchievementProgress(height, achievement);
+        OnAchievementProgressChanged.Invoke(progress, 7);
+    }
+
     void GetAstronautAchievement(float height, AchievementInfo achievement)
     {
         var progress = new AchievementProgress(height, achievement);
@@ -319,5 +343,11 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
     {
         var progress = new AchievementProgress(distanceInKm, achievement);
         OnAchievementProgressChanged.Invoke(progress, 6);
+    }
+
+    void GetHalfMarathonAchievement(int distanceInKm, AchievementInfo achievement)
+    {
+        var progress = new AchievementProgress(distanceInKm, achievement);
+        OnAchievementProgressChanged.Invoke(progress, 8);
     }
 }

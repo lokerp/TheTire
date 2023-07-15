@@ -2,13 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms.Impl;
 
-public class LaunchesManager : MonoBehaviour, IDataControllable
+public class LaunchesManager : MonoBehaviour, IDataControllable, IAchievementsControllable
 {
     public static LaunchesManager Instance { get; private set; }
     public int LaunchesAmount { get; private set; }
+    public Action<AchievementProgress, byte> OnAchievementProgressChanged { get; set; }
+
     public int maxLaunches = 10;
     public float timeToRecoverInS = 30;
     public TextMeshProUGUI launchesText;
@@ -17,6 +21,7 @@ public class LaunchesManager : MonoBehaviour, IDataControllable
     public TextMeshProUGUI timeText;
     public AcceptPage adAcceptPage;
 
+    private int _adWatchedCount;
     private int _timePassedInS = 0;
     private Color _launchesDefaultColor;
 
@@ -66,7 +71,11 @@ public class LaunchesManager : MonoBehaviour, IDataControllable
     public void OnAdvertisementCloseHandler(bool hasGotReward)
     {
         if (hasGotReward)
+        {
+            _adWatchedCount++;
             LaunchesAmount = 10;
+            GetSponsorAchievement(AchievementsManager.Instance.GetAchievementInfoById(10));
+        }
     }
 
     public void LoadData(Database database)
@@ -79,12 +88,14 @@ public class LaunchesManager : MonoBehaviour, IDataControllable
         }
 
         LaunchesAmount = Mathf.Clamp(database.currentLaunches + launchesEarnedFromLastSession, 0, maxLaunches);
+        _adWatchedCount = database.adWatchedCount;
         RefreshLaunchesText();
         SetTimeText();
     }
 
     public void SaveData(ref Database database)
     {
+        database.adWatchedCount = _adWatchedCount;
         database.currentLaunches = LaunchesAmount;
         database.isFirstVisitPerSession = false;
     }
@@ -185,5 +196,11 @@ public class LaunchesManager : MonoBehaviour, IDataControllable
     public void ReduceLaunchesAmount()
     {
         LaunchesAmount--;
+    }
+
+    public void GetSponsorAchievement(AchievementInfo achievement)
+    {
+        var progress = new AchievementProgress(_adWatchedCount, achievement);
+        OnAchievementProgressChanged.Invoke(progress, 10);
     }
 }

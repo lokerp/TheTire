@@ -25,7 +25,7 @@ MonoBehaviour:
     English: Keep playing and you'll get it... maybe
     Russian: "\u0418\u0433\u0440\u0430\u0439 \u0438 \u0442\u044B \u043F\u043E\u043B\u0443\u0447\u0438\u0448\u044C
       \u0435\u0433\u043E... \u0432\u043E\u0437\u043C\u043E\u0436\u043D\u043E"
-  moneyPrize: 100
+  moneyPrize: 1000
   totalProgress: 1
   isSecret: 1
   imagePath: AchievementsIcons/TodayIsCloudyAchievement

@@ -6,21 +6,22 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
 
-public class MenuPagesSwitch : MonoBehaviour, IAudioPlayable
+public class MenuPagesSwitch : MonoBehaviour, IAudioPlayable, IDataControllable
 {
+    public int _launchesCount;
     public GameObject backButton;
     public List<MenuPage> pages;
     public PageTypes startPage = PageTypes.MainMenu;
 
-    bool isGameLaunching = false;
-    private LinkedList<PageTypes> pageHistory;
+    bool _isGameLaunching = false;
+    private LinkedList<PageTypes> _pageHistory;
 
     [field: SerializeField]
     public List<AudioSource> AudioSources { get; private set; }
 
     private void Awake()
     {
-        pageHistory = new LinkedList<PageTypes>();
+        _pageHistory = new LinkedList<PageTypes>();
     }
 
     private void OnEnable()
@@ -44,7 +45,7 @@ public class MenuPagesSwitch : MonoBehaviour, IAudioPlayable
         {
             case "StartButton":
                 PlaySound(AudioSources[2]);
-                if (!isGameLaunching)
+                if (!_isGameLaunching)
                     StartGame();
                 break;
             case "WheelShop":
@@ -68,11 +69,11 @@ public class MenuPagesSwitch : MonoBehaviour, IAudioPlayable
                 PlaySound(AudioSources[3]);
                 break;
             case "BackButton":
-                if (pageHistory.Count > 1)
+                if (_pageHistory.Count > 1)
                 {
-                    if (pageHistory.Last.Value != PageTypes.Settings && pageHistory.Last.Value != PageTypes.Upgrades)
+                    if (_pageHistory.Last.Value != PageTypes.Settings && _pageHistory.Last.Value != PageTypes.Upgrades)
                         PlaySound(AudioSources[1]);
-                    OpenPage(pageHistory.Last.Previous.Value, false);
+                    OpenPage(_pageHistory.Last.Previous.Value, false);
                 }
                 break;
         }
@@ -83,7 +84,8 @@ public class MenuPagesSwitch : MonoBehaviour, IAudioPlayable
         if (LaunchesManager.Instance.CanPlay())
         {
             LaunchesManager.Instance.ReduceLaunchesAmount();
-            isGameLaunching = true;
+            _isGameLaunching = true;
+            _launchesCount++;
             ScenesManager.Instance.SwitchScene("Game");
         }
         else
@@ -104,15 +106,15 @@ public class MenuPagesSwitch : MonoBehaviour, IAudioPlayable
                 page.Open();
                 hasOpened = true;
                 if (addInHistory)
-                    pageHistory.AddLast(page.pageType);
+                    _pageHistory.AddLast(page.pageType);
                 else
-                    pageHistory.RemoveLast();
+                    _pageHistory.RemoveLast();
             }
             else
                 page.Close();
         }
 
-        if (pageHistory.Count == 1)
+        if (_pageHistory.Count == 1)
             backButton.SetActive(false);
         else 
             backButton.SetActive(true);
@@ -124,5 +126,15 @@ public class MenuPagesSwitch : MonoBehaviour, IAudioPlayable
     public void PlaySound(AudioSource source)
     {
         source.Play();
+    }
+
+    public void SaveData(ref Database database)
+    {
+        database.launchesCount = _launchesCount;
+    }
+
+    public void LoadData(Database database)
+    {
+        _launchesCount = database.launchesCount;
     }
 }

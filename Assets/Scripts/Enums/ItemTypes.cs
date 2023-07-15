@@ -20,7 +20,11 @@ public struct ItemTypes : IEquatable<ItemTypes>
             None,
             DaddysSedan,
             Smarts,
-            LowPoly
+            LowPoly,
+            FitnessBall,
+            BikeTire,
+            Lifebuoy,
+            Donut
         }
     }
 
@@ -34,7 +38,9 @@ public struct ItemTypes : IEquatable<ItemTypes>
             CueStick,
             DesertEagle,
             Tank,
-            BarhatnieTyagi
+            BarhatnieTyagi,
+            Trampoline,
+            Cannon
         }
     }
 

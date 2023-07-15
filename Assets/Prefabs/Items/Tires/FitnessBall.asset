@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3976b6b7b2762f4ebc8cdce0083e221, type: 3}
+  m_Name: FitnessBall
+  m_EditorClassIdentifier: 
+  itemType:
+    item: 1
+    tire: 4
+    weapon: 0
+  name:
+    English: FITNESS BALL
+    Russian: "\u041C\u042F\u0427 \u0414\u041B\u042F \u0424\u0418\u0422\u041D\u0415\u0421\u0410"
+  description:
+    English: Not a tor, so what?
+    Russian: "\u041D\u0435 \u0442\u043E\u0440, \u043D\u0443 \u0438 \u0447\u0442\u043E?"
+  requirements:
+    bouncinessLevel: 10
+    powerLevel: 0
+  path: Tires/FitnessBall

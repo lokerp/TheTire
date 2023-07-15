@@ -86,11 +86,6 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
         _defaultItemDescription = itemDescriptionText.text;
     }
 
-    private void Start()
-    {
-        SortCatalogue();
-    }
-
     void UIClickHandler(GameObject gameObject)
     {
         if (gameObject == leftArrowHolder.GetComponent<ButtonHolder>().button)
@@ -178,6 +173,7 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
         }
         currentItem = selectedItem;
 
+        SortCatalogue();
         RefreshAvailableItems();
         SwitchItem();
     }
@@ -232,10 +228,16 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
         itemDescriptionText.RefreshText();
 
         if (currentItem.requirements.bouncinessLevel > 0)
+        {
+            bouncinessReqHolder.SetActive(true);
             bouncinessReqText.text = currentItem.requirements.bouncinessLevel.ToString();
+        }
         else bouncinessReqHolder.SetActive(false);
         if (currentItem.requirements.powerLevel > 0)
+        {
+            powerReqHolder.SetActive(true);
             powerReqText.text = currentItem.requirements.powerLevel.ToString();
+        }
         else powerReqHolder.SetActive(false);
 
         if (currentItem.requirements.bouncinessLevel > currBouncinessLvl)

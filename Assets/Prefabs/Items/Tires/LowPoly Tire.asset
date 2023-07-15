@@ -23,6 +23,6 @@ MonoBehaviour:
     English: For weak computers
     Russian: "\u0414\u043B\u044F \u0441\u043B\u0430\u0431\u044B\u0445 \u043A\u043E\u043C\u043F\u044C\u044E\u0442\u0435\u0440\u043E\u0432"
   requirements:
-    bouncinessLevel: 5
+    bouncinessLevel: 3
     powerLevel: 0
   path: Tires/LowPoly Tire

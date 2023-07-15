@@ -20,8 +20,8 @@ MonoBehaviour:
     English: RACKET
     Russian: "\u0420\u0410\u041A\u0415\u0422\u041A\u0410"
   description:
-    English: Tireminton?
-    Russian: "\u0428\u0438\u043D\u043C\u0438\u043D\u0442\u043E\u043D?"
+    English: Tireminton
+    Russian: "\u0428\u0438\u043D\u043C\u0438\u043D\u0442\u043E\u043D"
   requirements:
     bouncinessLevel: 0
     powerLevel: 3

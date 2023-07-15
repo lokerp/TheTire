@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Data;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 
 enum ScaleZone
 {
@@ -14,7 +15,7 @@ enum ScaleZone
     greenZone
 }
 
-public class LaunchController : MonoBehaviour, IAudioPlayable, IDataControllable
+public class LaunchController : MonoBehaviour, IAudioPlayable, IDataControllable, IAchievementsControllable
 {
     public static LaunchController Instance { get; private set; }
 
@@ -37,6 +38,7 @@ public class LaunchController : MonoBehaviour, IAudioPlayable, IDataControllable
 
     [field: SerializeField]
     public List<AudioSource> AudioSources { get; set; }
+    public Action<AchievementProgress, byte> OnAchievementProgressChanged { get; set; }
 
     private Rigidbody _player;
     private int _powerLevel;
@@ -49,6 +51,8 @@ public class LaunchController : MonoBehaviour, IAudioPlayable, IDataControllable
     private ScaleZone _zone;
     // 0 = down, 1 = up
     private byte _moveSide = 1;
+
+    private int _redZoneThrowsCount;
 
     private void OnEnable()
     {
@@ -100,14 +104,19 @@ public class LaunchController : MonoBehaviour, IAudioPlayable, IDataControllable
             float angle = GetChoiceYPosition() / GetScaleHeight() * (maxAngle - minAngle);
             float bonusCoef = GetScaleBonus();
 
+            if (_zone == ScaleZone.redZone)
+            {
+                _redZoneThrowsCount++;
+                GetSniperAchievement(AchievementsManager.Instance.GetAchievementInfoById(11));
+            }
+
             _powerLevel += 10;
             _forceModifier = (float)_powerLevel * (_powerLevel + 1) / 2 * 10;
-
             _player.constraints = RigidbodyConstraints.None;
             float cos = Mathf.Cos(Mathf.Deg2Rad * angle);
             float sin = Mathf.Sin(Mathf.Deg2Rad * angle);
             Vector3 force = (_forceModifier * bonusCoef * new Vector3(0, sin, cos)) 
-                            + new Vector3(UnityEngine.Random.Range(0, randomXOffset), 0, 0);
+                            + new Vector3(UnityEngine.Random.Range(-randomXOffset, randomXOffset), 0, 0);
 
             launchAnimator.SetTrigger("Hit");
             while (launchAnimationEndHandler.IsAnimationEnded != true)
@@ -191,11 +200,18 @@ public class LaunchController : MonoBehaviour, IAudioPlayable, IDataControllable
 
     public void SaveData(ref Database database)
     {
-
+        database.redZoneThrowsCount = _redZoneThrowsCount;
     }
 
     public void LoadData(Database database)
     {
         _powerLevel = database.powerLevel;
+        _redZoneThrowsCount = database.redZoneThrowsCount;
+    }
+
+    private void GetSniperAchievement(AchievementInfo achievement)
+    {
+        var progress = new AchievementProgress(_redZoneThrowsCount, achievement);
+        OnAchievementProgressChanged.Invoke(progress, 11);
     }
 }

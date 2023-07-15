@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3976b6b7b2762f4ebc8cdce0083e221, type: 3}
+  m_Name: Cannon
+  m_EditorClassIdentifier: 
+  itemType:
+    item: 2
+    tire: 0
+    weapon: 8
+  name:
+    English: CANNON
+    Russian: "\u041F\u0423\u0428\u041A\u0410"
+  description:
+    English: Taken from torrent trackers
+    Russian: "\u0412\u0437\u044F\u0442\u0430 \u0441 \u0442\u043E\u0440\u0440\u0435\u043D\u0442-\u0442\u0440\u0435\u043A\u0435\u0440\u043E\u0432"
+  requirements:
+    bouncinessLevel: 0
+    powerLevel: 15
+  path: Weapons/Cannon
