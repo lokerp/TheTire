@@ -2268,7 +2268,7 @@ PrefabInstance:
     - target: {fileID: 3338961197202490683, guid: 025b12ec96ffb3a4391febd2f029dc3c, type: 3}
       propertyPath: <CloseButton>k__BackingField
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 493566486}
     - target: {fileID: 3338961197611520707, guid: 025b12ec96ffb3a4391febd2f029dc3c, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -250
@@ -2425,6 +2425,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9da91d8b990fe7949af8c63b1309780e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &493566486 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8536125090741655747, guid: 025b12ec96ffb3a4391febd2f029dc3c, type: 3}
+  m_PrefabInstance: {fileID: 493566483}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 507139883b960df4ab33c7d7cf396b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &515040993
@@ -3462,8 +3473,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -280, y: -70}
-  m_SizeDelta: {x: 300, y: 50}
+  m_AnchoredPosition: {x: -320, y: -70}
+  m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &647978646
 MonoBehaviour:
@@ -7925,6 +7936,7 @@ MonoBehaviour:
   bouncinessUpgradeButton: {fileID: 1882066178}
   powerUpgradeButton: {fileID: 598779095}
   noMoneyColor: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 0.5882353}
+  maxBouncinessLevel: 25
   <AudioSources>k__BackingField:
   - {fileID: 879379130}
 --- !u!4 &1297984682
@@ -8245,6 +8257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c4e3ac9c35444e478e946d96d847f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _launchesCount: 0
   backButton: {fileID: 936829025}
   pages:
   - {fileID: 2002088238}
@@ -9814,7 +9827,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 10
   m_WholeNumbers: 1
-  m_Value: 0
+  m_Value: 9.5
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -11865,7 +11878,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 10
   m_WholeNumbers: 1
-  m_Value: 0
+  m_Value: 9.5
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []

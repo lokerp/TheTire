@@ -48,12 +48,15 @@ MonoBehaviour:
   _database:
     settings:
       currentLanguage: 0
-      currentMusicVolume: 0.5
+      currentMusicVolume: 0.1
       currentSoundsVolume: 0.5
-    currentLaunches: 100
+    currentLaunches: 10
     currentMoney: 0
     bouncinessLevel: 1
     powerLevel: 1
+    launchesCount: 0
+    adWatchedCount: 0
+    redZoneThrowsCount: 0
     selectedTire:
       item: 1
       tire: 1

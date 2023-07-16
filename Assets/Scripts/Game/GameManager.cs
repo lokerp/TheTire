@@ -159,6 +159,7 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
 
     private IEnumerator ShowResults()
     {
+        AudioManager.Instance.gameMusic.Stop();
         _resultsPage.Open();
         _timerPage.Close();
         _pauseButtonPage.Close();
@@ -186,6 +187,7 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
         Time.timeScale = 0;
         _pauseButtonPage.Close();
         AudioManager.Instance.ChangeVolume(AudioManager.VolumeType.GameSounds, 0);
+        AudioManager.Instance.gameMusic.Pause();
         timerCountdown.Pause();
     }
 
@@ -194,6 +196,7 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
         Time.timeScale = 1;
         _pauseButtonPage.Open();
         AudioManager.Instance.ChangeVolume(AudioManager.VolumeType.GameSounds, 1);
+        AudioManager.Instance.gameMusic.UnPause();
         timerCountdown.UnPause();
     }
 

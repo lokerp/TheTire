@@ -1114,7 +1114,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: -6016361052655396168, guid: 6d430c9ff2b688a4f80171d385ef26c2, type: 2}
   m_audioClip: {fileID: 8300000, guid: b2db0f528f4dcb34888eb1516c17a55e, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.4
+  m_Volume: 0.6
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -12221,10 +12221,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6977242e92ee63f46afae843a0a90c74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sideBorders:
-  - {fileID: 416690536}
-  - {fileID: 348512276}
-  upBorder: {fileID: 0}
+  leftBorder: {fileID: 348512276}
+  rightBorder: {fileID: 416690536}
   downBorder: {fileID: 518090281}
 --- !u!1 &1764727374
 GameObject:
@@ -13601,7 +13599,7 @@ MonoBehaviour:
   <AudioSources>k__BackingField:
   - source: {fileID: 1464729852}
     minVolume: 0.01
-    maxVolume: 0.8
+    maxVolume: 1
     minPitch: 0.8
     maxPitch: 1.2
   - source: {fileID: 102807848}
@@ -13616,22 +13614,22 @@ MonoBehaviour:
     maxPitch: 1.2
   - source: {fileID: 1116301007}
     minVolume: 0.05
-    maxVolume: 0.8
+    maxVolume: 1
     minPitch: 0.8
     maxPitch: 1.2
   - source: {fileID: 222201504}
     minVolume: 0.01
-    maxVolume: 0.6
+    maxVolume: 0.8
     minPitch: 0.8
     maxPitch: 1.2
   - source: {fileID: 68982634}
     minVolume: 0.6
-    maxVolume: 0.8
+    maxVolume: 1
     minPitch: 1
     maxPitch: 1
   - source: {fileID: 13093364}
     minVolume: 0.2
-    maxVolume: 0.8
+    maxVolume: 1
     minPitch: 0.8
     maxPitch: 1.2
 --- !u!4 &2099320044

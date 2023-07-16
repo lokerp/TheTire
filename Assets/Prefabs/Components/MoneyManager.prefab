@@ -44,5 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 848587dd04fa38945abd8c81dcbecea1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxMoneyAmount: 99999
+  maxMoneyAmount: 999999
   moneyText: {fileID: 0}

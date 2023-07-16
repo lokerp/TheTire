@@ -25,5 +25,5 @@ MonoBehaviour:
       \u041C\u041A\u0421"
   requirements:
     bouncinessLevel: 15
-    powerLevel: 10
+    powerLevel: 7
   path: Weapons/Trampoline

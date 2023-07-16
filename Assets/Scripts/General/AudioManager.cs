@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour, IDataControllable
@@ -16,6 +17,9 @@ public class AudioManager : MonoBehaviour, IDataControllable
 
     public static AudioManager Instance { get; private set; }
     public AudioMixer mixer;
+
+    public AudioSource menuMusic;
+    public AudioSource gameMusic;
 
     [SerializeField] private Slider _musicVolumeSlider;
     [SerializeField] private Slider _soundsVolumeSlider;
@@ -37,6 +41,15 @@ public class AudioManager : MonoBehaviour, IDataControllable
 
         listenerInstanceMusic = (value) => ChangeVolume(VolumeType.Music, value / 10);
         listenerInstanceSounds = (value) => ChangeVolume(VolumeType.AllSounds, value / 10);
+    }
+
+    private void Start()
+    {
+        var sceneName = SceneManager.GetActiveScene().name;
+        if (sceneName == "Menu")
+            menuMusic.Play();
+        else
+            gameMusic.Play();
     }
 
     private void OnEnable()

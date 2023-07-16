@@ -74,6 +74,7 @@ public class LaunchesManager : MonoBehaviour, IDataControllable, IAchievementsCo
         {
             _adWatchedCount++;
             LaunchesAmount = 10;
+            RefreshLaunchesText();
             GetSponsorAchievement(AchievementsManager.Instance.GetAchievementInfoById(10));
         }
     }

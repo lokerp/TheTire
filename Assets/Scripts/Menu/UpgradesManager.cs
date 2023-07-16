@@ -25,6 +25,8 @@ public class UpgradesManager : MonoBehaviour, IAudioPlayable, IDataControllable
 
     public Color noMoneyColor;
 
+    public int maxBouncinessLevel;
+
     private int _bouncinessLevel;
     private int _powerLevel;
 
@@ -107,13 +109,13 @@ public class UpgradesManager : MonoBehaviour, IAudioPlayable, IDataControllable
 
     private void RefreshLevelsInfo(int currentMoney)
     {
-        bouncinessLevelText.text = _bouncinessLevel.ToString();
+        bouncinessLevelText.text = _bouncinessLevel < maxBouncinessLevel ? _bouncinessLevel.ToString() : "Max";
         powerLevelText.text = _powerLevel.ToString();
 
-        bouncinessUpgradeCostText.text = _bouncinessUpgradeCost.ToString();
+        bouncinessUpgradeCostText.text = _bouncinessLevel < maxBouncinessLevel ? _bouncinessUpgradeCost.ToString() : "0";
         powerUpgradeCostText.text = _powerUpgradeCost.ToString();
 
-        if (_bouncinessUpgradeCost > currentMoney)
+        if (_bouncinessUpgradeCost > currentMoney || _bouncinessLevel >= maxBouncinessLevel)
         {
             bouncinessUpgradeButton.GetComponent<Image>().color = noMoneyColor;
             bouncinessUpgradeButton.enabled = false;
