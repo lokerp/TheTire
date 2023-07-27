@@ -93,17 +93,6 @@
                 },
                 {
                     "name": "1D Axis",
-                    "id": "831f7c0f-f983-45c3-8e26-5ad18af0e0bc",
-                    "path": "1DAxis",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Turn",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "1D Axis",
                     "id": "0d2ff504-f81f-4c30-b748-64a645f57328",
                     "path": "1DAxis",
                     "interactions": "",

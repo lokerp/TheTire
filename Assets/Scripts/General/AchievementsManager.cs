@@ -4,41 +4,26 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class AchievementsManager : MonoBehaviour, IDataControllable
+public class AchievementsManager : StonUndestroyable<AchievementsManager>, IDataControllable
 {
-    public static AchievementsManager Instance { get; private set; }
     [SerializeField] private List<AchievementInfo> achievementsList;
     public Records Records { get; private set; }
-    [SerializeField] private Notification _notification;
-    [SerializeField] private float _notificationTimeOpenedInS;
-    public static event Action<Dictionary<byte, AchievementProgress>> OnAchievementsLoad;
+    public static event Action<Dictionary<byte, AchievementProgress>> OnAchievementsUpdate;
     public static event Action<AchievementInfo> OnAchievementEarned;
 
-    void Awake()
-    {
-        if (Instance == null || Instance == this)
-        {
-            Instance = this;
-        }
-        else
-            Destroy(gameObject);
-    }
 
-    void Start()
+    public void LoadData(Database database)
     {
         var achievementControllables = FindAllAchievementsControllables();
         foreach (var contr in achievementControllables)
             contr.OnAchievementProgressChanged += UpdateAchievementProgressById;
-    }
-
-    void IDataControllable.LoadData(Database database)
-    {
         Records = database.records;
-        InitAchievementProgress();
-        OnAchievementsLoad?.Invoke(Records.AchievementProgress);
+        if (DataManager.IsFirstVisitPerSession())
+            InitAchievementProgress();
+        OnAchievementsUpdate?.Invoke(Records.AchievementProgress);
     }
 
-    void IDataControllable.SaveData(ref Database database)
+    public void SaveData(ref Database database)
     {
         database.records = Records;
     }
@@ -77,7 +62,7 @@ public class AchievementsManager : MonoBehaviour, IDataControllable
         return Records.AchievementProgress[id];
     }
 
-    public void UpdateAchievementProgressById(AchievementProgress newProgress, byte id)
+    private void UpdateAchievementProgressById(AchievementProgress newProgress, byte id)
     {
         var oldProgress = Records.AchievementProgress[id];
         if (!oldProgress.isEarned && oldProgress.progress < newProgress.progress)
@@ -89,6 +74,9 @@ public class AchievementsManager : MonoBehaviour, IDataControllable
                 var achievement = GetAchievementInfoById(id);
                 OnAchievementEarned?.Invoke(achievement);
             }
+            OnAchievementsUpdate?.Invoke(Records.AchievementProgress);
         }
     }
+
+    public void AfterDataLoaded(Database database) { }
 }

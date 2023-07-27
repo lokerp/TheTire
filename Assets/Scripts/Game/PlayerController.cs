@@ -6,10 +6,8 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem.Controls;
 
-public class PlayerController : MonoBehaviour, IAchievementsControllable
+public class PlayerController : Ston<PlayerController>
 {
-    public static PlayerController Instance { get; private set; }
-
     public Rigidbody Rigidbody { get; private set; }
 
     public float waterDrag = 10;
@@ -23,7 +21,6 @@ public class PlayerController : MonoBehaviour, IAchievementsControllable
     PlayerInput _input;
 
     public Action<GameObject, Vector3, Vector3> OnCollision { get; set; }
-    public Action<AchievementProgress, byte> OnAchievementProgressChanged { get; set; }
 
     private void OnEnable()
     {
@@ -37,20 +34,16 @@ public class PlayerController : MonoBehaviour, IAchievementsControllable
 
     private void OnDestroy()
     {
-        OnAchievementProgressChanged = null;
         OnCollision = null;
     }
 
-    private void Awake()
+    protected override void Awake()
     {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
+        base.Awake();
 
         _input = new();
         Rigidbody = GetComponent<Rigidbody>();
-        _turnSpeed = 1 - Mathf.Clamp01((Mathf.Clamp(Rigidbody.mass, 5, 30) - 5) * 0.04f);
+        _turnSpeed = 2;
         _drag = Rigidbody.drag;
         _angularDrag = Rigidbody.angularDrag;
     }
@@ -64,7 +57,7 @@ public class PlayerController : MonoBehaviour, IAchievementsControllable
     {
         if (LaunchController.Instance.IsLaunched)
         {
-            float turnDirection = _input.Player.Turn.ReadValue<float>();
+            float turnDirection = Mathf.Clamp(_input.Player.Turn.ReadValue<float>(), -1, 1);
             Turn(turnDirection);
         }
     }
@@ -80,14 +73,12 @@ public class PlayerController : MonoBehaviour, IAchievementsControllable
         {
             Rigidbody.drag = waterDrag;
             Rigidbody.angularDrag = waterAngularDrag;
-            GetDiverAchievement();
         }
 
         else if (other.gameObject.CompareTag("Cloud"))
         {
             Rigidbody.drag = cloudDrag;
             Rigidbody.angularDrag = cloudAngularDrag;
-            GetTodayIsCloudyAchievement();
         }
 
         OnCollision?.Invoke(other.gameObject, other.ClosestPoint(transform.position), Rigidbody.velocity);
@@ -97,17 +88,5 @@ public class PlayerController : MonoBehaviour, IAchievementsControllable
     {
         Rigidbody.drag = _drag;
         Rigidbody.angularDrag = _angularDrag;
-    }
-
-    private void GetDiverAchievement()
-    {
-        var progress = new AchievementProgress(1, true);
-        OnAchievementProgressChanged.Invoke(progress, 0);
-    }
-
-    private void GetTodayIsCloudyAchievement()
-    {
-        var progress = new AchievementProgress(1, true);
-        OnAchievementProgressChanged.Invoke(progress, 1);
     }
 }

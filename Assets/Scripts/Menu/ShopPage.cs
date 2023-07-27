@@ -11,6 +11,7 @@ using UnityEngine.UI;
 public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievementsControllable
 {
     public Action<AchievementProgress, byte> OnAchievementProgressChanged { get; set; }
+    public static event Action OnSelectedItemChanged;
 
     [Space, Space]
     public ItemTypes.Type itemType;
@@ -60,14 +61,14 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
             RefreshAvailableItems();
         };
         UIEvents.OnUIClick += UIClickHandler;
-        UpgradesManager.OnLevelUp += OnLevelUpHandler;
+        UpgradesPage.OnLevelUp += OnLevelUpHandler;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
         UIEvents.OnUIClick -= UIClickHandler;
-        UpgradesManager.OnLevelUp -= OnLevelUpHandler;
+        UpgradesPage.OnLevelUp -= OnLevelUpHandler;
     }
 
     public override void Close()
@@ -80,10 +81,12 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
         base.Close();
     }
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         _shopAnimator = GetComponent<Animator>();
-        _defaultItemDescription = itemDescriptionText.text;
+        _defaultItemDescription = itemDescriptionText.Text;
     }
 
     void UIClickHandler(GameObject gameObject)
@@ -130,6 +133,7 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
         {
             case ShopOptionButton.ShopOption.Use:
                 selectedItem = currentItem;
+                OnSelectedItemChanged?.Invoke();
                 PlaySound(AudioSources[0]);
                 break;
             case ShopOptionButton.ShopOption.NotAvailable:
@@ -178,6 +182,12 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
         SwitchItem();
     }
 
+    public void AfterDataLoaded(Database database)
+    {
+        if (availableItemsCount == ItemsManager.Instance.GetItemsCount())
+            GetCollectorAchievement();
+    }
+
     void SwitchItem()
     {
         GetCurrentItemIndex();
@@ -211,21 +221,13 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
                 availableItems.Add(item);
         }
         availableItemsCount += newItemsCount;
-
-        if (availableItemsCount == ItemsManager.Instance.GetItemsCount())
-            GetCollectorAchievement();
     }
 
     void RefreshItemInfo()
     {
-        itemNameHolder.text = currentItem.name;
-        itemNameHolder.RefreshText();
-
-        itemDescriptionNameHolder.text = currentItem.name;
-        itemDescriptionNameHolder.RefreshText();
-
-        itemDescriptionText.text = _defaultItemDescription + currentItem.description;
-        itemDescriptionText.RefreshText();
+        itemNameHolder.Text = currentItem.name;
+        itemDescriptionNameHolder.Text = currentItem.name;
+        itemDescriptionText.Text = _defaultItemDescription + currentItem.description;
 
         if (currentItem.requirements.bouncinessLevel > 0)
         {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
-public class WeaponRigHandler : MonoBehaviour
+public class WeaponRigHandler : Ston<WeaponRigHandler>
 {
     public Transform RHRigTarget;
     public Transform LHRigTarget;

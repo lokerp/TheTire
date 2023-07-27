@@ -11,10 +11,6 @@ public class MenuPage : Page
     [SerializeField] protected List<GraphicRaycaster> _canvasRaycasts;
     [SerializeField] protected GameObject _pageCamera;
 
-    void Awake()
-    {
-        _animator = GetComponent<Animator>();
-    }
 
     public override void Close()
     {

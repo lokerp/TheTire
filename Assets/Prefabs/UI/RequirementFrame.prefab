@@ -143,7 +143,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0422\u0440\u0435\u0431\u043E\u0432\u0430\u043D\u0438\u044F: "
+  m_text: "\u0422\u0440\u0435\u0431\u043E\u0432\u0430\u043D\u0438\u044F:"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 85f3c4d37de76b44fb7acb2d7f4661fa, type: 2}
   m_sharedMaterial: {fileID: 6888149945216948057, guid: 85f3c4d37de76b44fb7acb2d7f4661fa, type: 2}
@@ -224,7 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1db631f653cba0549841f2e9b535a353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text:
+  _text:
     English: 'Requirements:'
     Russian: "\u0422\u0440\u0435\u0431\u043E\u0432\u0430\u043D\u0438\u044F:"
 --- !u!1 &2299904887337403305
@@ -700,7 +700,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 135
+  m_text: 65
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 85f3c4d37de76b44fb7acb2d7f4661fa, type: 2}
   m_sharedMaterial: {fileID: 6888149945216948057, guid: 85f3c4d37de76b44fb7acb2d7f4661fa, type: 2}

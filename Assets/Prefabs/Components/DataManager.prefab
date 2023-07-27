@@ -45,16 +45,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fileName: Save.txt
+  loadingProgressCircle: {fileID: 0}
   _database:
     settings:
-      currentLanguage: 0
-      currentMusicVolume: 0.1
-      currentSoundsVolume: 0.5
+      language: 0
+      musicVolume: 0.1
+      soundsVolume: 0.5
     currentLaunches: 10
     currentMoney: 0
     bouncinessLevel: 1
     powerLevel: 1
-    launchesCount: 0
+    totalLaunchesCount: 0
     adWatchedCount: 0
     redZoneThrowsCount: 0
     selectedTire:

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
-public class SpawnRoadController : MonoBehaviour
+public class SpawnRoadController : Ston<SpawnRoadController>
 {
     enum SpawnWay
     {

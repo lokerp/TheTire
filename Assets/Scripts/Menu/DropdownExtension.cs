@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class DropdownExtension : MonoBehaviour, IAudioPlayable
@@ -12,16 +13,23 @@ public class DropdownExtension : MonoBehaviour, IAudioPlayable
     [field: SerializeField]
     public List<AudioSource> AudioSources { get; private set; }
 
+    private UnityAction<int> onValueChangedHandler;
+
+    void Awake()
+    {
+        onValueChangedHandler = (int _) => PlaySound(AudioSources[1]);
+    }
+
     private void OnEnable()
     {
         UIEvents.OnUIClick += UIClickHandler;
-        dropdown.onValueChanged.AddListener((int _) => PlaySound(AudioSources[1]));
+        dropdown.onValueChanged.AddListener(onValueChangedHandler);
     }
 
     private void OnDisable()
     {
         UIEvents.OnUIClick -= UIClickHandler;
-        dropdown.onValueChanged.RemoveListener((int _) => PlaySound(AudioSources[0]));
+        dropdown.onValueChanged.RemoveListener(onValueChangedHandler);
     }
 
     void UIClickHandler(GameObject gameObject)

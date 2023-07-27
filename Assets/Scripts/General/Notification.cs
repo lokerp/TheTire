@@ -34,8 +34,7 @@ public class Notification : MonoBehaviour, IAudioPlayable
     public void OpenWithAchievement(AchievementInfo achievement)
     {
         _icon.sprite = Resources.Load<Sprite>(achievement.imagePath);
-        _info.text = achievement.title;
-        _info.RefreshText();
+        _info.Text = achievement.title;
         _rewardText.text = "+ " + achievement.moneyPrize.ToString();
         StartCoroutine(Open(timeOpenedInS));
     }

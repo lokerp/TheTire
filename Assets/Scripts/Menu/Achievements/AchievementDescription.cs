@@ -35,8 +35,8 @@ public class AchievementDescription : MonoBehaviour
 
         if (info.isSecret && !pr.isEarned)
         {
-            title.text = info.secretTitle;
-            description.text = info.secretDescription;
+            title.Text = info.secretTitle;
+            description.Text = info.secretDescription;
             icon.sprite = Resources.Load<Sprite>(info.secretImagePath);
             progress.text = 0 + " / " + 0;
             progress.color = notEarnedProgressColor;
@@ -44,8 +44,8 @@ public class AchievementDescription : MonoBehaviour
         }
         else
         {
-            title.text = info.title;
-            description.text = info.description;
+            title.Text = info.title;
+            description.Text = info.description;
             icon.sprite = Resources.Load<Sprite>(info.imagePath);
             progress.text = (int) pr.progress + " / " + info.totalProgress;
 
@@ -57,9 +57,6 @@ public class AchievementDescription : MonoBehaviour
                 canvGroup.alpha = notEarnedAlpha;
             }
         }
-
-        title.RefreshText();
-        description.RefreshText();
     }
 
     public void Close()

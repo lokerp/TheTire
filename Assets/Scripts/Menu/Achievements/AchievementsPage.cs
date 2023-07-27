@@ -1,37 +1,62 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class AchievementsPage : MonoBehaviour
+public class AchievementsPage : MenuPage, IDataControllable
 {
+    [Space]
     public List<CanvasGroup> pages;
+
+    [Space, Header("Stats")]
     public TextMeshProUGUI recordDistanceHolder;
     public TextMeshProUGUI achievementsEarnedCountHolder;
+
+    [Space, Header("Records")]
+    public GameObject errorText;
+    public GameObject recordHoldersGrid;
+    public List<RecordHolder> recordHolders;
+    public TranslatableText noInfoName;
+    public Texture2D defaultAvatar;
+    public Color currentPlayerRecordColor;
+    public TranslatableText currentPlayerRecordName;
+    public Color otherPlayerColor;
+    public TranslatableText emptyText;
+
+    [Space, Header("Achievements")]
     public List<AchievementHolder> achievementHolders;
     public AchievementDescription achievementDescription;
+
     public GameObject leftArrow;
     public GameObject rightArrow;
 
     private int currentPageIndex;
+    private int _playerRecord;
 
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
+
         UIEvents.OnUIClick += UIClickHandler;
-        AchievementsManager.OnAchievementsLoad += RefreshAchievements;
+        AchievementsManager.OnAchievementsUpdate += RefreshAchievements;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
         UIEvents.OnUIClick -= UIClickHandler;
-        AchievementsManager.OnAchievementsLoad -= RefreshAchievements;
+        AchievementsManager.OnAchievementsUpdate -= RefreshAchievements;
     }
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         currentPageIndex = 0;
         OpenPage();
     }
@@ -39,9 +64,6 @@ public class AchievementsPage : MonoBehaviour
     private void Start()
     {
         achievementDescription.Close();
-        recordDistanceHolder.text = ((int)AchievementsManager.Instance.Records.RecordDistance).ToString();
-        achievementsEarnedCountHolder.text = AchievementsManager.Instance.Records.AchievementsEarnedCount.ToString()
-                                             + "/" + AchievementsManager.Instance.GetAchievementsList().Count;
     }
 
     void UIClickHandler(GameObject gameObject)
@@ -93,6 +115,12 @@ public class AchievementsPage : MonoBehaviour
             throw new System.Exception("Error! Achievements Page hasn't been opened!");
     }
 
+    private void RefreshStats(int record, int achievementsEarnedCount)
+    {
+        recordDistanceHolder.text = record.ToString();
+        achievementsEarnedCountHolder.text = achievementsEarnedCount + "/" + AchievementsManager.Instance.GetAchievementsList().Count;
+    }
+
     public void RefreshAchievements(Dictionary<byte, AchievementProgress> achievementProgress)
     {
         achievementProgress = achievementProgress.OrderByDescending(x => x.Value.isEarned)
@@ -120,4 +148,81 @@ public class AchievementsPage : MonoBehaviour
             canv.blocksRaycasts = false;
         }
     }
+
+    public async Task RefreshRecords()
+    {
+        List<LeaderboardEntry> leaderbord = default;
+        LeaderboardEntry playerEntry = default;
+        bool wasPlayerEntryGot = false;
+        try
+        {
+            leaderbord = await DataManager.Instance.GetLeaderboardAsync();
+        }
+        catch (System.Exception e)
+        {
+            Debug.Log($"Error while loading leaderbord: {e}");
+            errorText.SetActive(true);
+            recordHoldersGrid.SetActive(false);
+            return;
+        }
+        try
+        {
+            playerEntry = await DataManager.Instance.GetLeaderboardPlayerEntryAsync();
+            wasPlayerEntryGot = true;
+        }
+        catch
+        {
+            wasPlayerEntryGot = false;
+        }
+        if (wasPlayerEntryGot)
+        {
+            int playerIndex = leaderbord.FindIndex((i) => i.uniqueID == playerEntry.uniqueID);
+            if (playerIndex == -1)
+                leaderbord[^1] = playerEntry;
+        }
+        int i;
+        int currentEntriesCount = Mathf.Min(leaderbord.Count, recordHolders.Count);
+        Task[] tasks = new Task[currentEntriesCount];
+        for (i = 0; i < currentEntriesCount; i++)
+            tasks[i] = SetPlayerRecordInfo(recordHolders[i], leaderbord[i], playerEntry.uniqueID);
+        await Task.WhenAll(tasks);
+        for (; i < recordHolders.Count; i++)
+            recordHolders[i].SetRecordInfo(emptyText, defaultAvatar, i + 1, 0, otherPlayerColor);
+    }
+
+    private async Task SetPlayerRecordInfo(RecordHolder recordHolder, LeaderboardEntry entry, string playerID)
+    {
+        Texture2D avatar = defaultAvatar;
+        TranslatableText name = noInfoName;
+        int score = entry.score;
+        int rank = entry.rank;
+        Color nameColor = otherPlayerColor;
+
+        if (!string.IsNullOrEmpty(entry.name))
+        {
+            name = new TranslatableText { English = entry.name, Russian = entry.name };
+            try { avatar = await DataManager.LoadImageFromInternetAsync(entry.avatar); }
+            catch { }
+        }
+
+        if (entry.uniqueID == playerID)
+        {
+            name = currentPlayerRecordName;
+            nameColor = currentPlayerRecordColor;
+            score = _playerRecord;
+        }
+
+        recordHolder.SetRecordInfo(name, avatar, rank, score, nameColor);
+    }
+
+    public void SaveData(ref Database database) { }
+
+    public void LoadData(Database database)
+    {
+        _playerRecord = (int) database.records.RecordDistance;
+        RefreshRecords();
+        RefreshStats((int) database.records.RecordDistance, database.records.AchievementsEarnedCount);
+    }
+
+    public void AfterDataLoaded(Database database) { }
 }

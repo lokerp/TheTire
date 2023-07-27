@@ -32,20 +32,18 @@ public class AchievementHolder : MonoBehaviour
         if (info.isSecret && !progress.isEarned)
         {
             icon.sprite = Resources.Load<Sprite>(info.secretImagePath);
-            title.text = info.secretTitle;
+            title.Text = info.secretTitle;
         }
         else
         {
             icon.sprite = Resources.Load<Sprite>(info.imagePath);
-            title.text = info.title;
+            title.Text = info.title;
             if (progress.isEarned)
             {
                 icon.color = earnedAlpha;
                 titleContr.color = earnedAlpha;
             }
         }
-
-        title.RefreshText();
     }
 
     public (AchievementInfo, AchievementProgress) GetInfo()

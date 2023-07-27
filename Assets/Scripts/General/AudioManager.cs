@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,103 +6,88 @@ using UnityEngine.Audio;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
-public class AudioManager : MonoBehaviour, IDataControllable
+public class AudioManager : StonUndestroyable<AudioManager>, IDataControllable
 {
-    public enum VolumeType
-    {
-        Music,
-        AllSounds,
-        GameSounds
-    }
-
-    public static AudioManager Instance { get; private set; }
     public AudioMixer mixer;
 
     public AudioSource menuMusic;
     public AudioSource gameMusic;
 
-    [SerializeField] private Slider _musicVolumeSlider;
-    [SerializeField] private Slider _soundsVolumeSlider;
-    private float musicVolume;
-    private float soundsVolume;
-
-    private UnityAction<float> listenerInstanceMusic;
-    private UnityAction<float> listenerInstanceSounds;
-
-
-    private void Awake()
-    {
-        if (Instance == null || Instance == this)
-        {
-            Instance = this;
-        }
-        else
-            Destroy(gameObject);
-
-        listenerInstanceMusic = (value) => ChangeVolume(VolumeType.Music, value / 10);
-        listenerInstanceSounds = (value) => ChangeVolume(VolumeType.AllSounds, value / 10);
-    }
-
-    private void Start()
-    {
-        var sceneName = SceneManager.GetActiveScene().name;
-        if (sceneName == "Menu")
-            menuMusic.Play();
-        else
-            gameMusic.Play();
-    }
-
     private void OnEnable()
     {
-        if (_musicVolumeSlider != null)
-            _musicVolumeSlider.onValueChanged.AddListener(listenerInstanceMusic);
-        if (_soundsVolumeSlider != null)
-            _soundsVolumeSlider.onValueChanged.AddListener(listenerInstanceSounds);
+        SettingsPage.OnSettingsChanged += ChangeVolume;
+        SceneManager.activeSceneChanged += PlayMusic;
+        APIBridge.OnAdvertisementOpen += () => MuteGame(true);
+        APIBridge.OnAdvertisementClose += (_) => MuteGame(false);
     }
 
-    private void OnDisable()
+    private void PlayMusic(Scene pastScene, Scene newScene)
     {
-        if (_musicVolumeSlider != null)
-            _musicVolumeSlider.onValueChanged.RemoveListener(listenerInstanceMusic);
-        if (_soundsVolumeSlider != null)
-            _soundsVolumeSlider.onValueChanged.RemoveListener(listenerInstanceSounds);
-    }
+        MuteGame(false);
 
+        if (newScene.name == "Menu")
+        {
+            gameMusic.Stop();
+            menuMusic.Play();
+        }
+        else if (newScene.name == "Game")
+        {
+            menuMusic.Stop();
+            gameMusic.Play();
+        }
+    }
 
     public void LoadData(Database database)
     {
-        musicVolume = database.settings.currentMusicVolume;
-        soundsVolume = database.settings.currentSoundsVolume;
-
-        if (_musicVolumeSlider != null)
-            _musicVolumeSlider.value = (int) (musicVolume * 10);
-        if (_soundsVolumeSlider != null)
-            _soundsVolumeSlider.value = (int) (soundsVolume * 10);
+        ChangeVolume(database.settings);
     }
 
-    public void SaveData(ref Database database)
+    public void SaveData(ref Database database) { }
+
+    private float Float01ToDb(float value)
     {
-        database.settings.currentMusicVolume = musicVolume;
-        database.settings.currentSoundsVolume = soundsVolume;
+        return value != 0 ? Mathf.Clamp(Mathf.Log10(value) * 20, -80, 0) : -80;
     }
 
-    public void ChangeVolume(VolumeType type, float value)
+    private void ChangeVolume(Settings settings)
     {
-        float newValueInDB = value != 0 ? Mathf.Clamp(Mathf.Log10(value) * 20, -80, 0) : -80;
-        switch (type)
+        float musicVolumeInDb = Float01ToDb(settings.musicVolume);
+        float soundsVolumeInDb = Float01ToDb(settings.soundsVolume);
+
+        mixer.SetFloat("MusicVolume", musicVolumeInDb);
+        mixer.SetFloat("SoundsVolume", soundsVolumeInDb);
+    }
+
+    public void ChangeVolume(VolumeTypes volumeType, float value)
+    {
+        var volumeInDb = Float01ToDb(value);
+        switch (volumeType)
         {
-            case VolumeType.Music:
-                mixer.SetFloat("MusicVolume", newValueInDB);
-                musicVolume = value;
+            case VolumeTypes.Music:
+                mixer.SetFloat("MusicVolume", volumeInDb);
                 break;
-            case VolumeType.AllSounds:
-                mixer.SetFloat("SoundsVolume", newValueInDB);
-                soundsVolume = value;
+            case VolumeTypes.Sounds:
+                mixer.SetFloat("SoundsVolume", volumeInDb);
                 break;
-            case VolumeType.GameSounds:
-                mixer.SetFloat("GameSoundsVolume", newValueInDB);
+            case VolumeTypes.GameSounds:
+                mixer.SetFloat("GameSoundsVolume", volumeInDb);
+                break;
+            case VolumeTypes.Master:
+                mixer.SetFloat("MasterVolume", volumeInDb);
                 break;
         }
+    }
+
+    public void AfterDataLoaded(Database database) { }
+
+    public void MuteGame(bool flag)
+    {
+        if (flag)
+            ChangeVolume(VolumeTypes.Master, 0);
+        else
+            ChangeVolume(VolumeTypes.Master, 1);
+
     }
 }

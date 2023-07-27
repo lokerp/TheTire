@@ -167,6 +167,8 @@ AudioMixerController:
   m_ExposedParameters:
   - guid: 593278de9c6de9e46aa8290a55434f4a
     name: GameSoundsVolume
+  - guid: b0bb0970338997e449186ec8d29d6bf4
+    name: MasterVolume
   - guid: 47f4c1710a4e3e84395334964410b09e
     name: MusicVolume
   - guid: 668519b446b02934494751133b7f7300

@@ -7,7 +7,20 @@ using UnityEngine;
 [RequireComponent(typeof(TextMeshProUGUI))]
 public class TextController : MonoBehaviour
 {
-    public TranslatableText text;
+    public TranslatableText Text
+    {
+        get
+        {
+            return _text;
+        }
+        set
+        {
+            _text = value;
+            RefreshText();
+        }
+    }
+
+    [SerializeField] private TranslatableText _text;
     private TextMeshProUGUI _textHandler;
 
     private void Awake()
@@ -17,18 +30,17 @@ public class TextController : MonoBehaviour
 
     public void RefreshText()
     {
-        Languages language = LanguageManager.Instance.language;
-
+        var language = LanguageManager.Instance.CurrentLanguage;
         if (_textHandler == null)
             _textHandler = GetComponent<TextMeshProUGUI>();
 
         switch (language)
         {
             case Languages.English:
-                _textHandler.text = text.English;
+                _textHandler.text = Text.English;
                 break;
             case Languages.Russian:
-                _textHandler.text = text.Russian;
+                _textHandler.text = Text.Russian;
                 break;
         }
     }

@@ -15,11 +15,10 @@ public class Database
     public int bouncinessLevel;
     public int powerLevel;
 
-    public int launchesCount;
+    public int totalLaunchesCount;
     public int adWatchedCount;
     public int redZoneThrowsCount;
     public DateTime lastSession = DateTime.UtcNow;
-    [NonSerialized] public bool isFirstVisitPerSession = false;
 
     public ItemTypes selectedTire;
     public List<ItemTypes> availableTires;

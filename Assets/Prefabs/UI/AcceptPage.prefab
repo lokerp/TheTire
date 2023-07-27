@@ -225,7 +225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1db631f653cba0549841f2e9b535a353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text:
+  _text:
     English: YES
     Russian: "\u0414\u0410"
 --- !u!114 &8536125090741655747
@@ -642,7 +642,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1db631f653cba0549841f2e9b535a353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text:
+  _text:
     English: NO
     Russian: "\u041D\u0415\u0422"
 --- !u!114 &4377361282875927827
@@ -755,7 +755,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 98.5
+  m_fontSize: 97.7
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -809,14 +809,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1db631f653cba0549841f2e9b535a353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text:
-    English: Are you sure you want to get to the menu?<br><br>You won't get money
-      and you will lose your record!
-    Russian: "\u0412\u044B \u0443\u0432\u0435\u0440\u0435\u043D\u044B, \u0447\u0442\u043E
-      \u0445\u043E\u0442\u0438\u0442\u0435 \u0432\u044B\u0439\u0442\u0438 \u0432
-      \u043C\u0435\u043D\u044E?<br><br>\u0412\u044B \u043D\u0435 \u043F\u043E\u043B\u0443\u0447\u0438\u0442\u0435
-      \u0434\u0435\u043D\u044C\u0433\u0438 \u0438 \u043F\u043E\u0442\u0435\u0440\u044F\u0435\u0442\u0435
-      \u0440\u0435\u043A\u043E\u0440\u0434!"
+  _text:
+    English: 
+    Russian: 
 --- !u!1 &3338961198045589132
 GameObject:
   m_ObjectHideFlags: 0
@@ -1044,6 +1039,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1db631f653cba0549841f2e9b535a353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text:
-    English: ATTENTION!
-    Russian: "\u0412\u041D\u0418\u041C\u0410\u041D\u0418\u0415!"
+  _text:
+    English: 
+    Russian: 

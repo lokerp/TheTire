@@ -30,19 +30,17 @@ public class ShopOptionButton : MonoBehaviour
         switch (option)
         {
             case ShopOption.NotAvailable:
-                _textHolder.text = notAvailableText;
+                _textHolder.Text = notAvailableText;
                 _colorHolder.color = notAvailableColor;
                 break;
             case ShopOption.Use:
-                _textHolder.text = useText;
+                _textHolder.Text = useText;
                 _colorHolder.color = useColor;
                 break;
             case ShopOption.InUse:
-                _textHolder.text = inUseText;
+                _textHolder.Text = inUseText;
                 _colorHolder.color = inUseColor;
                 break;
         }
-
-        _textHolder.RefreshText();
     }
 }

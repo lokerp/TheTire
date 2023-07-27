@@ -44,9 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53b641d6c7d96114787c3b3acfae453c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxLaunches: 10
-  timeToRecoverInS: 30
-  launchesText: {fileID: 0}
-  launchesErrorColor: {r: 1, g: 0, b: 0, a: 1}
-  timePanel: {fileID: 0}
-  timeText: {fileID: 0}
+  _launchesAmount: 10

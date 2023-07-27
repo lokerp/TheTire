@@ -4,28 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ScenesManager : MonoBehaviour
+public class ScenesManager : StonUndestroyable<ScenesManager>
 {
-    public static ScenesManager Instance { get; private set; }
     public Animator sceneTransition;
     private AsyncOperation asyncLoad;
 
     public static event Action OnSceneChanging;
 
-    private void Awake()
+    public void Start()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(this);
-        }
+        sceneTransition.SetTrigger("IsOpening");
     }
 
     public void SwitchScene(string sceneName)
     {
+        sceneTransition.SetTrigger("IsClosing");
         asyncLoad = SceneManager.LoadSceneAsync(sceneName);
         asyncLoad.allowSceneActivation = false;
         OnSceneChanging?.Invoke();
@@ -33,6 +26,7 @@ public class ScenesManager : MonoBehaviour
         {
             StartCoroutine(WaitForSceneLoad());
         }
+        sceneTransition.SetTrigger("IsOpening");
     }
 
     IEnumerator WaitForSceneLoad()

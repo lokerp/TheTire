@@ -45,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   api: 0
+  timeInSToWaitServerResponse: 10

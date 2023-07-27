@@ -1,24 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class MoneyManager : MonoBehaviour, IDataControllable
+public class MoneyManager : StonUndestroyable<MoneyManager>, IDataControllable
 {
-    public static MoneyManager Instance { get; private set; }
+    public static event Action<int> OnMoneyChanged;
     public int MoneyAmount { get; private set; }
-
-    public int maxMoneyAmount = 99999;
-    public TextMeshProUGUI moneyText;
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-            Destroy(this);
-    }
+    public int maxMoneyAmount = 9999999;
 
     private void OnEnable()
     {
@@ -37,8 +27,7 @@ public class MoneyManager : MonoBehaviour, IDataControllable
 
     public void LoadData(Database database)
     {
-        MoneyAmount = database.currentMoney;
-        RefreshMoneyText();
+        ChangeMoneyAmount(database.currentMoney);
     }
 
     public int ChangeMoneyAmount(int amount)
@@ -49,7 +38,7 @@ public class MoneyManager : MonoBehaviour, IDataControllable
             MoneyAmount = maxMoneyAmount;
         else
             MoneyAmount = amount;
-        RefreshMoneyText();
+        OnMoneyChanged?.Invoke(MoneyAmount);
         return 1;
     }
 
@@ -58,9 +47,5 @@ public class MoneyManager : MonoBehaviour, IDataControllable
         ChangeMoneyAmount(MoneyAmount + achievement.moneyPrize);
     }
 
-    void RefreshMoneyText()
-    {
-        if (moneyText != null)
-            moneyText.text = MoneyAmount.ToString();
-    }
+    public void AfterDataLoaded(Database database) { }
 }

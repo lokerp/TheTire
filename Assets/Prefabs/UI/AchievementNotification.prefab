@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1db631f653cba0549841f2e9b535a353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text:
+  _text:
     English: Achievement earned!
     Russian: "\u041D\u043E\u0432\u043E\u0435 \u0434\u043E\u0441\u0442\u0438\u0436\u0435\u043D\u0438\u0435!"
 --- !u!1 &1286771326
@@ -300,7 +300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1db631f653cba0549841f2e9b535a353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text:
+  _text:
     English: 
     Russian: 
 --- !u!1 &1335545854

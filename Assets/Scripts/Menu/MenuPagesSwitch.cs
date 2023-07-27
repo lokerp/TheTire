@@ -1,27 +1,28 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.TextCore.Text;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.UI;
+using UnityEngine.SceneManagement;
 
-public class MenuPagesSwitch : MonoBehaviour, IAudioPlayable, IDataControllable
+public class MenuPagesSwitch : Ston<MenuPagesSwitch>, IAudioPlayable, IDataControllable, IAchievementsControllable
 {
-    public int _launchesCount;
     public GameObject backButton;
     public List<MenuPage> pages;
     public PageTypes startPage = PageTypes.MainMenu;
 
-    bool _isGameLaunching = false;
-    private LinkedList<PageTypes> _pageHistory;
-
     [field: SerializeField]
     public List<AudioSource> AudioSources { get; private set; }
+    public Action<AchievementProgress, byte> OnAchievementProgressChanged { get; set; }
 
-    private void Awake()
+    private MainMenuPage _mainMenu;
+    bool _isGameLaunching = false;
+    private LinkedList<PageTypes> _pageHistory;
+    private int _launchesCount;
+
+    protected override void Awake()
     {
+        base.Awake();
         _pageHistory = new LinkedList<PageTypes>();
+        _mainMenu = (MainMenuPage) pages.Find((x) => x.pageType == PageTypes.MainMenu);
     }
 
     private void OnEnable()
@@ -83,7 +84,7 @@ public class MenuPagesSwitch : MonoBehaviour, IAudioPlayable, IDataControllable
     {
         if (LaunchesManager.Instance.CanPlay())
         {
-            LaunchesManager.Instance.ReduceLaunchesAmount();
+            LaunchesManager.Instance.ChangeLaunchesAmount(LaunchesManager.Instance.LaunchesAmount - 1, false);
             _isGameLaunching = true;
             _launchesCount++;
             ScenesManager.Instance.SwitchScene("Game");
@@ -91,7 +92,8 @@ public class MenuPagesSwitch : MonoBehaviour, IAudioPlayable, IDataControllable
         else
         {
             PlaySound(AudioSources[4]);
-            StartCoroutine(LaunchesManager.Instance.ShowError());
+            StopCoroutine(_mainMenu.ShowError());
+            StartCoroutine(_mainMenu.ShowError());
         }
     }
 
@@ -130,11 +132,30 @@ public class MenuPagesSwitch : MonoBehaviour, IAudioPlayable, IDataControllable
 
     public void SaveData(ref Database database)
     {
-        database.launchesCount = _launchesCount;
+        database.totalLaunchesCount = _launchesCount;
     }
 
     public void LoadData(Database database)
     {
-        _launchesCount = database.launchesCount;
+        _launchesCount = database.totalLaunchesCount;
+    }
+
+    private async void GetCriticAchievement()
+    {
+        bool hasRated = await DataManager.Instance.HasRatedAsync();
+        if (hasRated)
+            OnAchievementProgressChanged.Invoke(new AchievementProgress(1, true), 12);
+    }
+
+    public void AfterDataLoaded(Database database) 
+    {
+        #if !UNITY_EDITOR
+        if (SceneManager.GetActiveScene().name == "Menu"
+         && database.totalLaunchesCount % 5 == 0 
+         && database.totalLaunchesCount != 0)
+            APIBridge.Instance.ShowFullscreenAdv();
+        if (!AchievementsManager.Instance.GetAchievementProgressById(12).isEarned)
+            GetCriticAchievement();
+        #endif
     }
 }

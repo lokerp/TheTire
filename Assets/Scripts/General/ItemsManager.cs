@@ -4,20 +4,9 @@ using UnityEditor;
 using UnityEngine;
 
 
-public class ItemsManager : MonoBehaviour
+public class ItemsManager : StonUndestroyable<ItemsManager>
 {
-    public static ItemsManager Instance { get; private set; }
     [SerializeField] List<ItemInfo> _items;
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-            Destroy(this);
-    }
 
     public ItemInfo GetItemByType(ItemTypes type)
     {

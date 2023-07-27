@@ -15,10 +15,8 @@ enum ScaleZone
     greenZone
 }
 
-public class LaunchController : MonoBehaviour, IAudioPlayable, IDataControllable, IAchievementsControllable
+public class LaunchController : Ston<LaunchController>, IAudioPlayable, IDataControllable, IAchievementsControllable
 {
-    public static LaunchController Instance { get; private set; }
-
     public RectTransform scale;
     public RectTransform arrow;
     public RectTransform redZone;
@@ -64,16 +62,9 @@ public class LaunchController : MonoBehaviour, IAudioPlayable, IDataControllable
         _input.Disable();
     }
 
-    void Awake()
+    protected override void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        base.Awake();
 
         _input = new();
         _input.Player.Launch.performed += (obj) => StartCoroutine(Launch());
@@ -112,7 +103,6 @@ public class LaunchController : MonoBehaviour, IAudioPlayable, IDataControllable
 
             _powerLevel += 10;
             _forceModifier = (float)_powerLevel * (_powerLevel + 1) / 2 * 10;
-            _player.constraints = RigidbodyConstraints.None;
             float cos = Mathf.Cos(Mathf.Deg2Rad * angle);
             float sin = Mathf.Sin(Mathf.Deg2Rad * angle);
             Vector3 force = (_forceModifier * bonusCoef * new Vector3(0, sin, cos)) 
@@ -121,7 +111,7 @@ public class LaunchController : MonoBehaviour, IAudioPlayable, IDataControllable
             launchAnimator.SetTrigger("Hit");
             while (launchAnimationEndHandler.IsAnimationEnded != true)
                 yield return null;
-
+            _player.constraints = RigidbodyConstraints.None;
             _player.AddForce(force, ForceMode.Impulse);
             PlaySound(AudioSources[0]);
             launchEffect.Play();
@@ -214,4 +204,6 @@ public class LaunchController : MonoBehaviour, IAudioPlayable, IDataControllable
         var progress = new AchievementProgress(_redZoneThrowsCount, achievement);
         OnAchievementProgressChanged.Invoke(progress, 11);
     }
+
+    public void AfterDataLoaded(Database database) { }
 }

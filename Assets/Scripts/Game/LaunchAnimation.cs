@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LaunchAnimation : MonoBehaviour
+public class LaunchAnimation : Ston<LaunchAnimation>
 {
     private Weapon _weapon;
 

@@ -57,5 +57,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 24768a8f55ff87d4b9727033dcf5814e, type: 2}
   - {fileID: 11400000, guid: 7c0af00a30aa46841ac9a035c1ab9168, type: 2}
   - {fileID: 11400000, guid: f6d3c5a55a28db2438708fc8d5de7a62, type: 2}
-  _notification: {fileID: 0}
-  _notificationTimeOpenedInS: 4
+  - {fileID: 11400000, guid: f9dae725d6f674d458cacf7466e8b2ac, type: 2}

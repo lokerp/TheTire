@@ -5,23 +5,15 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
 
-public class UIEvents : MonoBehaviour
+public class UIEvents : StonUndestroyable<UIEvents>
 {
-    public static UIEvents Instance { get; private set; }
-
     private InputSystemUIInputModule UIInputSystem;
     public string layerName = "UI";
     public static event Action<GameObject> OnUIClick;
 
-    void Awake()
+    protected override void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-            Destroy(this);
-
+        base.Awake();
         UIInputSystem = GetComponent<InputSystemUIInputModule>();
     }
 
@@ -46,7 +38,7 @@ public class UIEvents : MonoBehaviour
             if (resultsData[0].gameObject != null && resultsData[0].gameObject.activeInHierarchy
              && resultsData[0].gameObject.layer == LayerMask.NameToLayer("UI"))
             {
-                OnUIClick.Invoke(resultsData[0].gameObject);
+                OnUIClick?.Invoke(resultsData[0].gameObject);
             }
         }
         //foreach (var result in resultsData)

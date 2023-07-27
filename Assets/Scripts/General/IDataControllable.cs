@@ -6,4 +6,5 @@ interface IDataControllable
 {
     void SaveData(ref Database database);
     void LoadData(Database database);
+    void AfterDataLoaded(Database database);
 }

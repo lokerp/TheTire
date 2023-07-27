@@ -7,65 +7,27 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
 
-public class LaunchesManager : MonoBehaviour, IDataControllable, IAchievementsControllable
+public class LaunchesManager : StonUndestroyable<LaunchesManager>, IDataControllable, IAchievementsControllable
 {
-    public static LaunchesManager Instance { get; private set; }
     public int LaunchesAmount { get; private set; }
-    public Action<AchievementProgress, byte> OnAchievementProgressChanged { get; set; }
 
-    public int maxLaunches = 10;
-    public float timeToRecoverInS = 30;
-    public TextMeshProUGUI launchesText;
-    public Color launchesErrorColor;
-    public Animator timePanel;
-    public TextMeshProUGUI timeText;
-    public AcceptPage adAcceptPage;
+    public Action<AchievementProgress, byte> OnAchievementProgressChanged { get; set; }
+    public static event Action OnLaunchRestore;
+    public static event Action OnLaunchesLoaded;
+
+    public int MaxLaunches { get; private set; } = 10;
+    public float TimeToRecoverInS { get; private set; } = 30;
 
     private int _adWatchedCount;
-    private int _timePassedInS = 0;
-    private Color _launchesDefaultColor;
 
     private void OnEnable()
     {
-        UIEvents.OnUIClick += UIClickHandler;
-        adAcceptPage.OnAccept += OnAcceptHandler;
         APIBridge.OnAdvertisementClose += OnAdvertisementCloseHandler;
     }
 
     private void OnDisable()
     {
-        UIEvents.OnUIClick -= UIClickHandler;
-        adAcceptPage.OnAccept -= OnAcceptHandler;
         APIBridge.OnAdvertisementClose -= OnAdvertisementCloseHandler;
-    }
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-            Destroy(this);
-
-        if (launchesText != null)
-            _launchesDefaultColor = launchesText.color;
-    }
-
-    void Start()
-    {
-        StartCoroutine(Timer());
-    }
-
-    public void OnAcceptHandler()
-    {
-    #if !UNITY_EDITOR
-        APIBridge.Instance.ShowRewardedAdv();
-    #endif
-    #if UNITY_EDITOR
-        LaunchesAmount = 10;
-        RefreshLaunchesText();
-    #endif
     }
 
     public void OnAdvertisementCloseHandler(bool hasGotReward)
@@ -73,8 +35,7 @@ public class LaunchesManager : MonoBehaviour, IDataControllable, IAchievementsCo
         if (hasGotReward)
         {
             _adWatchedCount++;
-            LaunchesAmount = 10;
-            RefreshLaunchesText();
+            ChangeLaunchesAmount(10, true);
             GetSponsorAchievement(AchievementsManager.Instance.GetAchievementInfoById(10));
         }
     }
@@ -82,94 +43,21 @@ public class LaunchesManager : MonoBehaviour, IDataControllable, IAchievementsCo
     public void LoadData(Database database)
     {
         var launchesEarnedFromLastSession = 0;
-        if (database.isFirstVisitPerSession)
+        if (DataManager.IsFirstVisitPerSession())
         {
             var timePassed = (System.DateTime.UtcNow - database.lastSession).TotalSeconds;
-            launchesEarnedFromLastSession = Mathf.Clamp((int)(timePassed / timeToRecoverInS), 0, maxLaunches);
+            launchesEarnedFromLastSession = Mathf.Clamp((int)(timePassed / TimeToRecoverInS), 0, MaxLaunches);
         }
 
-        LaunchesAmount = Mathf.Clamp(database.currentLaunches + launchesEarnedFromLastSession, 0, maxLaunches);
+        ChangeLaunchesAmount(database.currentLaunches + launchesEarnedFromLastSession, false);
+        OnLaunchesLoaded?.Invoke();
         _adWatchedCount = database.adWatchedCount;
-        RefreshLaunchesText();
-        SetTimeText();
     }
 
     public void SaveData(ref Database database)
     {
         database.adWatchedCount = _adWatchedCount;
         database.currentLaunches = LaunchesAmount;
-        database.isFirstVisitPerSession = false;
-    }
-
-    private IEnumerator Timer()
-    {
-        while (true)
-        {
-            if (LaunchesAmount >= maxLaunches)
-            {
-                yield return null;
-                continue;
-            }
-
-            else if (_timePassedInS < timeToRecoverInS)
-            {
-                SetTimeText();
-                _timePassedInS++;
-            }
-
-            else if (_timePassedInS >= timeToRecoverInS)
-            {
-                _timePassedInS = 0;
-                LaunchesAmount++;
-                SetTimeText();
-                RefreshLaunchesText();
-            }
-
-            yield return new WaitForSecondsRealtime(1);
-        }
-    }
-
-    void SetTimeText()
-    {
-        if (timeText == null)
-            return;
-
-        if (LaunchesAmount == maxLaunches)
-        {
-            timeText.text = $"0:00";
-            return;
-        }
-
-        int minutes = (int) ((timeToRecoverInS - _timePassedInS) / 60);
-        int seconds = (int) ((timeToRecoverInS - _timePassedInS) % 60);
-
-        timeText.text = string.Format("{0}:{1:d2}", minutes, seconds);
-    }
-
-    void UIClickHandler(GameObject gameObject)
-    {
-        switch (gameObject.tag)
-        {
-            case "TimePanelButton":
-                StartCoroutine(OpenTimePanel());
-                break;
-        }
-    }
-
-    private IEnumerator OpenTimePanel()
-    {
-        if (!timePanel.GetBool("IsOpen"))
-        {
-            timePanel.SetBool("IsOpen", true);
-            yield return new WaitForSecondsRealtime(5);
-            timePanel.SetBool("IsOpen", false);
-        }
-    }
-
-    void RefreshLaunchesText()
-    {
-        if (launchesText != null)
-            launchesText.text = $"{LaunchesAmount}/{maxLaunches}";
     }
 
     public bool CanPlay()
@@ -179,24 +67,11 @@ public class LaunchesManager : MonoBehaviour, IDataControllable, IAchievementsCo
         return false;
     }
 
-    public IEnumerator ShowError()
+    public void ChangeLaunchesAmount(int newLaunchesAmount, bool withSaving)
     {
-        StartCoroutine(OpenTimePanel());
-        
-        for (int i = 0; i < 3; i++)
-        {
-            launchesText.color = launchesErrorColor;
-            yield return new WaitForSecondsRealtime(0.2f);
-            launchesText.color = _launchesDefaultColor;
-            yield return new WaitForSecondsRealtime(0.2f);
-        }
-
-        yield break;
-    }
-
-    public void ReduceLaunchesAmount()
-    {
-        LaunchesAmount--;
+        LaunchesAmount = Mathf.Clamp(newLaunchesAmount, 0, MaxLaunches);
+        if (withSaving)
+            OnLaunchRestore?.Invoke();
     }
 
     public void GetSponsorAchievement(AchievementInfo achievement)
@@ -204,4 +79,6 @@ public class LaunchesManager : MonoBehaviour, IDataControllable, IAchievementsCo
         var progress = new AchievementProgress(_adWatchedCount, achievement);
         OnAchievementProgressChanged.Invoke(progress, 10);
     }
+
+    public void AfterDataLoaded(Database database) { }
 }

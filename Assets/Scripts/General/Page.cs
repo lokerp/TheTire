@@ -39,7 +39,7 @@ public class Page : MonoBehaviour
             CloseButton.OnClick -= Close;
     }
 
-    private void Awake()
+    protected virtual void Awake()
     {
         if (_animator == null && (HasOpeningAnimation || HasClosingAnimation))
             throw new System.Exception("Page Component doesn't have an animator, but has animations");

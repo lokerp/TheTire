@@ -6,17 +6,16 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour, IDataControllable, IAchievementsControllable
+public class GameManager : Ston<GameManager>, IDataControllable, IAchievementsControllable
 {
-    public GameManager Instance { get; private set; }
     public Action<AchievementProgress, byte> OnAchievementProgressChanged { get; set; }
 
     [Header("Spawn Holders")]
     public Transform tireHolder;
     public Transform weaponHolder;
     public Animator launchAnimator;
-
 
     [Header("Pages And UI'S")]
     [SerializeField] private Page _pausePage;
@@ -26,6 +25,7 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
     [SerializeField] private Page _passedDistancePage;
     [SerializeField] private Page _resultsPage;
     [SerializeField] private Page _pauseButtonPage;
+    [SerializeField] private Page _rewindPage;
 
     [SerializeField] private ButtonHolder _returnButton;
     public TextMeshProUGUI passedDistanceText;
@@ -41,14 +41,27 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
     public GameObject recordHolder;
     public AudioSource newRecordSound;
 
+    [Header("Rewind")]
+    public Color rewindOnColor;
+    public Color rewindOffColor;
+    public ButtonHolder rewindButton;
+    public float timeToShowRewindBtn = 10f;
+    public float minRewindTimeScale = 1.5f;
+    public float maxRewindTimeScale = 6;
+    public float maxRewindVelocity;
+
     [Header("Other")]
     public float timeInSToCloseScale;
     public PhysicMaterial tirePhysicMaterial;
     [Range(0, 1)] public float bouncinessMaxLvl;
 
+    private float _currentTimeScale = 1;
+    private bool _isRewindEnabled = false;
     private bool _isPlaying = true;
     private GameObject _player;
     private GameObject _playerPrefab;
+    private Rigidbody _playerRb;
+    private PlayerController _playerContr;
     private GameObject _weapon;
     private GameObject _weaponPrefab;
     private float _passedDistance = 0;
@@ -63,6 +76,7 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
         _pausePage.OnClose += Unpause;
         _pauseAcceptPage.OnAccept += ExitToMenu;
         _returnButton.OnClick += ExitToMenu;
+        rewindButton.OnClick += TurnRewind;
     }
 
 
@@ -73,6 +87,7 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
         _pausePage.OnClose -= Unpause;
         _pauseAcceptPage.OnAccept -= ExitToMenu;
         _returnButton.OnClick -= ExitToMenu;
+        rewindButton.OnClick -= TurnRewind;
     }
 
     private void OnDestroy()
@@ -80,18 +95,10 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
         OnAchievementProgressChanged = null;
     }
 
-    private void Awake()
+    protected override void Awake()
     {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
+        base.Awake();
         _pauseButtonPage.Close();
-    }
-
-    private void Start()
-    {  
-        GetGamerAchievement(_launchesCount, AchievementsManager.Instance.GetAchievementInfoById(9));
     }
 
     public void LoadData(Database database)
@@ -99,16 +106,19 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
         _playerPrefab = ItemsManager.PathToPrefab<GameObject>(ItemsManager.Instance.GetItemByType(database.selectedTire).path);
         _weaponPrefab = ItemsManager.PathToPrefab<GameObject>(ItemsManager.Instance.GetItemByType(database.selectedWeapon).path);
         _recordDistance = database.records.RecordDistance;
-        _launchesCount = database.launchesCount;
-        SetTireBounciness(database.bouncinessLevel, 25);
+        _launchesCount = database.totalLaunchesCount;
+        SetTireBounciness(database.bouncinessLevel, UpgradesPage.maxBouncinessLevel);
         SpawnTire();
         SpawnWeapon();
     }
 
     public void SaveData(ref Database database)
     {
-        if (_passedDistance > _recordDistance)
+        if (!_isPlaying && _passedDistance > _recordDistance)
+        {
             database.records.RecordDistance = _passedDistance;
+            DataManager.Instance.SetLeaderboardScore((int) _passedDistance);
+        }
     }
 
     void SetTireBounciness(int curLvl, int maxLvl)
@@ -123,9 +133,11 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
         spawnedObj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX
                                                            | RigidbodyConstraints.FreezePositionZ
                                                            | RigidbodyConstraints.FreezeRotation;
-        spawnedObj.AddComponent<PlayerController>();
+        _playerContr = spawnedObj.AddComponent<PlayerController>();
+        _playerContr.OnCollision += OnCollisionAchievementsHandler;
 
         _player = spawnedObj;
+        _playerRb = _player.GetComponent<Rigidbody>();
     }
 
     private void SpawnWeapon()
@@ -143,6 +155,7 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
 
     private void OnLaunch(Vector3 force, float forceModifier)
     {
+        GetGamerAchievement(_launchesCount, AchievementsManager.Instance.GetAchievementInfoById(9));
         _pauseButtonPage.Open();
         _passedDistancePage.Open();
         StartCoroutine(RefreshPassedDistance());
@@ -160,9 +173,11 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
     private IEnumerator ShowResults()
     {
         AudioManager.Instance.gameMusic.Stop();
+        TurnRewind(false);
         _resultsPage.Open();
         _timerPage.Close();
         _pauseButtonPage.Close();
+        _rewindPage.Close();
 
         _earnedMoney = (int)(_passedDistance / 10) * 2;
         distanceResult.text = Mathf.CeilToInt(_passedDistance).ToString();
@@ -186,16 +201,16 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
     {
         Time.timeScale = 0;
         _pauseButtonPage.Close();
-        AudioManager.Instance.ChangeVolume(AudioManager.VolumeType.GameSounds, 0);
+        AudioManager.Instance.ChangeVolume(VolumeTypes.GameSounds, 0);
         AudioManager.Instance.gameMusic.Pause();
         timerCountdown.Pause();
     }
 
     private void Unpause()
     {
-        Time.timeScale = 1;
+        Time.timeScale = _currentTimeScale;
         _pauseButtonPage.Open();
-        AudioManager.Instance.ChangeVolume(AudioManager.VolumeType.GameSounds, 1);
+        AudioManager.Instance.ChangeVolume(VolumeTypes.GameSounds, 1);
         AudioManager.Instance.gameMusic.UnPause();
         timerCountdown.UnPause();
     }
@@ -203,13 +218,15 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
     private void ExitToMenu()
     {
         Unpause();
+        TurnRewind(false);
         ScenesManager.Instance.SwitchScene("Menu");
     }
 
     IEnumerator RefreshPassedDistance()
     {
+        float timePassed = 0;
         float maxHeight = 0;
-        float maxDistance = 0;
+        float maxDistanceInM = 0;
         float mapSizeFromPlayer = 3200 - _player.transform.position.z;
         AchievementInfo pilotAchievement = AchievementsManager.Instance.GetAchievementInfoById(7);
         AchievementInfo astronautAchievement = AchievementsManager.Instance.GetAchievementInfoById(2);
@@ -217,6 +234,7 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
         AchievementInfo timeFliesAchievement = AchievementsManager.Instance.GetAchievementInfoById(4);
         AchievementInfo championAchievement = AchievementsManager.Instance.GetAchievementInfoById(6);
         AchievementInfo halfMarathonAchievement = AchievementsManager.Instance.GetAchievementInfoById(8);
+
         while (_isPlaying)
         {
             Vector3 distanceVector = _player.transform.position - tireHolder.transform.position;
@@ -231,17 +249,31 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
                 GetAstronautAchievement(maxHeight, astronautAchievement);
                 GetPilotAchievement(maxHeight, pilotAchievement);
             }
-            if (maxDistance < _passedDistance)
+            if (maxDistanceInM < _passedDistance)
             {
-                maxDistance = _passedDistance;
-                GetFirstKilometerAchievement(maxDistance, firstKilometerAchievement);
-                GetChampionAchievement((int) (maxDistance / 1000), championAchievement);
-                GetHalfMarathonAchievement((int) (maxDistance / 1000), halfMarathonAchievement);
+                maxDistanceInM = _passedDistance;
+                var maxDistanceInKm = (int)(maxDistanceInM / 1000);
+                GetFirstKilometerAchievement(maxDistanceInM, firstKilometerAchievement);
+                GetChampionAchievement(maxDistanceInKm, championAchievement);
+                GetHalfMarathonAchievement(maxDistanceInKm, halfMarathonAchievement);
 
             }
-            if (maxDistance >= mapSizeFromPlayer)
+            if (maxDistanceInM >= mapSizeFromPlayer)
                 GetTimeFliesAchievement(1, timeFliesAchievement);
 
+            if (!_rewindPage.IsOpened() && timePassed >= timeToShowRewindBtn)
+                _rewindPage.Open();
+
+            if (_isRewindEnabled)
+            {
+                _currentTimeScale = minRewindTimeScale 
+                                  + MathfExtension.FuncSpeedApply(_playerRb.velocity.magnitude / maxRewindVelocity,
+                                                                  MathfExtension.FuncSpeed.SquareRoot)
+                                  * (maxRewindTimeScale - minRewindTimeScale);
+                Time.timeScale = _currentTimeScale;
+            }
+
+            timePassed += 0.2f;
             yield return new WaitForSeconds(0.2f);
         }
     }
@@ -313,6 +345,60 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
         _passedDistancePage.Open();
     }
 
+    void TurnRewind()
+    {
+        var buttonImg = rewindButton.gameObject.GetComponent<Image>();
+        if (_isRewindEnabled)
+        {
+            buttonImg.color = rewindOffColor;
+            _isRewindEnabled = false;
+            _currentTimeScale = 1;
+            Time.timeScale = _currentTimeScale;
+        }
+        else
+        {
+            buttonImg.color = rewindOnColor;
+            _isRewindEnabled = true;
+        }
+    }
+
+    void TurnRewind(bool turnOn)
+    {
+        var buttonImg = rewindButton.gameObject.GetComponent<Image>();
+        if (!turnOn)
+        {
+            buttonImg.color = rewindOffColor;
+            _isRewindEnabled = false;
+            _currentTimeScale = 1;
+            Time.timeScale = _currentTimeScale;
+        }
+        else
+        {
+            buttonImg.color = rewindOnColor;
+            _isRewindEnabled = true;
+        }
+    }
+
+    void OnCollisionAchievementsHandler(GameObject collider, Vector3 _, Vector3 __)
+    {
+        if (collider.CompareTag("Water"))
+            GetDiverAchievement();
+        else if (collider.CompareTag("Cloud"))
+            GetTodayIsCloudyAchievement();
+    }
+
+    private void GetDiverAchievement()
+    {
+        var progress = new AchievementProgress(1, true);
+        OnAchievementProgressChanged.Invoke(progress, 0);
+    }
+
+    private void GetTodayIsCloudyAchievement()
+    {
+        var progress = new AchievementProgress(1, true);
+        OnAchievementProgressChanged.Invoke(progress, 1);
+    }
+
     void GetGamerAchievement(int launches, AchievementInfo achievement)
     {
         var progress = new AchievementProgress(launches, achievement);
@@ -353,4 +439,6 @@ public class GameManager : MonoBehaviour, IDataControllable, IAchievementsContro
         var progress = new AchievementProgress(distanceInKm, achievement);
         OnAchievementProgressChanged.Invoke(progress, 8);
     }
+
+    public void AfterDataLoaded(Database database) { }
 }

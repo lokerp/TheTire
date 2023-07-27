@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorldBordersController : MonoBehaviour
+public class WorldBordersController : Ston<WorldBordersController>
 {
     public Transform leftBorder;
     public Transform rightBorder;
