@@ -32,3 +32,4 @@ MonoBehaviour:
   imagePath: AchievementsIcons/AstronautAchievement
   secretImagePath: AchievementsIcons/SecretAchievement
   id: 2
+  platform: -1

@@ -16,7 +16,7 @@ public class MainMenuPage : MenuPage
     public Color launchesDefaultColor;
 
     private int _timePassedInS;
-    private Action timePanelButtonOnClickHandler;
+    private Action<ButtonHolderClickEventArgs> timePanelButtonOnClickHandler;
 
     [Space, Header("Money")]
     public TextMeshProUGUI moneyText;
@@ -25,7 +25,7 @@ public class MainMenuPage : MenuPage
     {
         base.Awake();
 
-        timePanelButtonOnClickHandler = () =>
+        timePanelButtonOnClickHandler = (args) =>
         {
             StopCoroutine(OpenTimePanel());
             StartCoroutine(OpenTimePanel());
@@ -36,20 +36,20 @@ public class MainMenuPage : MenuPage
     {
         base.OnEnable();
         adAcceptPage.OnAccept += OnAcceptHandler;
-        LaunchesManager.OnLaunchRestore += RefreshLaunchesTexts;
+        LaunchesManager.OnLaunchesChanged += RefreshLaunchesTexts;
         LaunchesManager.OnLaunchesLoaded += RefreshLaunchesTexts;
         timePanelButton.OnClick += timePanelButtonOnClickHandler;
-        MoneyManager.OnMoneyChanged += RefreshMoneyText;
+        MoneyManager.OnMoneyLoaded += RefreshMoneyText;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
         adAcceptPage.OnAccept -= OnAcceptHandler;
-        LaunchesManager.OnLaunchRestore -= RefreshLaunchesTexts;
+        LaunchesManager.OnLaunchesChanged -= RefreshLaunchesTexts;
         LaunchesManager.OnLaunchesLoaded -= RefreshLaunchesTexts;
         timePanelButton.OnClick -= timePanelButtonOnClickHandler;
-        MoneyManager.OnMoneyChanged -= RefreshMoneyText;
+        MoneyManager.OnMoneyLoaded -= RefreshMoneyText;
     }
 
     private void Start()
@@ -84,14 +84,8 @@ public class MainMenuPage : MenuPage
 
     public void OnAcceptHandler()
     {
-        #if !UNITY_EDITOR
         if (LaunchesManager.Instance.LaunchesAmount < LaunchesManager.Instance.MaxLaunches)
             APIBridge.Instance.ShowRewardedAdv();
-        #endif
-        #if UNITY_EDITOR
-        LaunchesManager.Instance.ChangeLaunchesAmount(10, true);
-        RefreshLaunchesTexts();
-        #endif
     }
 
     private IEnumerator Timer()

@@ -18,12 +18,12 @@ public class RecordHolder : MonoBehaviour
         _nameColorHolder = nameHolder.GetComponent<TextMeshProUGUI>();    
     }
 
-    public void SetRecordInfo(TranslatableText name, Texture2D avatar, int place, int score, Color nameColor)
+    public void SetRecordInfo(TranslatableText name, Texture2D avatar, int place, TranslatableText score, Color nameColor)
     {
         nameHolder.Text = name;
         _nameColorHolder.color = nameColor;
         avatarHolder.texture = avatar;
-        recordHolder.Text = new TranslatableText { English = score + " m.", Russian = score + " ì."};
-        placeHolder.text = place.ToString() + '.';
+        recordHolder.Text = score;
+        placeHolder.text = place == -1 ? "?" : place.ToString();
     }
 }

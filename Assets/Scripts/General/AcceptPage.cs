@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Profiling.Memory.Experimental;
 using UnityEngine;
 
 public class AcceptPage : Page
@@ -18,36 +19,30 @@ public class AcceptPage : Page
 
     protected override void OnEnable()
     {
-        if (OpenButton != null)
-            OpenButton.OnClick += Open;
-        if (CloseButton != null)
-            CloseButton.OnClick += Close;
+        base.OnEnable();
 
         AcceptButton.OnClick += RaiseOnAcceptEvent;
         CancelButton.OnClick += RaiseOnCancelEvent;
         if (closeOnCancel)
-            CancelButton.OnClick += Close;
+            CancelButton.OnClick += closeBtnClickHandler;
     }
 
     protected override void OnDisable()
     {
-        if (OpenButton != null)
-            OpenButton.OnClick -= Open;
-        if (CloseButton != null)
-            CloseButton.OnClick -= Close;
+        base.OnDisable();
 
         AcceptButton.OnClick -= RaiseOnAcceptEvent;
         CancelButton.OnClick -= RaiseOnCancelEvent;
         if (closeOnCancel)
-            CancelButton.OnClick -= Close;
+            CancelButton.OnClick -= closeBtnClickHandler;
     }
 
-    protected virtual void RaiseOnAcceptEvent()
+    protected virtual void RaiseOnAcceptEvent(ButtonHolderClickEventArgs args = null)
     {
         OnAccept?.Invoke();
     }
 
-    protected virtual void RaiseOnCancelEvent()
+    protected virtual void RaiseOnCancelEvent(ButtonHolderClickEventArgs args = null)
     {
         OnCancel?.Invoke();
     }

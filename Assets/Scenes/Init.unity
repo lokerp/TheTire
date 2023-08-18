@@ -123,6 +123,63 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &5115618
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1784232869452525445, guid: f0c31259d0ac76b488d32108b6b06044, type: 3}
+      propertyPath: m_RootOrder
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 1784232869452525445, guid: f0c31259d0ac76b488d32108b6b06044, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 7.950274
+      objectReference: {fileID: 0}
+    - target: {fileID: 1784232869452525445, guid: f0c31259d0ac76b488d32108b6b06044, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.1019104
+      objectReference: {fileID: 0}
+    - target: {fileID: 1784232869452525445, guid: f0c31259d0ac76b488d32108b6b06044, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -59.881973
+      objectReference: {fileID: 0}
+    - target: {fileID: 1784232869452525445, guid: f0c31259d0ac76b488d32108b6b06044, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1784232869452525445, guid: f0c31259d0ac76b488d32108b6b06044, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1784232869452525445, guid: f0c31259d0ac76b488d32108b6b06044, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1784232869452525445, guid: f0c31259d0ac76b488d32108b6b06044, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1784232869452525445, guid: f0c31259d0ac76b488d32108b6b06044, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1784232869452525445, guid: f0c31259d0ac76b488d32108b6b06044, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1784232869452525445, guid: f0c31259d0ac76b488d32108b6b06044, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3854809722981434589, guid: f0c31259d0ac76b488d32108b6b06044, type: 3}
+      propertyPath: m_Name
+      value: Sounds
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f0c31259d0ac76b488d32108b6b06044, type: 3}
 --- !u!1001 &13467881
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -177,6 +234,10 @@ PrefabInstance:
     - target: {fileID: 2565039376030845255, guid: 253fa0b00be7e4d439af8debec9f5c23, type: 3}
       propertyPath: m_Name
       value: APIBridge
+      objectReference: {fileID: 0}
+    - target: {fileID: 8887967016508876724, guid: 253fa0b00be7e4d439af8debec9f5c23, type: 3}
+      propertyPath: <Platform>k__BackingField
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 253fa0b00be7e4d439af8debec9f5c23, type: 3}
@@ -1416,6 +1477,26 @@ PrefabInstance:
     - target: {fileID: 3443615292992025386, guid: e438b5349d8403c44b8e01ae1cd8c813, type: 3}
       propertyPath: m_Name
       value: ScenesManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 4512405782233332546, guid: e438b5349d8403c44b8e01ae1cd8c813, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4512405782464705751, guid: e438b5349d8403c44b8e01ae1cd8c813, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 4512405782464705751, guid: e438b5349d8403c44b8e01ae1cd8c813, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 4512405782464705751, guid: e438b5349d8403c44b8e01ae1cd8c813, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 4512405782464705751, guid: e438b5349d8403c44b8e01ae1cd8c813, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e438b5349d8403c44b8e01ae1cd8c813, type: 3}

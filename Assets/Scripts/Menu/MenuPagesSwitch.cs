@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MenuPagesSwitch : Ston<MenuPagesSwitch>, IAudioPlayable, IDataControllable, IAchievementsControllable
+public class MenuPagesSwitch : Ston<MenuPagesSwitch>, IAudioPlayable, IAchievementsControllable
 {
+    [field: SerializeField]
+    public Notification AdErrorNotification { get; private set; }
+    private Action _adErrorDelegate;
+
     public GameObject backButton;
     public List<MenuPage> pages;
     public PageTypes startPage = PageTypes.MainMenu;
@@ -23,16 +27,19 @@ public class MenuPagesSwitch : Ston<MenuPagesSwitch>, IAudioPlayable, IDataContr
         base.Awake();
         _pageHistory = new LinkedList<PageTypes>();
         _mainMenu = (MainMenuPage) pages.Find((x) => x.pageType == PageTypes.MainMenu);
+        _adErrorDelegate = () => AdErrorNotification.Open(null, 4, null);
     }
 
     private void OnEnable()
     {
         UIEvents.OnUIClick += UIClickHandler;
+        APIBridge.OnAdvertisementError += _adErrorDelegate;
     }
 
     private void OnDisable()
     {
         UIEvents.OnUIClick -= UIClickHandler;
+        APIBridge.OnAdvertisementError -= _adErrorDelegate;
     }
 
     private void Start()
@@ -84,15 +91,13 @@ public class MenuPagesSwitch : Ston<MenuPagesSwitch>, IAudioPlayable, IDataContr
     {
         if (LaunchesManager.Instance.CanPlay())
         {
-            LaunchesManager.Instance.ChangeLaunchesAmount(LaunchesManager.Instance.LaunchesAmount - 1, false);
             _isGameLaunching = true;
-            _launchesCount++;
+            LaunchesManager.Instance.OnGameStart();
             ScenesManager.Instance.SwitchScene("Game");
         }
         else
         {
             PlaySound(AudioSources[4]);
-            StopCoroutine(_mainMenu.ShowError());
             StartCoroutine(_mainMenu.ShowError());
         }
     }
@@ -130,19 +135,9 @@ public class MenuPagesSwitch : Ston<MenuPagesSwitch>, IAudioPlayable, IDataContr
         source.Play();
     }
 
-    public void SaveData(ref Database database)
-    {
-        database.totalLaunchesCount = _launchesCount;
-    }
-
-    public void LoadData(Database database)
-    {
-        _launchesCount = database.totalLaunchesCount;
-    }
-
     private async void GetCriticAchievement()
     {
-        bool hasRated = await DataManager.Instance.HasRatedAsync();
+        bool hasRated = await APIBridge.Instance.HasRatedAsync();
         if (hasRated)
             OnAchievementProgressChanged.Invoke(new AchievementProgress(1, true), 12);
     }
@@ -150,9 +145,8 @@ public class MenuPagesSwitch : Ston<MenuPagesSwitch>, IAudioPlayable, IDataContr
     public void AfterDataLoaded(Database database) 
     {
         #if !UNITY_EDITOR
-        if (SceneManager.GetActiveScene().name == "Menu"
-         && database.totalLaunchesCount % 5 == 0 
-         && database.totalLaunchesCount != 0)
+        if (!DataManager.IsFullyLaunched()
+         && database.totalLaunchesCount % 4 == 0)
             APIBridge.Instance.ShowFullscreenAdv();
         if (!AchievementsManager.Instance.GetAchievementProgressById(12).isEarned)
             GetCriticAchievement();

@@ -9,6 +9,13 @@ using UnityEngine.UI;
 
 public class SettingsPage : MenuPage, IDataControllable
 {
+    [Serializable]
+    public struct LanguageWithIcon
+    {
+        public TranslatableText language;
+        public Sprite icon;
+    }
+
     public static event Action OnSettingsAuth;
     public static event Action OnSettingsSaved;
     public static event Action<Settings> OnSettingsChanged;
@@ -21,6 +28,7 @@ public class SettingsPage : MenuPage, IDataControllable
 
     [Space, Header("Language")]
     [SerializeField] private TMP_Dropdown _languageDropdown;
+    [SerializeField] private List<LanguageWithIcon> _languages;
 
     [Space, Header("Music")]
     [SerializeField] private Slider _musicVolumeSlider;
@@ -48,6 +56,8 @@ public class SettingsPage : MenuPage, IDataControllable
         {
             CheckVolumeChange(VolumeTypes.Sounds, value / 10);
         };
+
+        _languageDropdown.options = new(new TMP_Dropdown.OptionData[_languages.Count]);
     }
 
     protected override void OnEnable()
@@ -58,7 +68,7 @@ public class SettingsPage : MenuPage, IDataControllable
         _languageDropdown.onValueChanged.AddListener(CheckLanguageChange);
         _musicVolumeSlider.onValueChanged.AddListener(_listenerInstanceMusic);
         _soundsVolumeSlider.onValueChanged.AddListener(_listenerInstanceSounds);
-        _authButton.onClick.AddListener(Auth);
+        _authButton.onClick.AddListener(OnAuthButtonClickHandler);
     }
 
     protected override void OnDisable()
@@ -69,7 +79,7 @@ public class SettingsPage : MenuPage, IDataControllable
         _languageDropdown.onValueChanged.RemoveListener(CheckLanguageChange);
         _musicVolumeSlider.onValueChanged.RemoveListener(_listenerInstanceMusic);
         _soundsVolumeSlider.onValueChanged.RemoveListener(_listenerInstanceSounds);
-        _authButton.onClick.RemoveListener(Auth);
+        _authButton.onClick.RemoveListener(OnAuthButtonClickHandler);
     }
 
     public override void Close()
@@ -111,7 +121,9 @@ public class SettingsPage : MenuPage, IDataControllable
             case 1:
                 _settings.language = Languages.Russian;
                 break;
+        
         }
+        RefreshDropdownValues();
 
         OnSettingsChangeInvoke();
     }
@@ -142,6 +154,21 @@ public class SettingsPage : MenuPage, IDataControllable
         _settings = _savedSettings;
         RefreshSettingsValues();
         RefreshPlayerInfo();
+
+        RefreshDropdownValues();
+    }
+
+    private void RefreshDropdownValues()
+    {
+        for (int i = 0; i < _languages.Count; i++)
+        {
+            _languageDropdown.options[i] = new TMP_Dropdown.OptionData()
+            {
+                text = _languages[i].language.GetText(_settings.language),
+                image = _languages[i].icon
+            };
+        }
+        _languageDropdown.RefreshShownValue();
     }
 
     private void RefreshSettingsValues()
@@ -170,17 +197,17 @@ public class SettingsPage : MenuPage, IDataControllable
         }
     }
 
-    private async void Auth()
+    private async void OnAuthButtonClickHandler()
     {
-        if (!DataManager.IsPlayerAuth())
+        if (!APIBridge.IsPlayerAuth())
         {
-            await DataManager.Instance.AuthAsync();
-            if (DataManager.IsPlayerAuth())
+            await APIBridge.Instance.AuthAsync();
+            if (APIBridge.IsPlayerAuth())
                 OnSettingsAuth?.Invoke();
         }
         else
         {
-            await DataManager.Instance.RequestPlayerPermissionAsync();
+            await APIBridge.Instance.RequestPlayerPermissionAsync();
             RefreshPlayerInfo();
         }
     }

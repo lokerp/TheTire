@@ -31,3 +31,4 @@ MonoBehaviour:
   imagePath: AchievementsIcons/HalfMarathonRunnerAchievement
   secretImagePath: AchievementsIcons/SecretAchievement
   id: 8
+  platform: -1

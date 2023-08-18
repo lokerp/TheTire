@@ -28,8 +28,10 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
     public ShopOptionButton optionButtonHolder;
     public GameObject bouncinessReqHolder;
     public GameObject powerReqHolder;
+    public GameObject adReqHolder;
     public TextMeshProUGUI bouncinessReqText;
     public TextMeshProUGUI powerReqText;
+    public TextMeshProUGUI adReqText;
 
     public Color notEarnedReqColor;
     public Color earnedReqColor;
@@ -43,8 +45,10 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
     private List<ItemInfo> availableItems;
     private int currBouncinessLvl;
     private int currPowerLvl;
+    private int currAdWatchedCount;
 
     private Action<int, int> OnLevelUpHandler;
+    private Action<bool> OnAdvertisementCloseHandler;
 
     private static int availableItemsCount;
 
@@ -60,8 +64,17 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
             currPowerLvl = weaponLvl;
             RefreshAvailableItems();
         };
+        OnAdvertisementCloseHandler = (hasReward) =>
+        {
+            if (hasReward)
+            {
+                currAdWatchedCount++;
+                RefreshAvailableItems();
+            }
+        };
         UIEvents.OnUIClick += UIClickHandler;
         UpgradesPage.OnLevelUp += OnLevelUpHandler;
+        APIBridge.OnAdvertisementClose += OnAdvertisementCloseHandler;
     }
 
     protected override void OnDisable()
@@ -69,6 +82,7 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
         base.OnDisable();
         UIEvents.OnUIClick -= UIClickHandler;
         UpgradesPage.OnLevelUp -= OnLevelUpHandler;
+        APIBridge.OnAdvertisementClose -= OnAdvertisementCloseHandler;
     }
 
     public override void Close()
@@ -162,8 +176,11 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
     public void LoadData(Database database)
     {
         availableItemsCount = database.availableTires.Count + database.availableWeapons.Count;
+
         currBouncinessLvl = database.bouncinessLevel;
         currPowerLvl = database.powerLevel;
+        currAdWatchedCount = database.adWatchedCount;
+
         switch (itemType)
         {
             case ItemTypes.Type.Tire:
@@ -215,10 +232,14 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
         int newItemsCount = 0;
         foreach (var item in catalogue)
         {
-            if (!availableItems.Contains(item) 
-                && currBouncinessLvl >= item.requirements.bouncinessLevel 
-                && currPowerLvl >= item.requirements.powerLevel)
+            if (!availableItems.Contains(item)
+                && currBouncinessLvl >= item.requirements.bouncinessLevel
+                && currPowerLvl >= item.requirements.powerLevel
+                && currAdWatchedCount >= item.requirements.adsViewed)
+            {
                 availableItems.Add(item);
+                newItemsCount++;
+            }
         }
         availableItemsCount += newItemsCount;
     }
@@ -241,6 +262,12 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
             powerReqText.text = currentItem.requirements.powerLevel.ToString();
         }
         else powerReqHolder.SetActive(false);
+        if (currentItem.requirements.adsViewed > 0)
+        {
+            adReqHolder.SetActive(true);
+            adReqText.text = currentItem.requirements.adsViewed.ToString();
+        }
+        else adReqHolder.SetActive(false);
 
         if (currentItem.requirements.bouncinessLevel > currBouncinessLvl)
             bouncinessReqText.color = notEarnedReqColor;
@@ -248,6 +275,9 @@ public class ShopPage : MenuPage, IDataControllable, IAudioPlayable, IAchievemen
         if (currentItem.requirements.powerLevel > currPowerLvl)
             powerReqText.color = notEarnedReqColor;
         else powerReqText.color = earnedReqColor;
+        if (currentItem.requirements.adsViewed > currAdWatchedCount)
+            adReqText.color = notEarnedReqColor;
+        else adReqText.color = earnedReqColor;
 
         if (IsAvailable(currentItem))
             if (selectedItem == currentItem)

@@ -12,13 +12,14 @@ public class LaunchesManager : StonUndestroyable<LaunchesManager>, IDataControll
     public int LaunchesAmount { get; private set; }
 
     public Action<AchievementProgress, byte> OnAchievementProgressChanged { get; set; }
-    public static event Action OnLaunchRestore;
+    public static event Action OnLaunchesChanged;
     public static event Action OnLaunchesLoaded;
 
     public int MaxLaunches { get; private set; } = 10;
     public float TimeToRecoverInS { get; private set; } = 30;
 
     private int _adWatchedCount;
+    private int _totalLaunchesCount;
 
     private void OnEnable()
     {
@@ -52,12 +53,14 @@ public class LaunchesManager : StonUndestroyable<LaunchesManager>, IDataControll
         ChangeLaunchesAmount(database.currentLaunches + launchesEarnedFromLastSession, false);
         OnLaunchesLoaded?.Invoke();
         _adWatchedCount = database.adWatchedCount;
+        _totalLaunchesCount = database.totalLaunchesCount;
     }
 
     public void SaveData(ref Database database)
     {
         database.adWatchedCount = _adWatchedCount;
         database.currentLaunches = LaunchesAmount;
+        database.totalLaunchesCount = _totalLaunchesCount;
     }
 
     public bool CanPlay()
@@ -67,11 +70,17 @@ public class LaunchesManager : StonUndestroyable<LaunchesManager>, IDataControll
         return false;
     }
 
+    public void OnGameStart()
+    {
+        _totalLaunchesCount++;
+        ChangeLaunchesAmount(LaunchesAmount - 1, true);
+    }
+
     public void ChangeLaunchesAmount(int newLaunchesAmount, bool withSaving)
     {
         LaunchesAmount = Mathf.Clamp(newLaunchesAmount, 0, MaxLaunches);
         if (withSaving)
-            OnLaunchRestore?.Invoke();
+            OnLaunchesChanged?.Invoke();
     }
 
     public void GetSponsorAchievement(AchievementInfo achievement)

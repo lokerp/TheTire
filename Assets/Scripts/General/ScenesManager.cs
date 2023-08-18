@@ -11,14 +11,15 @@ public class ScenesManager : StonUndestroyable<ScenesManager>
 
     public static event Action OnSceneChanging;
 
-    public void Start()
+    protected override void Awake()
     {
-        sceneTransition.SetTrigger("IsOpening");
+        base.Awake();
+        sceneTransition.SetBool("IsOpening", true);
     }
 
     public void SwitchScene(string sceneName)
     {
-        sceneTransition.SetTrigger("IsClosing");
+        sceneTransition.SetBool("IsOpening", false);
         asyncLoad = SceneManager.LoadSceneAsync(sceneName);
         asyncLoad.allowSceneActivation = false;
         OnSceneChanging?.Invoke();
@@ -26,7 +27,7 @@ public class ScenesManager : StonUndestroyable<ScenesManager>
         {
             StartCoroutine(WaitForSceneLoad());
         }
-        sceneTransition.SetTrigger("IsOpening");
+        sceneTransition.SetBool("IsOpening", true);
     }
 
     IEnumerator WaitForSceneLoad()

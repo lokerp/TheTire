@@ -10,6 +10,7 @@ public class SkyController : MonoBehaviour
     public Transform sun;
 
     private Vector3 _defaultSkyScale;
+    private Vector3 _defaultSkyPosition;
     private Vector3 _startPlayerPos;
     private Transform _currentPlayerPos;
     private Rigidbody _playerRb;
@@ -23,6 +24,7 @@ public class SkyController : MonoBehaviour
     {
         _skyMesh = GetComponent<MeshRenderer>();
         _defaultSkyScale = transform.localScale;
+        _defaultSkyPosition = transform.position;
         skyMaterial.mainTextureOffset = new Vector2(startTimeOfDay, 0);
     }
 
@@ -43,27 +45,31 @@ public class SkyController : MonoBehaviour
 
     void UpscaleSky()
     {
-        transform.position = new Vector3(transform.position.x, transform.position.y, _currentPlayerPos.position.z);
+        float newYPosition = _defaultSkyPosition.y;
+        if (_currentPlayerPos.position.y > 1000)
+            newYPosition = Mathf.Lerp(transform.position.y, 0.02f * _currentPlayerPos.position.y, Time.deltaTime);
+        else if (!Mathf.Approximately(transform.position.y, _defaultSkyPosition.y))
+            newYPosition = Mathf.Lerp(transform.position.y, _defaultSkyPosition.y, Time.deltaTime * 5);
 
-        float newYCoordinates = transform.localScale.y + (_playerRb.velocity.y / _nonScaleMeshSize);
-
-        Vector3 sizeAdjVector = new(transform.localScale.x,
-                                    newYCoordinates,
-                                    transform.localScale.z);
+        transform.position = new Vector3(transform.position.x, newYPosition, _currentPlayerPos.position.z);
 
         if (_playerRb.velocity.y > 0 && _currentPlayerPos.position.y / _skyMesh.bounds.size.y > 0.8f
             || transform.localScale.y > _defaultSkyScale.y)
         {
+            float newYScale = transform.localScale.y + (_playerRb.velocity.y / _nonScaleMeshSize);
+            Vector3 sizeAdjVector = new(transform.localScale.x,
+                                        newYScale,
+                                        transform.localScale.z);
             transform.localScale = Vector3.Lerp(transform.localScale, sizeAdjVector, Time.deltaTime);
         }
 
         else if (!Mathf.Approximately(transform.localScale.y, _defaultSkyScale.y))
-            transform.localScale = Vector3.Lerp(transform.localScale, _defaultSkyScale, 5);
+            transform.localScale = Vector3.Lerp(transform.localScale, _defaultSkyScale, Time.deltaTime * 5);
     }
 
     void ChangeTimeOfDay()
     {
-        float playerDistance = _currentPlayerPos.position.z - _startPlayerPos.z;
+        float playerDistance = WorldLoopController.Instance.GetRealPlayerZPosition() - _startPlayerPos.z;
         float distanceToDayCycleRatio;
 
         if (playerDistance >= 0)

@@ -23,24 +23,30 @@ public class Page : MonoBehaviour
     public event Action OnOpen;
     public event Action OnClose;
 
+    protected Action<ButtonHolderClickEventArgs> openBtnClickHandler;
+    protected Action<ButtonHolderClickEventArgs> closeBtnClickHandler;
+
     protected virtual void OnEnable()
     {
         if (OpenButton != null)
-            OpenButton.OnClick += Open;
+            OpenButton.OnClick += openBtnClickHandler;
         if (CloseButton != null)
-            CloseButton.OnClick += Close;
+            CloseButton.OnClick += closeBtnClickHandler;
     }
 
     protected virtual void OnDisable()
     {
         if (OpenButton != null)
-            OpenButton.OnClick -= Open;
+            OpenButton.OnClick -= openBtnClickHandler;
         if (CloseButton != null)
-            CloseButton.OnClick -= Close;
+            CloseButton.OnClick -= closeBtnClickHandler;
     }
 
     protected virtual void Awake()
     {
+        openBtnClickHandler = (args) => Open();
+        closeBtnClickHandler = (args) => Close();
+
         if (_animator == null && (HasOpeningAnimation || HasClosingAnimation))
             throw new System.Exception("Page Component doesn't have an animator, but has animations");
     }

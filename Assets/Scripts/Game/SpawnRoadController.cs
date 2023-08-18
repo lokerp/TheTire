@@ -7,16 +7,11 @@ using UnityEngine;
 
 public class SpawnRoadController : Ston<SpawnRoadController>
 {
-    enum SpawnWay
-    {
-        Front,
-        Back
-    }
-
     [Range(3, 10)] public int maxRoadsSpawned = 4;
 
     public List<RoadCoords> roadsToSpawn = new();
     public RoadCoords startRoad;
+    public float worldCycleSize;
     private List<RoadCoords> _spawnedRoads = new();
 
     private int _frontSpawnedCount;
@@ -24,12 +19,15 @@ public class SpawnRoadController : Ston<SpawnRoadController>
     private int _maxFrontSpawnedCount;
     private int _maxBackSpawnedCount;
 
+    private int _roadsShouldSpawnCount;
+
+    private int _roadLength;
+
     private int _startIndex = -1;
     private int _endIndex = -1;
-    private SpawnWay _spawnWay;
+    private SpawnWays _spawnWay;
 
     private Transform _playerPos;
-
   
     void Start()
     {
@@ -57,20 +55,37 @@ public class SpawnRoadController : Ston<SpawnRoadController>
             throw new System.Exception("roadsToSpawn < maxRoadSpawned!!!");
     }
 
-    // Update is called once per frame
+    private void OnEnable()
+    {
+        WorldLoopController.OnLoop += OnLoopHandler;
+    }
+
+    private void OnDisable()
+    {
+        WorldLoopController.OnLoop -= OnLoopHandler;
+    }
+
     void Update()
     {
-        if (ShouldSpawn())
+        while (ShouldSpawn())
+        {
             Spawn();
-        if (ShouldDespawn())
-            Despawn();
+            if (ShouldDespawn())
+                Despawn();
+        }
+    }
+
+    void OnLoopHandler(Vector3 translateVec)
+    {
+        foreach (var road in _spawnedRoads)
+            road.transform.Translate(translateVec, Space.World);
     }
 
     void Spawn()
     {
         RoadCoords _spawnedObject = null;
 
-        if (_spawnWay == SpawnWay.Front)
+        if (_spawnWay == SpawnWays.Front)
         {
             _endIndex = MathfExtension.Mod(_endIndex + 1, roadsToSpawn.Count);
             _spawnedObject = roadsToSpawn[_endIndex];
@@ -81,7 +96,7 @@ public class SpawnRoadController : Ston<SpawnRoadController>
             _frontSpawnedCount++;
         }
 
-        else if (_spawnWay == SpawnWay.Back)
+        else if (_spawnWay == SpawnWays.Back)
         {
             _startIndex = MathfExtension.Mod(_startIndex - 1, roadsToSpawn.Count);
             _spawnedObject = roadsToSpawn[_startIndex];
@@ -97,7 +112,7 @@ public class SpawnRoadController : Ston<SpawnRoadController>
 
     void Despawn()
     {
-        if (_spawnWay == SpawnWay.Front)
+        if (_spawnWay == SpawnWays.Front)
         {
             _startIndex++;
             _spawnedRoads[0].gameObject.SetActive(false);
@@ -105,7 +120,7 @@ public class SpawnRoadController : Ston<SpawnRoadController>
             _frontSpawnedCount--;
         }
 
-        else if (_spawnWay == SpawnWay.Back)
+        else if (_spawnWay == SpawnWays.Back)
         {
             _endIndex--;
             _spawnedRoads.Last().gameObject.SetActive(false);
@@ -121,14 +136,14 @@ public class SpawnRoadController : Ston<SpawnRoadController>
         if (_frontSpawnedCount < _maxFrontSpawnedCount 
          || _playerPos.position.z >= _spawnedRoads[2].Begin.transform.position.z)
         {
-            _spawnWay = SpawnWay.Front;
+            _spawnWay = SpawnWays.Front;
             return true;
         }
 
         else if (_backSpawnedCount < _maxBackSpawnedCount
               || _playerPos.position.z < _spawnedRoads[1].Begin.transform.position.z)
         {
-            _spawnWay = SpawnWay.Back;
+            _spawnWay = SpawnWays.Back;
             return true;
         }
 
@@ -148,14 +163,14 @@ public class SpawnRoadController : Ston<SpawnRoadController>
 
         switch (_spawnWay)
         {
-            case SpawnWay.Front:
+            case SpawnWays.Front:
                 newPosition = new Vector3(newRoad.transform.position.x,
                                           newRoad.transform.position.y,
                                           lastRoad.End.position.z
                                           + newRoad.transform.position.z
                                           - newRoad.Begin.position.z);
                 break;
-            case SpawnWay.Back:
+            case SpawnWays.Back:
                 newPosition = new Vector3(newRoad.transform.position.x,
                                           newRoad.transform.position.y,
                                           lastRoad.Begin.position.z

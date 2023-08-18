@@ -32,3 +32,4 @@ MonoBehaviour:
   imagePath: AchievementsIcons/SniperAchievement
   secretImagePath: AchievementsIcons/SecretAchievement
   id: 11
+  platform: -1

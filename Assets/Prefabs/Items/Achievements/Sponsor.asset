@@ -33,3 +33,4 @@ MonoBehaviour:
   imagePath: AchievementsIcons/SponsorAchievement
   secretImagePath: AchievementsIcons/SecretAchievement
   id: 10
+  platform: 5

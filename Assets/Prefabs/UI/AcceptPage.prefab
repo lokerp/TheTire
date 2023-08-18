@@ -730,8 +730,8 @@ MonoBehaviour:
   m_text: Are you sure you want to get to the menu?<br><br>You won't get money and
     you will lose your record!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5f2496255cd1b834d916b21b6b9afacc, type: 2}
+  m_sharedMaterial: {fileID: 2993776348968173209, guid: 5f2496255cd1b834d916b21b6b9afacc, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -755,7 +755,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 97.7
+  m_fontSize: 100
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

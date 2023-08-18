@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1db631f653cba0549841f2e9b535a353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text:
+  _text:
     English: 
     Russian: 
 --- !u!114 &-2397581901879925847
@@ -170,6 +170,7 @@ MonoBehaviour:
   notAvailableColor: {r: 0.735849, g: 0.735849, b: 0.735849, a: 0.5882353}
   useColor: {r: 1, g: 1, b: 1, a: 1}
   inUseColor: {r: 1, g: 1, b: 1, a: 0.627451}
+  noMoneyColor: {r: 0, g: 0, b: 0, a: 0}
   notAvailableText:
     English: UNAVAILABLE
     Russian: "\u041D\u0415\u0414\u041E\u0421\u0422\u0423\u041F\u041D\u041E"
@@ -179,6 +180,15 @@ MonoBehaviour:
   inUseText:
     English: IN USE
     Russian: "\u0412\u042B\u0411\u0420\u0410\u041D\u041E"
+  buyText:
+    English: BUY
+    Russian: "\u041A\u0423\u041F\u0418\u0422\u042C"
+  getText:
+    English: GET
+    Russian: "\u041F\u041E\u041B\u0423\u0427\u0418\u0422\u042C"
+  noMoneyText:
+    English: NO MONEY
+    Russian: "\u041D\u0415\u0422 \u0414\u0415\u041D\u0415\u0413"
   _colorHolder: {fileID: 6719612144069942485}
   _textHolder: {fileID: 6719612144069942487}
 --- !u!114 &660623375

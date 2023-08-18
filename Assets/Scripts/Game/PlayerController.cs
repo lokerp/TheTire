@@ -25,11 +25,13 @@ public class PlayerController : Ston<PlayerController>
     private void OnEnable()
     {
         _input.Enable();
+        WorldLoopController.OnLoop += OnLoopHandler;
     }
 
     private void OnDisable()
     {
         _input.Disable();
+        WorldLoopController.OnLoop -= OnLoopHandler;
     }
 
     private void OnDestroy()
@@ -43,14 +45,19 @@ public class PlayerController : Ston<PlayerController>
 
         _input = new();
         Rigidbody = GetComponent<Rigidbody>();
-        _turnSpeed = 2;
+        _turnSpeed = 300;
         _drag = Rigidbody.drag;
         _angularDrag = Rigidbody.angularDrag;
     }
 
+    private void OnLoopHandler(Vector3 translateVec)
+    {
+        transform.Translate(translateVec, Space.World);
+    }
+
     private void Turn(float turnDirection)
     {
-        Rigidbody.AddTorque(new Vector3(0, 0, turnDirection * _turnSpeed * -1));
+        Rigidbody.AddTorque(new Vector3(0, 0, -turnDirection * _turnSpeed * Time.deltaTime));
     }
 
     void Update()

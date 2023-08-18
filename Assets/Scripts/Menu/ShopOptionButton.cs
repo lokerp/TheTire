@@ -10,10 +10,9 @@ public class ShopOptionButton : MonoBehaviour
     {
         NotAvailable,
         Use,
-        InUse
+        InUse,
     }
 
-    public Color buyColor;
     public Color notAvailableColor;
     public Color useColor;
     public Color inUseColor;
@@ -41,6 +40,7 @@ public class ShopOptionButton : MonoBehaviour
                 _textHolder.Text = inUseText;
                 _colorHolder.color = inUseColor;
                 break;
+
         }
     }
 }

@@ -387,7 +387,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1437915279}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 0
   m_Camera: {fileID: 0}
@@ -508,7 +508,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -607,6 +607,7 @@ GameObject:
   - component: {fileID: 7723568790721493389}
   - component: {fileID: 6506407236047999586}
   - component: {fileID: 3644166997299911261}
+  - component: {fileID: 2232071967671413825}
   m_Layer: 5
   m_Name: RewardText
   m_TagString: Untagged
@@ -732,6 +733,21 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &2232071967671413825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5776565474819853989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1db631f653cba0549841f2e9b535a353, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _text:
+    English: 
+    Russian: 
 --- !u!1 &6264907143456954647
 GameObject:
   m_ObjectHideFlags: 0
@@ -851,6 +867,46 @@ PrefabInstance:
       propertyPath: <AudioSources>k__BackingField.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3009328109310055848, guid: 93853fdb0ef1e8e4d862563827ffcb21, type: 3}
+      propertyPath: textControllers._serializedList.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3009328109310055848, guid: 93853fdb0ef1e8e4d862563827ffcb21, type: 3}
+      propertyPath: imageControllers._serializedList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3009328109310055848, guid: 93853fdb0ef1e8e4d862563827ffcb21, type: 3}
+      propertyPath: textControllers._serializedList.Array.data[0].Key
+      value: title
+      objectReference: {fileID: 0}
+    - target: {fileID: 3009328109310055848, guid: 93853fdb0ef1e8e4d862563827ffcb21, type: 3}
+      propertyPath: textControllers._serializedList.Array.data[1].Key
+      value: description
+      objectReference: {fileID: 0}
+    - target: {fileID: 3009328109310055848, guid: 93853fdb0ef1e8e4d862563827ffcb21, type: 3}
+      propertyPath: textControllers._serializedList.Array.data[2].Key
+      value: reward
+      objectReference: {fileID: 0}
+    - target: {fileID: 3009328109310055848, guid: 93853fdb0ef1e8e4d862563827ffcb21, type: 3}
+      propertyPath: imageControllers._serializedList.Array.data[0].Key
+      value: icon
+      objectReference: {fileID: 0}
+    - target: {fileID: 3009328109310055848, guid: 93853fdb0ef1e8e4d862563827ffcb21, type: 3}
+      propertyPath: textControllers._serializedList.Array.data[0].Value
+      value: 
+      objectReference: {fileID: 7360544}
+    - target: {fileID: 3009328109310055848, guid: 93853fdb0ef1e8e4d862563827ffcb21, type: 3}
+      propertyPath: textControllers._serializedList.Array.data[1].Value
+      value: 
+      objectReference: {fileID: 1286771328}
+    - target: {fileID: 3009328109310055848, guid: 93853fdb0ef1e8e4d862563827ffcb21, type: 3}
+      propertyPath: textControllers._serializedList.Array.data[2].Value
+      value: 
+      objectReference: {fileID: 2232071967671413825}
+    - target: {fileID: 3009328109310055848, guid: 93853fdb0ef1e8e4d862563827ffcb21, type: 3}
+      propertyPath: imageControllers._serializedList.Array.data[0].Value
+      value: 
+      objectReference: {fileID: 3688855859678692872}
     - target: {fileID: 3009328109310055850, guid: 93853fdb0ef1e8e4d862563827ffcb21, type: 3}
       propertyPath: m_Name
       value: AchievementNotification

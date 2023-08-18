@@ -1,24 +1,19 @@
+using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
-using Newtonsoft.Json;
 using System.Diagnostics;
-using UnityEngine.SceneManagement;
-using UnityEngine.Events;
-using System.Data;
-using System;
-using Unity.VisualScripting;
-using UnityEngine.UI;
+using System.Linq;
 using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.SocialPlatforms.Impl;
-using Unity.Mathematics;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public struct DataLoadingInfo
 {
     public Database data;
-    public string loadingStatus;
+    public bool _shouldSaveDataToCloud;
 }
 
 public struct PlayerInfo
@@ -33,7 +28,7 @@ public struct LeaderboardEntry
     public string uniqueID;
     public string avatar;
     public string name;
-    public int score;
+    public long score;
     public int rank;
 }
 
@@ -50,10 +45,11 @@ public class DataManager : StonUndestroyable<DataManager>
 
     private Action<AchievementInfo> OnAchievementEarnedSaveHandler;
     private Action<int, int> OnLevelUpgradeHandler;
+    private Action<int> OnMoneyChangedHandler;
 
     private PlayerInfo _playerInfo;
+    private DataLoadingInfo _dataLoadingInfo;
     private bool _isFirstVisitPerSession;
-    private bool _shouldSaveDataToCloud;
     private float _loadingProgress;
     private bool _gameIsFullyLaunched;
 
@@ -70,29 +66,32 @@ public class DataManager : StonUndestroyable<DataManager>
 
     public async void InitGameAsync()
     {
-        _shouldSaveDataToCloud = true;
         _loadingProgress = 0.1f;
         StartCoroutine(ControlLoadingScreen());
+        _dataLoadingInfo = default;
 
         OnAchievementEarnedSaveHandler = (_) => SaveGame();
         OnLevelUpgradeHandler = (_, _) => SaveGame();
-        ScenesManager.OnSceneChanging += SaveGame;
-        LaunchesManager.OnLaunchRestore += SaveGame;
+        OnMoneyChangedHandler = (_) => SaveGame();
+        LaunchesManager.OnLaunchesChanged += SaveGame;
         ShopPage.OnSelectedItemChanged += SaveGame;
         SettingsPage.OnSettingsSaved += SaveGame;
-        UpgradesPage.OnLevelUp += OnLevelUpgradeHandler;
+        MoneyManager.OnMoneyChanged += OnMoneyChangedHandler;
         AchievementsManager.OnAchievementEarned += OnAchievementEarnedSaveHandler;
 
         SceneManager.activeSceneChanged += (_, _) => LoadGame();
-        SettingsPage.OnSettingsAuth += LoadGame;
+        SettingsPage.OnSettingsAuth += async () => { await OnAuth(); };
 
         _loadingProgress = 0.5f;
 
-        Database serverDatabase = await LoadDataFromServerAsync();
-        if (serverDatabase != null)
+#if !UNITY_EDITOR
+        await APIBridge.Instance.AuthAsync();    
+        _dataLoadingInfo = await APIBridge.Instance.LoadDataAsync();
+#endif
+        if (_dataLoadingInfo.data != null)
         {
-            fileDataHandler.Save(serverDatabase);
-            _database = serverDatabase;
+            fileDataHandler.Save(_dataLoadingInfo.data);
+            _database = _dataLoadingInfo.data;
         }
         else
         {
@@ -102,13 +101,12 @@ public class DataManager : StonUndestroyable<DataManager>
             else
                 CreateDatabase();
         }
-        SetLeaderboardScore((int) _database.records.RecordDistance);
-
         _loadingProgress = 0.8f;
 
         _isFirstVisitPerSession = true;
         LoadGame();
         _isFirstVisitPerSession = false;
+        SaveGame();
         _loadingProgress = 1;
     }
 
@@ -120,8 +118,10 @@ public class DataManager : StonUndestroyable<DataManager>
 
         _database.lastSession = System.DateTime.UtcNow;
 #if !UNITY_EDITOR
-        if (_shouldSaveDataToCloud)
+        if (_dataLoadingInfo._shouldSaveDataToCloud) {
             APIBridge.Instance.SaveData(_database);
+            APIBridge.Instance.SetLeaderboardScore((long) _database.records.RecordDistance);
+        }
 #endif
         fileDataHandler.Save(_database);
 
@@ -173,6 +173,11 @@ public class DataManager : StonUndestroyable<DataManager>
         _database.records = new Records();
     }
 
+    public static bool IsFullyLaunched()
+    {
+        return Instance._gameIsFullyLaunched;
+    }
+
     public static bool IsFirstVisitPerSession()
     {
         return Instance._isFirstVisitPerSession;
@@ -193,32 +198,6 @@ public class DataManager : StonUndestroyable<DataManager>
         ScenesManager.Instance.SwitchScene("Menu");
     }
 
-    public async Task<bool> HasRatedAsync()
-    {
-        return await APIBridge.Instance.HasRatedAsync();
-    }
-
-    public static bool IsPlayerAuth()
-    {
-#if UNITY_EDITOR
-        return false;
-#endif
-        return APIBridge.Instance.IsPlayerAuth();
-    }
-
-    public bool HasPlayerPermission()
-    {
-#if UNITY_EDITOR
-        return false;
-#endif
-        return APIBridge.Instance.HasPlayerPermission();
-    }
-
-    public async Task RequestPlayerPermissionAsync()
-    {
-        await APIBridge.Instance.RequestPlayerPermissionAsync();
-    }
-
     public async Task<PlayerInfo> GetPlayerInfoAsync()
     {
         if (!_playerInfo.isLoaded)
@@ -226,68 +205,15 @@ public class DataManager : StonUndestroyable<DataManager>
         return _playerInfo;
     }
 
-    public async Task AuthAsync()
+    public async Task OnAuth()
     {
-#if UNITY_EDITOR
-        return;
-#endif
-        if (!IsPlayerAuth())
+        _dataLoadingInfo = await APIBridge.Instance.LoadDataAsync();
+        if (_dataLoadingInfo.data != null)
         {
-            await APIBridge.Instance.AuthAsync();
-            if (IsPlayerAuth())
-            {
-                Database serverDatabase = await LoadDataFromServerAsync();
-                UnityEngine.Debug.Log($"Loaded data: {serverDatabase}");
-                if (serverDatabase != null)
-                {
-                    fileDataHandler.Save(serverDatabase);
-                    _database = serverDatabase;
-                    SetLeaderboardScore((int)serverDatabase.records.RecordDistance);
-                }
-            }
+            fileDataHandler.Save(_dataLoadingInfo.data);
+            _database = _dataLoadingInfo.data;
+            LoadGame();
         }
-    }
-
-    public async Task<Database> LoadDataFromServerAsync()
-    {
-#if UNITY_EDITOR
-        return null;
-#endif
-        _shouldSaveDataToCloud = true;
-        DataLoadingInfo dataLoadingInfo = default;
-        try
-        {
-            dataLoadingInfo = await APIBridge.Instance.LoadDataAsync();
-        }
-        catch (Exception ex)
-        {
-            UnityEngine.Debug.Log(ex);
-            _shouldSaveDataToCloud = false;
-        }
-
-        if (dataLoadingInfo.loadingStatus == "NOTAUTH" 
-         || dataLoadingInfo.loadingStatus == "ERROR")
-            _shouldSaveDataToCloud = false;
-
-        return dataLoadingInfo.data;
-    }
-
-
-    public void SetLeaderboardScore(int score)
-    {
-#if !UNITY_EDITOR
-        APIBridge.Instance.SetLeaderboardScore(score);
-#endif
-    }
-
-    public async Task<List<LeaderboardEntry>> GetLeaderboardAsync()
-    {
-        return await APIBridge.Instance.GetLeaderboardAsync();
-    }
-
-    public async Task<LeaderboardEntry> GetLeaderboardPlayerEntryAsync()
-    {
-        return await APIBridge.Instance.GetLeaderboardPlayerEntryAsync();
     }
 
     public static async Task<Texture2D> LoadImageFromInternetAsync(string url)

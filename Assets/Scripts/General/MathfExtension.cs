@@ -62,4 +62,58 @@ public static class MathfExtension
 
         yield break;
     }
+
+    public static TranslatableText GetUnitsFromNumber(float num, bool translateToKm = false, bool isBigText = false, bool endsWithDot = false)
+    {
+        TranslatableText numPart = null;
+        TranslatableText unitPart = null;
+        if (!translateToKm || num < 10000)
+        {
+            numPart = (TranslatableText) ((long) num).ToString();
+            if (isBigText)
+                unitPart = new() { English = " M", Russian = " Ì"};
+            else
+                unitPart = new() { English = " m", Russian = " ל" };
+        }
+        else
+        {
+            numPart = (TranslatableText) Math.Round(num / 1000f, 1).ToString();
+            if (isBigText)
+                unitPart = new() { English = " KM", Russian = " ÊÌ" };
+            else
+                unitPart = new() { English = " km", Russian = " ךל" };
+        }
+
+        if (endsWithDot)
+            unitPart.Concatenate(".");
+
+        return numPart + unitPart;
+    }
+
+    public static TranslatableText GetUnitsFromNumber(long num, bool translateToKm = false, bool isBigText = false, bool endsWithDot = false)
+    {
+        TranslatableText numPart = null;
+        TranslatableText unitPart = null;
+        if (!translateToKm || num < 10000)
+        {
+            numPart = (TranslatableText)num.ToString();
+            if (isBigText)
+                unitPart = new() { English = " M", Russian = " Ì" };
+            else
+                unitPart = new() { English = " m", Russian = " ל" };
+        }
+        else
+        {
+            numPart = (TranslatableText)Math.Round(num / 1000f, 1).ToString();
+            if (isBigText)
+                unitPart = new() { English = " KM", Russian = " ÊÌ" };
+            else
+                unitPart = new() { English = " km", Russian = " ךל" };
+        }
+
+        if (endsWithDot)
+            unitPart.Concatenate(".");
+
+        return numPart + unitPart;
+    }
 }

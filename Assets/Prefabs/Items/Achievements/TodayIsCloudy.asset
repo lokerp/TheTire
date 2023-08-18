@@ -31,3 +31,4 @@ MonoBehaviour:
   imagePath: AchievementsIcons/TodayIsCloudyAchievement
   secretImagePath: AchievementsIcons/SecretAchievement
   id: 1
+  platform: -1

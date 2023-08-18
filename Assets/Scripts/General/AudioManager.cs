@@ -19,8 +19,10 @@ public class AudioManager : StonUndestroyable<AudioManager>, IDataControllable
     {
         SettingsPage.OnSettingsChanged += ChangeVolume;
         SceneManager.activeSceneChanged += PlayMusic;
+#if YANDEX_BUILD
         APIBridge.OnAdvertisementOpen += () => MuteGame(true);
         APIBridge.OnAdvertisementClose += (_) => MuteGame(false);
+#endif
     }
 
     private void PlayMusic(Scene pastScene, Scene newScene)

@@ -8,7 +8,6 @@ public class CloudsController : MonoBehaviour
     private PoolManager poolManager;
     private List<GameObject> skiesToSpawn = new();
     private List<GameObject> spawnedSkies = new();
-    private int spawnIndex;
     private float timeToCheckInSeconds = .4f;
     public int minHeight = 80;
     public int maxHeight = 130;
@@ -18,28 +17,67 @@ public class CloudsController : MonoBehaviour
     [Range(0, 10)]public float scaleMinAmount = 1f;
     [Range(0, 10)]public float scaleMaxAmount = 5f;
 
-    private Transform playerTransform;
+    private int sphereRadius;
+    private Transform _playerTransform;
+    private Rigidbody _playerRb;
+    private SpawnWays _spawnWay;
 
+    private void Awake()
+    {
+        sphereRadius = sphereDiameter / 2;
+    }
 
     void Start()
     {
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-
+        _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        _playerRb = _playerTransform.GetComponent<Rigidbody>();
+        _spawnWay = SpawnWays.Front;
         foreach (Transform sky in transform)
             skiesToSpawn.Add(sky.gameObject);
 
         poolManager = new PoolManager(skiesToSpawn);
-        SpawnSkiesAtStart(playerTransform.position);
+        SpawnSkiesAtStart(_playerTransform.position);
         spawnedSkies = FindSpawnedSkies();
 
         StartCoroutine(SpawnSkies());
     }
 
+    private void OnEnable()
+    {
+        WorldLoopController.OnLoop += OnLoopHandler;
+    }
+
+    private void OnDisable()
+    {
+        WorldLoopController.OnLoop -= OnLoopHandler;
+    }
+
+    void OnLoopHandler(Vector3 translateVec)
+    {
+        foreach (var cloud in spawnedSkies)
+            cloud.transform.Translate(translateVec, Space.World);
+    }
+
     GameObject ShouldSpawn() 
     {
-        foreach (var sky in spawnedSkies)
-            if (sky.transform.position.z < playerTransform.position.z - 30)
-                return sky;
+        if (_playerRb.velocity.z < 0)
+            _spawnWay = SpawnWays.Back;
+        else
+            _spawnWay = SpawnWays.Front;
+
+        if (_spawnWay == SpawnWays.Back)
+        {
+            foreach (var sky in spawnedSkies)
+                if (sky.transform.position.z > _playerTransform.position.z + sphereRadius + 50)
+                    return sky;
+        }
+
+        else if (_spawnWay == SpawnWays.Front)
+        {
+            foreach (var sky in spawnedSkies)
+                if (sky.transform.position.z < _playerTransform.position.z - 30)
+                    return sky;
+        }
 
         return null;
     }
@@ -55,7 +93,7 @@ public class CloudsController : MonoBehaviour
             {
                 sky.transform.position = new Vector3(Random.Range(-spreadRadius, spreadRadius),
                                                      Random.Range(minHeight, maxHeight),
-                                                     Random.Range(playerPos.z + 100, playerPos.z + sphereDiameter / 2));
+                                                     Random.Range(playerPos.z + 100, playerPos.z + sphereRadius));
 
                 SetRandomTransform(sky.transform);
                 spawnedSkies.Add(sky);
@@ -70,15 +108,19 @@ public class CloudsController : MonoBehaviour
         int heightsAmplitude = maxHeight - minHeight;
         while (true)
         {
-            Vector3 playerPos = playerTransform.position;
+            Vector3 playerPos = _playerTransform.position;
             GameObject sky;
             if (sky = ShouldSpawn())
             {
+                float newSkyZCoord = Random.Range(playerPos.z + sphereRadius + 50,
+                                                  playerPos.z + sphereDiameter);
+                if (_spawnWay == SpawnWays.Back)
+                    newSkyZCoord = 2 * playerPos.z - newSkyZCoord;
+
                 sky.transform.position = new Vector3(Random.Range(-spreadRadius, spreadRadius),
                                                      Random.Range(Mathf.Clamp(playerPos.y - heightsAmplitude, minHeight, int.MaxValue),
                                                                   Mathf.Clamp(playerPos.y + heightsAmplitude, minHeight, int.MaxValue)),
-                                                     Random.Range(playerPos.z + sphereDiameter / 2 + 50, playerPos.z + sphereDiameter));
-
+                                                     newSkyZCoord);
                 SetRandomTransform(sky.transform);
             }
 

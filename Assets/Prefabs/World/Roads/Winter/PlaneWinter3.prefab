@@ -189,7 +189,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4413080771182797611}
-  m_Material: {fileID: 13400000, guid: 34de220904b2cfa42850ee1cedc0185e, type: 2}
+  m_Material: {fileID: 13400000, guid: 8b0065e8ac1dee54c810faf16ffdc896, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -418,7 +418,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8425653429227179083}
-  m_Material: {fileID: 13400000, guid: 34de220904b2cfa42850ee1cedc0185e, type: 2}
+  m_Material: {fileID: 13400000, guid: 8b0065e8ac1dee54c810faf16ffdc896, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -1698,6 +1698,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2819172915638589278, guid: 3cf9e1aed1461054ba84138d08eeb4a7, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 3e173b07c7c2dfe4a875b9d5c8f0f5ce, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3cf9e1aed1461054ba84138d08eeb4a7, type: 3}
 --- !u!4 &5663239208741205428 stripped

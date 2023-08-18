@@ -1,0 +1,5 @@
+enum SpawnWays
+{
+    Front,
+    Back
+}

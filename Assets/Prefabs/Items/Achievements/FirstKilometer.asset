@@ -31,3 +31,4 @@ MonoBehaviour:
   imagePath: AchievementsIcons/FirstKilometer
   secretImagePath: AchievementsIcons/SecretAchievement
   id: 3
+  platform: -1

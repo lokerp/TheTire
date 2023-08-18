@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics.Contracts;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -19,7 +20,9 @@ public class GameManager : Ston<GameManager>, IDataControllable, IAchievementsCo
 
     [Header("Pages And UI'S")]
     [SerializeField] private Page _pausePage;
-    [SerializeField] private AcceptPage _pauseAcceptPage;
+    [SerializeField] private AcceptPage _pauseRestartAcceptPage;
+    [SerializeField] private AcceptPage _pauseReturnAcceptPage;
+    [SerializeField] private Notification _noLaunchesNotification;
     [SerializeField] private Page _scalePage;
     [SerializeField] private Page _timerPage;
     [SerializeField] private Page _passedDistancePage;
@@ -27,7 +30,9 @@ public class GameManager : Ston<GameManager>, IDataControllable, IAchievementsCo
     [SerializeField] private Page _pauseButtonPage;
     [SerializeField] private Page _rewindPage;
 
-    [SerializeField] private ButtonHolder _returnButton;
+    [SerializeField] private ButtonHolder _pauseRestartButton;
+    [SerializeField] private ButtonHolder _resultsReturnButton;
+    [SerializeField] private ButtonHolder _resultsRestartButton;
     public TextMeshProUGUI passedDistanceText;
 
     [Header("Timer")]
@@ -51,13 +56,16 @@ public class GameManager : Ston<GameManager>, IDataControllable, IAchievementsCo
     public float maxRewindVelocity;
 
     [Header("Other")]
+    public float timeInSToOpenNotification;
+    public AudioSource noLaunchesErrorSound;
     public float timeInSToCloseScale;
     public PhysicMaterial tirePhysicMaterial;
-    [Range(0, 1)] public float bouncinessMaxLvl;
+    [Range(0, 1)] public float physBouncinessMaxLvl;
 
     private float _currentTimeScale = 1;
     private bool _isRewindEnabled = false;
     private bool _isPlaying = true;
+    private bool _isPaused = false;
     private GameObject _player;
     private GameObject _playerPrefab;
     private Rigidbody _playerRb;
@@ -68,26 +76,33 @@ public class GameManager : Ston<GameManager>, IDataControllable, IAchievementsCo
     private float _recordDistance = 0;
     private int _earnedMoney = 0;
     private int _launchesCount = 0;
+    private Action<ButtonHolderClickEventArgs> _rewindBtnClickHandler;
+    private Action _returnAcceptClickHandler;
 
     private void OnEnable()
     {
         LaunchController.OnLaunch += OnLaunch;
         _pausePage.OnOpen += Pause;
         _pausePage.OnClose += Unpause;
-        _pauseAcceptPage.OnAccept += ExitToMenu;
-        _returnButton.OnClick += ExitToMenu;
-        rewindButton.OnClick += TurnRewind;
+        _pauseReturnAcceptPage.OnAccept += _returnAcceptClickHandler;
+        _pauseRestartAcceptPage.OnAccept += Restart;
+        _resultsRestartButton.OnClick += OnResultsRestartButtonClick;
+        _pauseRestartButton.OnClick += OnPauseRestartButtonClick;
+        _resultsReturnButton.OnClick += ExitToMenu;
+        rewindButton.OnClick += _rewindBtnClickHandler;
     }
-
 
     private void OnDisable()
     {
         LaunchController.OnLaunch -= OnLaunch;
         _pausePage.OnOpen -= Pause;
         _pausePage.OnClose -= Unpause;
-        _pauseAcceptPage.OnAccept -= ExitToMenu;
-        _returnButton.OnClick -= ExitToMenu;
-        rewindButton.OnClick -= TurnRewind;
+        _pauseReturnAcceptPage.OnAccept -= _returnAcceptClickHandler;
+        _pauseRestartAcceptPage.OnAccept -= Restart;
+        _pauseRestartButton.OnClick -= OnResultsRestartButtonClick;
+        _pauseRestartButton.OnClick -= OnPauseRestartButtonClick;
+        _resultsReturnButton.OnClick -= ExitToMenu;
+        rewindButton.OnClick -= _rewindBtnClickHandler;
     }
 
     private void OnDestroy()
@@ -99,6 +114,9 @@ public class GameManager : Ston<GameManager>, IDataControllable, IAchievementsCo
     {
         base.Awake();
         _pauseButtonPage.Close();
+
+        _rewindBtnClickHandler = (args) => TurnRewind(!_isRewindEnabled);
+        _returnAcceptClickHandler = () => ExitToMenu();
     }
 
     public void LoadData(Database database)
@@ -115,15 +133,12 @@ public class GameManager : Ston<GameManager>, IDataControllable, IAchievementsCo
     public void SaveData(ref Database database)
     {
         if (!_isPlaying && _passedDistance > _recordDistance)
-        {
             database.records.RecordDistance = _passedDistance;
-            DataManager.Instance.SetLeaderboardScore((int) _passedDistance);
-        }
     }
 
     void SetTireBounciness(int curLvl, int maxLvl)
     {
-        tirePhysicMaterial.bounciness = (float) curLvl / maxLvl * bouncinessMaxLvl;
+        tirePhysicMaterial.bounciness = (float) curLvl / maxLvl * physBouncinessMaxLvl;
         tirePhysicMaterial.dynamicFriction = (1 - (float)curLvl / maxLvl) * 1000;
     }
 
@@ -158,9 +173,31 @@ public class GameManager : Ston<GameManager>, IDataControllable, IAchievementsCo
         GetGamerAchievement(_launchesCount, AchievementsManager.Instance.GetAchievementInfoById(9));
         _pauseButtonPage.Open();
         _passedDistancePage.Open();
-        StartCoroutine(RefreshPassedDistance());
+        StartCoroutine(PlayingRoutine());
         StartCoroutine(CheckForStop());
         StartCoroutine(CloseScale());
+        Invoke(nameof(ShowRewindBtn), timeToShowRewindBtn);
+    }
+
+    private void OnResultsRestartButtonClick(ButtonHolderClickEventArgs clickInfo)
+    {
+        if (LaunchesManager.Instance.CanPlay())
+            Restart();
+        else
+            _noLaunchesNotification.Open(null, timeInSToOpenNotification, noLaunchesErrorSound);
+    }
+
+    private void OnPauseRestartButtonClick(ButtonHolderClickEventArgs clickInfo)
+    {
+        if (LaunchesManager.Instance.CanPlay())
+            _pauseRestartAcceptPage.Open();
+        else
+            _noLaunchesNotification.Open(null, timeInSToOpenNotification, noLaunchesErrorSound);
+    }
+
+    private void ShowRewindBtn()
+    {
+        _rewindPage.Open();
     }
 
     IEnumerator CloseScale()
@@ -174,14 +211,16 @@ public class GameManager : Ston<GameManager>, IDataControllable, IAchievementsCo
     {
         AudioManager.Instance.gameMusic.Stop();
         TurnRewind(false);
-        _resultsPage.Open();
         _timerPage.Close();
         _pauseButtonPage.Close();
         _rewindPage.Close();
 
-        _earnedMoney = (int)(_passedDistance / 10) * 2;
-        distanceResult.text = Mathf.CeilToInt(_passedDistance).ToString();
+        _earnedMoney = Mathf.Clamp((int) (_passedDistance / 10) * 2, 0, int.MaxValue);
+        distanceResult.text = ((long) Mathf.Ceil(_passedDistance)).ToString();
         moneyEarnedResult.text = _earnedMoney.ToString();
+        MoneyManager.Instance.ChangeMoneyAmount(MoneyManager.Instance.MoneyAmount + _earnedMoney);
+
+        _resultsPage.Open();
 
         if (_passedDistance > _recordDistance)
         {
@@ -193,12 +232,11 @@ public class GameManager : Ston<GameManager>, IDataControllable, IAchievementsCo
         }
         else
             recordHolder.SetActive(false);
-
-        MoneyManager.Instance.ChangeMoneyAmount(MoneyManager.Instance.MoneyAmount + _earnedMoney);
     }
 
     private void Pause()
     {
+        _isPaused = true;
         Time.timeScale = 0;
         _pauseButtonPage.Close();
         AudioManager.Instance.ChangeVolume(VolumeTypes.GameSounds, 0);
@@ -208,6 +246,7 @@ public class GameManager : Ston<GameManager>, IDataControllable, IAchievementsCo
 
     private void Unpause()
     {
+        _isPaused = false;
         Time.timeScale = _currentTimeScale;
         _pauseButtonPage.Open();
         AudioManager.Instance.ChangeVolume(VolumeTypes.GameSounds, 1);
@@ -215,16 +254,23 @@ public class GameManager : Ston<GameManager>, IDataControllable, IAchievementsCo
         timerCountdown.UnPause();
     }
 
-    private void ExitToMenu()
+    private void ExitToMenu(ButtonHolderClickEventArgs args = null)
     {
         Unpause();
         TurnRewind(false);
         ScenesManager.Instance.SwitchScene("Menu");
     }
 
-    IEnumerator RefreshPassedDistance()
+    private void Restart()
     {
-        float timePassed = 0;
+        Unpause();
+        TurnRewind(false);
+        LaunchesManager.Instance.OnGameStart();
+        ScenesManager.Instance.SwitchScene("Game");
+    }
+
+    IEnumerator PlayingRoutine()
+    {
         float maxHeight = 0;
         float maxDistanceInM = 0;
         float mapSizeFromPlayer = 3200 - _player.transform.position.z;
@@ -234,14 +280,15 @@ public class GameManager : Ston<GameManager>, IDataControllable, IAchievementsCo
         AchievementInfo timeFliesAchievement = AchievementsManager.Instance.GetAchievementInfoById(4);
         AchievementInfo championAchievement = AchievementsManager.Instance.GetAchievementInfoById(6);
         AchievementInfo halfMarathonAchievement = AchievementsManager.Instance.GetAchievementInfoById(8);
+        AchievementInfo jubileeAchievement = AchievementsManager.Instance.GetAchievementInfoById(13);
+        AchievementInfo fastAchievement = AchievementsManager.Instance.GetAchievementInfoById(14);
 
         while (_isPlaying)
         {
             Vector3 distanceVector = _player.transform.position - tireHolder.transform.position;
-            _passedDistance = distanceVector.z;
-            if (_passedDistance < 0)
-                _passedDistance = 0;
-            passedDistanceText.text = Mathf.CeilToInt(_passedDistance).ToString() + " m.";
+            _passedDistance = WorldLoopController.Instance.GetRealPlayerZPosition() 
+                            - tireHolder.transform.position.z;
+            passedDistanceText.text = ((long) Mathf.Ceil(_passedDistance)).ToString() + " m.";
 
             if (maxHeight < distanceVector.y)
             {
@@ -256,24 +303,15 @@ public class GameManager : Ston<GameManager>, IDataControllable, IAchievementsCo
                 GetFirstKilometerAchievement(maxDistanceInM, firstKilometerAchievement);
                 GetChampionAchievement(maxDistanceInKm, championAchievement);
                 GetHalfMarathonAchievement(maxDistanceInKm, halfMarathonAchievement);
-
+                GetJubileeAchievement(maxDistanceInKm, jubileeAchievement);
             }
             if (maxDistanceInM >= mapSizeFromPlayer)
                 GetTimeFliesAchievement(1, timeFliesAchievement);
-
-            if (!_rewindPage.IsOpened() && timePassed >= timeToShowRewindBtn)
-                _rewindPage.Open();
+            GetFastAchievement((int) _playerRb.velocity.magnitude, fastAchievement);
 
             if (_isRewindEnabled)
-            {
-                _currentTimeScale = minRewindTimeScale 
-                                  + MathfExtension.FuncSpeedApply(_playerRb.velocity.magnitude / maxRewindVelocity,
-                                                                  MathfExtension.FuncSpeed.SquareRoot)
-                                  * (maxRewindTimeScale - minRewindTimeScale);
-                Time.timeScale = _currentTimeScale;
-            }
+                ApplyRewind();
 
-            timePassed += 0.2f;
             yield return new WaitForSeconds(0.2f);
         }
     }
@@ -345,23 +383,6 @@ public class GameManager : Ston<GameManager>, IDataControllable, IAchievementsCo
         _passedDistancePage.Open();
     }
 
-    void TurnRewind()
-    {
-        var buttonImg = rewindButton.gameObject.GetComponent<Image>();
-        if (_isRewindEnabled)
-        {
-            buttonImg.color = rewindOffColor;
-            _isRewindEnabled = false;
-            _currentTimeScale = 1;
-            Time.timeScale = _currentTimeScale;
-        }
-        else
-        {
-            buttonImg.color = rewindOnColor;
-            _isRewindEnabled = true;
-        }
-    }
-
     void TurnRewind(bool turnOn)
     {
         var buttonImg = rewindButton.gameObject.GetComponent<Image>();
@@ -377,6 +398,17 @@ public class GameManager : Ston<GameManager>, IDataControllable, IAchievementsCo
             buttonImg.color = rewindOnColor;
             _isRewindEnabled = true;
         }
+    }
+
+    void ApplyRewind()
+    {
+        if (!_isRewindEnabled || _isPaused)
+            return;
+        _currentTimeScale = minRewindTimeScale
+                          + MathfExtension.FuncSpeedApply(_playerRb.velocity.magnitude / maxRewindVelocity,
+                                                          MathfExtension.FuncSpeed.SquareRoot)
+                          * (maxRewindTimeScale - minRewindTimeScale);
+        Time.timeScale = _currentTimeScale;
     }
 
     void OnCollisionAchievementsHandler(GameObject collider, Vector3 _, Vector3 __)
@@ -438,6 +470,18 @@ public class GameManager : Ston<GameManager>, IDataControllable, IAchievementsCo
     {
         var progress = new AchievementProgress(distanceInKm, achievement);
         OnAchievementProgressChanged.Invoke(progress, 8);
+    }
+
+    void GetJubileeAchievement(int distanceInKm, AchievementInfo achievement)
+    {
+        var progress = new AchievementProgress(distanceInKm, achievement);
+        OnAchievementProgressChanged.Invoke(progress, 13);
+    }
+
+    void GetFastAchievement(int speed, AchievementInfo achievement)
+    {
+        var progress = new AchievementProgress(speed, achievement);
+        OnAchievementProgressChanged.Invoke(progress, 14);
     }
 
     public void AfterDataLoaded(Database database) { }

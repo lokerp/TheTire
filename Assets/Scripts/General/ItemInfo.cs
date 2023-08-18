@@ -13,10 +13,17 @@ public class ItemInfo : ScriptableObject
     {
         public int bouncinessLevel;
         public int powerLevel;
+        public int adsViewed;
 
         public int CompareTo(Requirements other)
         {
-            return (bouncinessLevel + powerLevel).CompareTo(other.bouncinessLevel + other.powerLevel);
+            int compRes = 0;
+            if (adsViewed > 0 || other.adsViewed > 0)
+                compRes = adsViewed.CompareTo(other.adsViewed);
+            else
+                compRes = (bouncinessLevel + powerLevel).CompareTo(other.bouncinessLevel + other.powerLevel);
+
+            return compRes;
         }
     }
 

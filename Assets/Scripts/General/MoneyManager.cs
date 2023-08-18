@@ -7,6 +7,7 @@ using UnityEngine;
 public class MoneyManager : StonUndestroyable<MoneyManager>, IDataControllable
 {
     public static event Action<int> OnMoneyChanged;
+    public static event Action<int> OnMoneyLoaded;
     public int MoneyAmount { get; private set; }
     public int maxMoneyAmount = 9999999;
 
@@ -27,10 +28,10 @@ public class MoneyManager : StonUndestroyable<MoneyManager>, IDataControllable
 
     public void LoadData(Database database)
     {
-        ChangeMoneyAmount(database.currentMoney);
+        ChangeMoneyAmount(database.currentMoney, false);
     }
 
-    public int ChangeMoneyAmount(int amount)
+    public int ChangeMoneyAmount(int amount, bool withSaving = true)
     {
         if (amount < 0)
             return 0;
@@ -38,13 +39,15 @@ public class MoneyManager : StonUndestroyable<MoneyManager>, IDataControllable
             MoneyAmount = maxMoneyAmount;
         else
             MoneyAmount = amount;
-        OnMoneyChanged?.Invoke(MoneyAmount);
+        if (withSaving)
+            OnMoneyChanged?.Invoke(MoneyAmount);
+        OnMoneyLoaded?.Invoke(MoneyAmount);
         return 1;
     }
 
     public void GetMoneyForAchievement(AchievementInfo achievement)
     {
-        ChangeMoneyAmount(MoneyAmount + achievement.moneyPrize);
+        ChangeMoneyAmount(MoneyAmount + achievement.moneyPrize, false);
     }
 
     public void AfterDataLoaded(Database database) { }

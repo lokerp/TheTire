@@ -40,7 +40,8 @@ public struct ItemTypes : IEquatable<ItemTypes>
             Tank,
             BarhatnieTyagi,
             Trampoline,
-            Cannon
+            Cannon,
+            Notmacbook
         }
     }
 

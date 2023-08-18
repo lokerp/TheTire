@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class DataLoadException : Exception
 {
@@ -15,15 +16,12 @@ public class DataLoadException : Exception
 
 public class APIBridge : StonUndestroyable<APIBridge>
 {
-    public enum API
-    {
-        Yandex,
-        VK
-    }
+    [field: SerializeField]
+    public Platforms Platform { get; private set; }
 
-    public API api;
     public static event Action OnAdvertisementOpen;
     public static event Action<bool> OnAdvertisementClose;
+    public static event Action OnAdvertisementError;
 
     private string _jsonData = null;
     private bool _wasDataLoadingFinished = false;
@@ -46,29 +44,30 @@ public class APIBridge : StonUndestroyable<APIBridge>
 
     public void SaveData(Database data)
     {
-        switch (api)
+        string jsonData = JsonConvert.SerializeObject(data, Formatting.Indented);
+        try
         {
-            case API.Yandex:
-                ExternAPI.SaveData(JsonConvert.SerializeObject(data, Formatting.Indented));
-                break;
-            case API.VK:
-                break;
+            string encryptedJsonData = StringEncryptor.EncryptString(jsonData);
+#if YANDEX_BUILD
+            YandexAPI.SaveData(encryptedJsonData);
+#endif
+#if VK_BUILD
+            VKApi.SaveData(JsonConvert.SerializeObject(data, Formatting.Indented));
+#endif
         }
+        catch { }
     }
 
     public async Task<DataLoadingInfo> LoadDataAsync()
     {
         _wasDataLoadingFinished = false;
-        Database data = null;
-
-        switch (api)
-        {
-            case API.Yandex:
-                ExternAPI.LoadData();
-                break;
-            case API.VK:
-                break;
-        }
+        DataLoadingInfo dataLoadingInfo = new() { data = null, _shouldSaveDataToCloud = true };
+#if YANDEX_BUILD
+        YandexAPI.LoadData();
+#endif
+#if VK_BUILD
+        VKApi.LoadData();
+#endif
 
         while (true)
         {
@@ -78,43 +77,82 @@ public class APIBridge : StonUndestroyable<APIBridge>
         }
 
         if (string.IsNullOrEmpty(_dataLoadingStatus))
-            throw new DataLoadException($"Error while getting data loading status");
+        {
+            Console.WriteLine("Error while getting data loading status");
+            dataLoadingInfo._shouldSaveDataToCloud = false;
+        }
 
-        if (_dataLoadingStatus == "SUCCESS")
-            data = JsonConvert.DeserializeObject<Database>(_jsonData);
+        if (_dataLoadingStatus == "NOTAUTH"
+         || _dataLoadingStatus == "ERROR")
+            dataLoadingInfo._shouldSaveDataToCloud = false;
+        else if (_dataLoadingStatus == "EMPTY")
+            dataLoadingInfo._shouldSaveDataToCloud = true;
 
-        return new DataLoadingInfo { data = data, loadingStatus = _dataLoadingStatus };
+        if (_dataLoadingStatus == "OLD")
+        {
+            try
+            {
+                dataLoadingInfo.data = JsonConvert.DeserializeObject<Database>(_jsonData);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception while loading old data: {ex}");
+            }
+        }
+
+        else if (_dataLoadingStatus == "SUCCESS")
+        {
+            try
+            {
+                #if YANDEX_BUILD
+                dataLoadingInfo.data = JsonConvert.DeserializeObject<Database>(StringEncryptor.DecryptString(_jsonData));
+#endif
+                #if VK_BUILD
+                dataLoadingInfo.data = JsonConvert.DeserializeObject<Database>(_jsonData);
+                #endif
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception while loading new data: {ex}");
+            }
+        }
+        Debug.Log($"Loaded data: {dataLoadingInfo.data}. Loading status: {_dataLoadingStatus}");
+        return dataLoadingInfo;
     }
 
     public void ShowRewardedAdv()
     {
-        switch (api)
-        {
-            case API.Yandex:
-                ExternAPI.ShowRewardedAdv();
-                break;
-        }
+#if UNITY_EDITOR
+        RaiseOnAdvertisementCloseEvent(1);
+#endif
+#if YANDEX_BUILD
+        YandexAPI.ShowRewardedAdv();
+#endif
+#if VK_BUILD
+        VKApi.ShowRewardedAdv();
+#endif
     }
 
     public void ShowFullscreenAdv()
     {
-        switch (api)
-        {
-            case API.Yandex:
-                ExternAPI.ShowFullscreenAdv();
-                break;
-        }
+#if YANDEX_BUILD
+        YandexAPI.ShowFullscreenAdv();
+#endif
+#if VK_BUILD
+        VKApi.ShowFullscreenAdv();
+#endif
     }
 
     public async Task<bool> HasRatedAsync()
     {
         _wasRatedLoadingFinished = false;
-        switch (api)
-        {
-            case API.Yandex:
-                ExternAPI.HasRated();
-                break;
-        }
+
+#if YANDEX_BUILD
+        YandexAPI.HasRated();
+#endif
+#if VK_BUILD
+        return false;
+#endif
 
         while (true)
         {
@@ -126,24 +164,24 @@ public class APIBridge : StonUndestroyable<APIBridge>
         return _hasRated;
     }
 
-    public void SetLeaderboardScore(int score)
+    public void SetLeaderboardScore(long score)
     {
-        switch (api)
-        {
-            case API.Yandex:
-                ExternAPI.SetLeaderboardScore(score);
-                break;
-        }
+#if YANDEX_BUILD
+        YandexAPI.SetLeaderboardScore(score);
+#endif
+#if VK_BUILD
+        VKApi.SetLeaderboardScore(score);
+#endif
     }
 
-    public bool IsPlayerAuth()
+    public static bool IsPlayerAuth()
     {
-        switch (api)
-        {
-            case API.Yandex:
-                return ExternAPI.IsPlayerAuth();
-        }
-
+#if YANDEX_BUILD
+        return YandexAPI.IsPlayerAuth();
+#endif
+#if VK_BUILD
+        return true;
+#endif
         return false;
     }
 
@@ -156,18 +194,19 @@ public class APIBridge : StonUndestroyable<APIBridge>
         string infoJson = null;
         string[] nameAndAvatar = null;
 
-        switch (api)
-        {
-            case API.Yandex:
-                infoJson = ExternAPI.GetPlayerInfo();
-                break;
-        }
+#if YANDEX_BUILD
+        infoJson = YandexAPI.GetPlayerInfo();
+#endif
+#if VK_BUILD
+        infoJson = VKApi.GetPlayerInfo();
+#endif
+
         if (string.IsNullOrEmpty(infoJson))
             throw new DataLoadException("Error while loading player info, infoJson is null");
         nameAndAvatar = JsonConvert.DeserializeObject<string[]>(infoJson);
         if (nameAndAvatar == null 
-            || string.IsNullOrEmpty(nameAndAvatar[0]) 
-            || string.IsNullOrEmpty(nameAndAvatar[1]))
+         || string.IsNullOrEmpty(nameAndAvatar[0]) 
+         || string.IsNullOrEmpty(nameAndAvatar[1]))
             throw new DataLoadException("Error while loading player info, nameAndAvatar is null");
 
         playerInfo.isLoaded = true;
@@ -179,12 +218,13 @@ public class APIBridge : StonUndestroyable<APIBridge>
     public async Task AuthAsync()
     {
         _wasAuthLoadingFinished = false;
-        switch (api)
-        {
-            case API.Yandex:
-                ExternAPI.Auth();
-                break;
-        }
+
+#if YANDEX_BUILD
+        YandexAPI.Auth();
+#endif
+#if VK_BUILD
+        VKApi.Auth();
+#endif
 
         while (true)
         {
@@ -196,12 +236,13 @@ public class APIBridge : StonUndestroyable<APIBridge>
 
     public bool HasPlayerPermission()
     {
-        switch (api)
-        {
-            case API.Yandex:
-                _playerPermission = ExternAPI.HasPlayerPermission();
-                break;
-        }
+
+#if YANDEX_BUILD
+        _playerPermission = YandexAPI.HasPlayerPermission();
+#endif
+#if VK_BUILD
+        return true;
+#endif
 
         return _playerPermission;
 
@@ -211,12 +252,12 @@ public class APIBridge : StonUndestroyable<APIBridge>
     {
         _wasPlayerPermissionRequestFinished = false;
 
-        switch (api)
-        {
-            case API.Yandex:
-                ExternAPI.RequestPlayerPermission();
-                break;
-        }
+#if YANDEX_BUILD
+        YandexAPI.RequestPlayerPermission();
+#endif
+#if VK_BUILD
+        _wasPlayerPermissionRequestFinished = true;
+#endif
 
         while (true)
         {
@@ -230,12 +271,12 @@ public class APIBridge : StonUndestroyable<APIBridge>
     {
         _wasLeaderbordLoadingFinished = false;
 
-        switch (api)
-        {
-            case API.Yandex:
-                ExternAPI.GetLeaderboard();
-                break;
-        }
+#if YANDEX_BUILD
+        YandexAPI.GetLeaderboard();
+#endif
+#if VK_BUILD || Server
+        ServerAPI.GetLeaderboard();
+#endif
 
         while (true)
         {
@@ -251,12 +292,12 @@ public class APIBridge : StonUndestroyable<APIBridge>
     {
         _wasLeaderbordPlayerEntryLoadingFinished = false;
 
-        switch (api)
-        {
-            case API.Yandex:
-                ExternAPI.GetLeaderboardPlayerEntry();
-                break;
-        }
+#if YANDEX_BUILD
+        YandexAPI.GetLeaderboardPlayerEntry();
+#endif
+#if VK_BUILD || Server
+        ServerAPI.GetLeaderboardPlayerEntry();
+#endif
 
         while (true)
         {
@@ -270,14 +311,18 @@ public class APIBridge : StonUndestroyable<APIBridge>
 
     public void OnGameReady()
     {
-        switch (api)
-        {
-            case API.Yandex:
-                ExternAPI.OnGameReady();
-                break;
-            case API.VK:
-                break;
-        }
+#if YANDEX_BUILD
+        YandexAPI.OnGameReady();
+#endif
+#if VK_BUILD
+
+#endif
+    }
+
+    public void YandexCheatingCheckCallback(int record)
+    {
+        if ((int) AchievementsManager.Instance.Records.RecordDistance != record)
+            SetLeaderboardScore((int)AchievementsManager.Instance.Records.RecordDistance);
     }
 
     public void RaiseOnAdvertisementOpenEvent()
@@ -288,6 +333,11 @@ public class APIBridge : StonUndestroyable<APIBridge>
     public void RaiseOnAdvertisementCloseEvent(int hasGotReward)
     {
         OnAdvertisementClose?.Invoke(Convert.ToBoolean(hasGotReward));
+    }
+
+    public void RaiseOnAdvertisementErrorEvent()
+    {
+        OnAdvertisementError?.Invoke();
     }
 
     public void LoadedDataCallback(string jsonData)

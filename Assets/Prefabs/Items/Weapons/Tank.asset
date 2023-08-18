@@ -15,7 +15,7 @@ MonoBehaviour:
   itemType:
     item: 2
     tire: 0
-    weapon: 0
+    weapon: 5
   name:
     English: TANK
     Russian: "\u0422\u0410\u041D\u041A"
@@ -25,4 +25,5 @@ MonoBehaviour:
   requirements:
     bouncinessLevel: 0
     powerLevel: 13
+    adsViewed: 0
   path: Weapons/Tank

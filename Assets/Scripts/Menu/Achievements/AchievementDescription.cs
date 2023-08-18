@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class AchievementDescription : MonoBehaviour
 {
-    CanvasGroup canvGroup;
+    public CanvasGroup canvGroup;
     public Image icon;
     public TextController title;
     public TextController description;
@@ -14,17 +14,6 @@ public class AchievementDescription : MonoBehaviour
     public Color earnedProgressColor;
     public Color notEarnedProgressColor;
     [Range(0, 1)] public float notEarnedAlpha;
-
-    private void Awake()
-    {
-        canvGroup = GetComponent<CanvasGroup>();
-    }
-
-    private void OnDisable()
-    {
-        Close();
-    }
-
 
     public void Show((AchievementInfo, AchievementProgress) i)
     {

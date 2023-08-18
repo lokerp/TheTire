@@ -17,6 +17,7 @@ public class AchievementInfo : ScriptableObject
     public string imagePath;
     public string secretImagePath;
     public byte id;
+    public Platforms platform;
 
     AchievementInfo()
     {

@@ -7,7 +7,7 @@ using UnityEngine;
 public class ButtonHolder : MonoBehaviour, IAudioPlayable
 {
     public GameObject button;
-    public event Action OnClick;
+    public event Action<ButtonHolderClickEventArgs> OnClick;
 
     [field: SerializeField]
     public List<AudioSource> AudioSources { get; private set; }
@@ -26,7 +26,7 @@ public class ButtonHolder : MonoBehaviour, IAudioPlayable
     {
         if (gameObject == button)
         {
-            OnClick?.Invoke();
+            OnClick?.Invoke(new ButtonHolderClickEventArgs() { buttonHolder = this, button = button });
             if (AudioSources.Count != 0)
                 PlaySound(AudioSources[0]);
         }
@@ -36,4 +36,10 @@ public class ButtonHolder : MonoBehaviour, IAudioPlayable
     {
         source.Play();
     }
+}
+
+public class ButtonHolderClickEventArgs : EventArgs
+{
+    public ButtonHolder buttonHolder;
+    public GameObject button;
 }

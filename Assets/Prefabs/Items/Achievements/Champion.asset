@@ -31,3 +31,4 @@ MonoBehaviour:
   imagePath: AchievementsIcons/ChampionAchievement
   secretImagePath: AchievementsIcons/SecretAchievement
   id: 6
+  platform: -1

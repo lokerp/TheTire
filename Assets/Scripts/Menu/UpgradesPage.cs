@@ -23,7 +23,7 @@ public class UpgradesPage : MenuPage, IAudioPlayable, IDataControllable
 
     public Color noMoneyColor;
 
-    public static int maxBouncinessLevel = 25;
+    public static int maxBouncinessLevel = 30;
 
     private int _bouncinessLevel;
     private int _powerLevel;
@@ -31,8 +31,8 @@ public class UpgradesPage : MenuPage, IAudioPlayable, IDataControllable
     private int _bouncinessUpgradeCost;
     private int _powerUpgradeCost;
 
-    private Action OnBouncinessUpgradeButtonClick;
-    private Action OnPowerUpgradeButtonClick;
+    private Action<ButtonHolderClickEventArgs> OnBouncinessUpgradeButtonClick;
+    private Action<ButtonHolderClickEventArgs> OnPowerUpgradeButtonClick;
 
     public static event Action<int, int> OnLevelUp;
 
@@ -42,8 +42,8 @@ public class UpgradesPage : MenuPage, IAudioPlayable, IDataControllable
     protected override void Awake()
     {
         base.Awake();
-        OnBouncinessUpgradeButtonClick = () => UpgradeLevel(LevelType.Bounciness);
-        OnPowerUpgradeButtonClick = () => UpgradeLevel(LevelType.Power);
+        OnBouncinessUpgradeButtonClick = (args) => UpgradeLevel(LevelType.Bounciness);
+        OnPowerUpgradeButtonClick = (args) => UpgradeLevel(LevelType.Power);
     }
 
     protected override void OnEnable()
@@ -51,6 +51,7 @@ public class UpgradesPage : MenuPage, IAudioPlayable, IDataControllable
         base.OnEnable();
         bouncinessUpgradeButton.OnClick += OnBouncinessUpgradeButtonClick;
         powerUpgradeButton.OnClick += OnPowerUpgradeButtonClick;
+        MoneyManager.OnMoneyLoaded += RefreshLevelsInfo;
     }
 
     protected override void OnDisable()
@@ -58,6 +59,7 @@ public class UpgradesPage : MenuPage, IAudioPlayable, IDataControllable
         base.OnDisable();
         bouncinessUpgradeButton.OnClick -= OnBouncinessUpgradeButtonClick;
         powerUpgradeButton.OnClick -= OnPowerUpgradeButtonClick;
+        MoneyManager.OnMoneyLoaded -= RefreshLevelsInfo;
     }
 
     public void LoadData(Database database)
